@@ -1,0 +1,3 @@
+[functions.workshop-accounts]
+verify_jwt = false
+# La fonction valide elle-même le jeton avec auth.getUser, puis les droits SQL.
