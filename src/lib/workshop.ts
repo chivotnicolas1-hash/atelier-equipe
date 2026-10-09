@@ -14,5 +14,5 @@ export const stations = [
 {id:"devis",name:"Gestion devis",short:"Gestion devis",x:43,y:58,w:23,h:8},
 ];
 export const parisToday=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
-export const presenceLabels:Record<string,string>={unknown:"À renseigner",present:"Présent",absent:"Absent",leave:"Congé"};
+export const presenceLabels:Record<string,string>={unknown:"À renseigner",rest:"Non travaillé",present:"Présent",absent:"Absent",leave:"Congé"};
 export const priorityLabels:Record<string,string>={normal:"Normale",high:"Prioritaire",urgent:"Urgente"};
