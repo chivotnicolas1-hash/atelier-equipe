@@ -1,0 +1,1 @@
+export function Checkbox({checked,onChange,label,disabled=false}:{checked:boolean,onChange:(v:boolean)=>void,label:string,disabled?:boolean}){return <label className="import-checkbox"><input type="checkbox" checked={checked} disabled={disabled} onChange={e=>onChange(e.target.checked)}/><span>{label}</span></label>}
