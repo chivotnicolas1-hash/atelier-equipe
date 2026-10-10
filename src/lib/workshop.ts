@@ -73,14 +73,14 @@ export const stations = [
   "id": "organisation",
   "name": "Organisation",
   "short": "Organisation",
-  "col": 3,
+  "col": 2,
   "row": 3
  },
  {
   "id": "devis",
   "name": "Gestion devis",
   "short": "Gestion devis",
-  "col": 3,
+  "col": 2,
   "row": 4
  }
 ];
