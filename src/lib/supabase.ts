@@ -15,4 +15,4 @@ export async function provisionAccount(staffId:string,password:string){
  if(error){let message='Création du compte impossible. Vérifie que la fonction workshop-accounts est déployée.';try{const body=await error.context?.json();if(body?.error)message=body.error;}catch{}throw new Error(message);}
  if(data?.error)throw new Error(data.error);return data;
 }
-export async function logout(){const {error}=await supabase.auth.signOut({scope:'local'});if(error)throw error;}
+export async function logout(){if('serviceWorker'in navigator&&'PushManager'in window){const reg=await navigator.serviceWorker.getRegistration();const sub=await reg?.pushManager.getSubscription();if(sub){const {error:removeError}=await supabase.rpc('workshop_push_remove',{p_endpoint:sub.endpoint});if(removeError)throw new Error('Impossible de désinscrire cet appareil. Vérifie ta connexion puis réessaie de te déconnecter.');await sub.unsubscribe();}}const {error}=await supabase.auth.signOut({scope:'local'});if(error)throw error;}
