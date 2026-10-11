@@ -38,3 +38,15 @@
 .notification-settings{padding:16px;border:1px solid #dce5e7;border-radius:12px;margin:12px 0}.notification-settings p{margin:10px 0;font-size:14px}
 
 .stat.stat-action.stat-alert{background:#fee2e2;border:1px solid #991b1b;color:#7f1d1d}.stat.stat-action.stat-alert:hover{background:#fecaca;border-color:#7f1d1d}.stat-alert .stat-icon.orange{background:#fecaca;color:#991b1b}.stat-alert .stat-copy>span,.stat-alert .stat-copy strong{color:#7f1d1d}
+
+/* Mobile roster: controls below the person, never beside a compressed name. */
+@media(max-width:850px){
+ .roster-panel .person-row{display:flex;flex-direction:column;align-items:stretch;gap:12px;min-width:0}
+ .roster-panel .person-top{flex:none;width:100%;min-width:0;margin:0;display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:8px 10px}
+ .roster-panel .person-top>div{min-width:0}
+ .roster-panel .person-top strong{overflow-wrap:break-word;word-break:normal;white-space:normal}
+ .roster-panel .person-top>.lunch-badge{grid-column:1/-1;grid-row:2;margin:0}
+ .roster-panel .person-top>.confirmed{grid-column:3;grid-row:1}
+ .roster-panel .person-row>.choice,.roster-panel .person-row>.secondary{width:100%;min-width:0}
+ .roster-panel .person-row>.subtle-tag{align-self:flex-start}
+}
