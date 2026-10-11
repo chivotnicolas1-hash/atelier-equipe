@@ -57,3 +57,7 @@
 .task-management-actions{display:flex;flex-wrap:wrap;gap:10px}.recurrence-fields{display:grid;gap:14px;background:#f2f7f8;padding:14px;border-radius:8px}.recurrence-card{display:grid;gap:8px;padding:16px 0;border-bottom:1px solid #dae5e9}
 
 .plate-scanner{display:flex;flex-wrap:wrap;gap:10px;padding:14px;border:1px solid #d5e2e7;border-radius:8px}.plate-scanner p{width:100%;font-size:14px}.plate-scanner input[hidden]{display:none}
+
+.bay-member{text-align:center;align-items:center}.bay-member>span{width:100%}.bay-member small{justify-content:center;text-align:center;flex-wrap:wrap}
+
+.orders-content{padding:20px;display:grid;gap:14px}.order-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px;text-align:left;border:1px solid #d4e0e5;border-radius:8px;background:white}.order-row>span{min-width:0}.order-row strong{overflow-wrap:anywhere}.order-row small{display:block;margin-top:6px;color:#627782}.order-item{border:1px solid #d4e0e5;padding:14px;border-radius:8px;display:grid;gap:12px;min-width:0}.order-item legend{padding:0 6px;font-weight:600}@media(max-width:520px){.order-row{align-items:flex-start;flex-direction:column}}
