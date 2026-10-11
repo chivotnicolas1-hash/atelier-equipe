@@ -52,3 +52,8 @@
 }
 
 .secondary.workorder-button{background:#3baf4c;border-color:#3baf4c;color:#102c17;gap:10px;font-weight:700}.secondary.workorder-button:hover{background:#3baf4c;border-color:#247a31;box-shadow:0 2px 8px #173b4826}.workorder-button:focus-visible{outline:3px solid #173b48;outline-offset:3px}.workorder-logo{width:32px;height:32px;object-fit:contain;flex-shrink:0;border-radius:7px}
+
+.import-launch.workorder-launch{justify-content:center}.workorder-launch>.workorder-button{flex:0 0 auto;width:auto}
+.task-management-actions{display:flex;flex-wrap:wrap;gap:10px}.recurrence-fields{display:grid;gap:14px;background:#f2f7f8;padding:14px;border-radius:8px}.recurrence-card{display:grid;gap:8px;padding:16px 0;border-bottom:1px solid #dae5e9}
+
+.plate-scanner{display:flex;flex-wrap:wrap;gap:10px;padding:14px;border:1px solid #d5e2e7;border-radius:8px}.plate-scanner p{width:100%;font-size:14px}.plate-scanner input[hidden]{display:none}
