@@ -50,3 +50,5 @@
  .roster-panel .person-row>.choice,.roster-panel .person-row>.secondary{width:100%;min-width:0}
  .roster-panel .person-row>.subtle-tag{align-self:flex-start}
 }
+
+.secondary.workorder-button{background:#3baf4c;border-color:#3baf4c;color:#102c17;gap:10px;font-weight:700}.secondary.workorder-button:hover{background:#3baf4c;border-color:#247a31;box-shadow:0 2px 8px #173b4826}.workorder-button:focus-visible{outline:3px solid #173b48;outline-offset:3px}.workorder-logo{width:32px;height:32px;object-fit:contain;flex-shrink:0;border-radius:7px}
