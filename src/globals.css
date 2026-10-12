@@ -127,3 +127,9 @@ button:focus-visible,a:focus-visible{outline-color:#0866b6}
 .dark .stat div>span,.dark .mode-tabs button,.dark :is(.task-details,.task-meta,.profile-details p,.report-row>span,.report-row small,.report-empty,.report-detail-photos figcaption){color:#afc4d8}
 .dark .stat.stat-alert div>span,.dark .stat.stat-alert .stat-copy>span{color:#ffe1e4}.dark .stat.stat-action.stat-alert:hover{background:#603038;border-color:#e7929a}.dark .task-meta .late{color:#ffb4a8}
 .dark .report-timestamp{background:#243f58;color:#c7dfef}.dark .task-check.checked{background:#367f6b}
+
+/* MAJ23 : en-tête permanent, logo entier et accueil de chargement. */
+.topbar,.dark .topbar{background:#142b43;border-color:#385773;color:#e2edf8}.topbar .brand-name{color:#9dceff}.topbar .brand-sub,.topbar .muted{color:#afc4d8}.topbar .icon-btn{color:#b9dcff}.topbar .icon-btn:hover{background:#284561}
+.app-logo{opacity:1;object-fit:contain;width:100%;height:100%;padding:0;filter:none}.topbar .brand-mark{width:64px;height:66px}
+.loading-screen{min-height:65dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:30px}.loading-screen>img{width:min(240px,60vw);height:auto;object-fit:contain;opacity:1}.loading-screen>p{font-weight:600;font-size:18px}.date-control[hidden]{display:none}
+@media(max-width:520px){.topbar{gap:8px}.topbar .brand-mark{width:54px;height:56px}.topbar .brand{gap:6px}.topbar .brand-name{font-size:11px}}

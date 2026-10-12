@@ -1,0 +1,1 @@
+export default function LoadingScreen(){return <div className="loading-screen" role="status" aria-live="polite"><img src="/atelier-fayet-logo.png" alt="Atelier Fayet 33"/><p>Par Nicolas CHIVOT</p><span className="muted">Chargement de l’atelier…</span></div>}
