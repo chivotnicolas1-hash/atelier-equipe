@@ -95,3 +95,35 @@ button:focus-visible,a:focus-visible{outline-color:#0866b6}
 .login-card .brand-mark{width:104px;height:106px;margin:0 auto 22px}.login-card>.eyebrow{text-align:center}
 .login-form input{border-color:#cbdff0}.profile-avatar{box-shadow:0 0 0 2px #e3effa}
 @media(max-width:520px){.topbar .brand-mark{width:46px;height:48px;flex-shrink:0}.brand{gap:9px}.brand-name{font-size:14px;letter-spacing:1px}}
+
+/* MAJ22 : préférences d’affichage et réglages administrateur. */
+.topbar{background:#eaf4ff}
+.daily-target{background:#eaf4ef;border:1px solid #bcd8ca;flex-wrap:wrap}
+.daily-target div>span{color:#35624e}.daily-target strong{color:#1b4b36}.daily-target small{color:#668374}.target-icon{background:#cfe8d9;color:#28674d}
+.daily-target .target-edit{margin-left:auto}.profile-notifications{scroll-margin:20px;outline:none}.login-theme{display:flex;justify-content:flex-end}
+.dark{color-scheme:dark;--background:#192f46;--foreground:#e2edf8;--popover:#203a54;--primary:#237dc7;--muted:#263f58;--color-muted-foreground:#afc4d8;--color-accent:#304e6c;--color-accent-foreground:#eef6ff;--color-border:#45617b;--color-input:#45617b}
+.dark body{background:#101f30;color:#e2edf8}
+.dark .topbar{background:#142b43;border-color:#385773}.dark .brand-name{color:#9dceff}.dark .brand-sub,.dark .topbar .muted{color:#afc4d8}
+.dark .topbar .icon-btn,.dark .icon-btn{color:#b9dcff}.dark .topbar .icon-btn:hover{background:#284561}
+.dark :is(.panel,.stat-card,.team-card,.app-dialog,.login-card,.order-row,.date-control,.mode-tabs,.task-card,.my-post,.notification-settings,.push-invite){background:#192f46;color:#e2edf8;border-color:#3c5871}
+.dark :is(input,textarea,select,.choice){background:#14283d!important;color:#e2edf8!important;border-color:#496782!important}
+.dark .secondary:not(.workorder-button):not(.danger){background:#203a54;color:#c4e3ff;border-color:#496782}.dark .secondary:not(.workorder-button):hover{background:#2a4966}
+.dark :is(.muted,.stat-copy>span,.day-slots,.person-team,.map-footnote,.order-row small,.team-empty){color:#afc4d8}
+.dark :is(.eyebrow,.nav-tabs button){color:#a6d1f6}.dark .nav-tabs button[data-state=active],.dark .mode-tabs button[data-state=active]{background:#237dc7;color:white}
+.dark :is(.info-line,.roster-help,.my-hours,.recurrence-fields,.report-search,.import-summary,.import-targets,.import-loading,.profile-details,.notification-invite){background:#233d56;color:#d1e6f8}
+.dark :is(.app-dialog label,.report-search label){color:#d1e6f8}
+.dark .daily-target{background:#183d31;border-color:#487f64}.dark .daily-target div>span,.dark .daily-target strong{color:#cbefdb}.dark .daily-target small{color:#a2cab6}.dark .target-icon{background:#285b42;color:#c6f0d8}
+.dark .atelier-map-scroll{background:#14283b}.dark .bay{background:#20364b;border-color:#54718b;color:#bfd9ef;--car-fill:#314b65;--glass-fill:#152c40}.dark .bay-caption strong{color:#c7e4fc}.dark .bay.has-members{background:#204568;border-color:#699ecc;--car-fill:#356893;--glass-fill:#172f47}.dark .bay.office{background:#24394f}.dark .bay-drawing{color:#95c8f1}.dark .bay-member{background:#315c80;color:#e3f3ff}.dark .bay-member.at-lunch{background:#5d461b;color:#ffe5a8}.dark .circulation{color:#a3bdd4;border-color:#506d85}
+.dark .login-page{background:radial-gradient(ellipse at 20% 10%,#203e5e,transparent 60%),#101f30}
+.dark .secondary.danger{background:#49252b;color:#ffb9bf;border-color:#a8646b}
+.dark .profile-photo{background:#29435d;color:#c5def4}.dark .team-badge,.dark .role-badge,.dark .subtle-tag{background:#2b4760;color:#cee6fa}
+.dark .stat-action:hover{background:#264660}.dark .stat-icon{background:#2b4c6b;color:#c0e2ff}
+@media(max-width:520px){.top-actions{gap:6px}.topbar{padding-left:12px;padding-right:12px}.topbar .brand-name{font-size:12px;letter-spacing:.5px}.topbar .brand-sub{font-size:8px}.daily-target .target-edit{margin-left:0}}
+.dark :is(.stat,.teams-toolbar,.report-form,.report-row,.report-photo-grid figure,.plate,.map-mobile-hint){background:#192f46;color:#e2edf8;border-color:#496782}
+.dark .stat.urgent-active{background:#49252b;border-color:#c7737a;color:#ffe1e4}
+.dark .report-row:hover{background:#294965}.dark .task-check{background:#203a54;border-color:#839db4}.dark .task-check.done{background:#327957}
+.dark .priority{background:#2e485f;color:#d0e3f4}.dark .priority.high{background:#5c451c;color:#ffe4a2}.dark .import-day.needs-review{background:#473c22;color:#ffe4a2}
+.dark .stat.stat-alert{background:#49252b;border-color:#c7737a;color:#ffe1e4}.dark .stat.stat-alert .stat-copy>span,.dark .stat.stat-alert .stat-copy strong{color:#ffe1e4}.dark .stat.stat-alert .stat-icon{background:#70353f;color:#ffd4d9}
+.dark .stat div>span,.dark .mode-tabs button,.dark :is(.task-details,.task-meta,.profile-details p,.report-row>span,.report-row small,.report-empty,.report-detail-photos figcaption){color:#afc4d8}
+.dark .stat.stat-alert div>span,.dark .stat.stat-alert .stat-copy>span{color:#ffe1e4}.dark .stat.stat-action.stat-alert:hover{background:#603038;border-color:#e7929a}.dark .task-meta .late{color:#ffb4a8}
+.dark .report-timestamp{background:#243f58;color:#c7dfef}.dark .task-check.checked{background:#367f6b}
