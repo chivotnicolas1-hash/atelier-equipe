@@ -40,7 +40,7 @@ export function parsePage(pieces:Piece[],staff:{id:string,name:string}[]):Import
 }
 export function validSlots(slots:Slot[]){return slots.length<=4&&slots.every((s,i)=>/^([01]\d|2[0-3]):[0-5]\d$/.test(s.start)&&/^([01]\d|2[0-3]):[0-5]\d$/.test(s.end)&&s.end>s.start&&(i===0||s.start>=slots[i-1].end));}
 
-export type ImportTarget={date:string,amount:number|null,include:boolean};
+export type ImportTarget={date:string,amount:number|null,include:boolean,ratio?:number|null};
 export function parseTargets(pieces:Piece[]):ImportTarget[]{
  const headers=pieces.map(p=>({...p,date:headerDate(p.text)})).filter(p=>p.date).sort((a,b)=>a.x-b.x);
  if(headers.length!==7)throw Error('Les 7 dates du planning sont nécessaires pour lire les objectifs.');
@@ -50,11 +50,16 @@ export function parseTargets(pieces:Piece[]):ImportTarget[]{
  const cells=pieces.filter(p=>p.y<h.y&&p.y>h.y-35&&p.x+p.width/2>=lo&&p.x+p.width/2<hi&&p.text.includes('€'));
  const values=cells.map(p=>{const match=p.text.replace(/[\s\u00a0\u202f]/g,'').match(/^(\d+)(?:,(\d{2}))?€$/);return match?Number(match[1])+Number(match[2]||0)/100:null});
  if(values.length>1||values.some(v=>v===null))throw Error('Un objectif est ambigu dans l’en-tête du PDF. Aucun import effectué.');
- const amount=values[0]??null;return {date:h.date!,amount,include:amount!==null};
+ const amount=values[0]??null;
+ const goalY=cells[0]?.y;
+ const ratioCells=goalY==null?[]:pieces.filter(p=>p.y<goalY-2&&p.y>goalY-13&&p.x+p.width/2>=lo&&p.x+p.width/2<hi&&/^\d+(?:[,.]\d{1,2})?$/.test(p.text.trim()));
+ if(ratioCells.length>1)throw Error('Ratio ambigu pour le '+h.date+'. Vérifie le PDF.');
+ const ratio=ratioCells.length?Number(ratioCells[0].text.replace(',','.')):null;
+ return {date:h.date!,amount,include:amount!==null,ratio};
  });
 }
 export function mergeTargets(targets:ImportTarget[]):ImportTarget[]{
- const dates=new Map<string,ImportTarget>();for(const t of targets){const prev=dates.get(t.date);if(prev?.amount!=null&&t.amount!=null&&prev.amount!==t.amount)throw Error('Deux pages indiquent des objectifs différents pour le '+t.date);if(!prev||prev.amount===null)dates.set(t.date,t)}return [...dates.values()].sort((a,b)=>a.date.localeCompare(b.date));
+ const dates=new Map<string,ImportTarget>();for(const t of targets){const prev=dates.get(t.date);if(prev?.amount!=null&&t.amount!=null&&prev.amount!==t.amount)throw Error('Deux pages indiquent des objectifs différents pour le '+t.date);if(prev?.ratio!=null&&t.ratio!=null&&prev.ratio!==t.ratio)throw Error('Deux ratios différents pour le '+t.date);if(!prev||prev.amount===null)dates.set(t.date,{...t,ratio:t.ratio??prev?.ratio});else if(prev.ratio==null&&t.ratio!=null)dates.set(t.date,{...prev,ratio:t.ratio})}return [...dates.values()].sort((a,b)=>a.date.localeCompare(b.date));
 }
 export function flagDuplicateNames(people:ImportPerson[]):ImportPerson[]{
  const count=new Map<string,number>();for(const p of people){const name=normalizedName(p.name);count.set(name,(count.get(name)||0)+1)}
