@@ -2,7 +2,7 @@ import {useEffect,useState} from 'react';
 import {supabase} from './lib/supabase';
 async function rpc(name:string,args?:Record<string,unknown>){const {data,error}=await supabase.rpc(name,args);if(error)throw Error(error.code==='PGRST202'?'Les notifications ne sont pas encore configurées (script 12).':error.message);return data}
 const supported=()=>typeof Notification!=='undefined'&&'serviceWorker'in navigator&&'PushManager'in window;
-export function NotificationSettings(){
+export function NotificationSettings({onActivated}:{onActivated?:()=>void}){
  const [active,setActive]=useState(false),[busy,setBusy]=useState(false),[message,setMessage]=useState('');
  useEffect(()=>{let live=true;if(supported())void navigator.serviceWorker.ready.then(async reg=>{const sub=await reg.pushManager.getSubscription();if(!sub)return;const status=await rpc('workshop_push_status');if(live)setActive(status.endpoints.includes(sub.endpoint)&&Notification.permission==='granted')}).catch(()=>{});return()=>{live=false}},[]);
  async function toggle(){setBusy(true);setMessage('');try{
@@ -13,7 +13,7 @@ export function NotificationSettings(){
   const key=import.meta.env.VITE_VAPID_PUBLIC_KEY;if(!key)throw Error('L’administrateur doit configurer la clé publique des notifications dans Cloudflare.');
   const raw=atob(key.replace(/-/g,'+').replace(/_/g,'/'));const bytes=Uint8Array.from(raw,c=>c.charCodeAt(0));
   if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:bytes});
-  await rpc('workshop_push_register',{p_subscription:sub.toJSON()});setActive(true);setMessage('Cet appareil recevra les annonces et les notifications de tes tâches.');
+  await rpc('workshop_push_register',{p_subscription:sub.toJSON()});setActive(true);setMessage('Cet appareil recevra les annonces et les notifications de tes tâches.');onActivated?.();
  }catch(e:any){setMessage(e.message||'Activation impossible. Réessaie.')}finally{setBusy(false)}}
  return <section className="notification-settings"><h3>Notifications sur cet appareil</h3><p className="muted">Reçois les annonces de l’atelier et les mises à jour de tes tâches, même lorsque l’application est fermée.</p><button className="secondary" disabled={busy} onClick={toggle}>{busy?'Veuillez patienter…':active?'Désactiver sur cet appareil':'Activer les notifications'}</button><p role="status">{message|| (active?'Cet appareil est inscrit. La réception dépend des réglages du téléphone.':'Autorise les notifications sur chacun de tes appareils. Sur iPhone, ouvre l’application depuis l’écran d’accueil.')}</p></section>
 }
