@@ -1,0 +1,136 @@
+ATELIER FAYET 33 — GRANDE MISE À JOUR 10
+
+INSTALLATION SUR LA VERSION 09
+
+1. Décompresse atelier-supabase.zip.
+2. Ouvre supabase/10-evolution-atelier.sql avec le Bloc-notes et copie tout.
+3. Dans Supabase > SQL Editor > New query : colle le script puis clique Run.
+   Attends Success. Les scripts 01 à 07, puis 09 doivent déjà avoir été
+   appliqués. Il n’existe pas de migration 08 : cette version était visuelle.
+   Ne relance pas les anciens scripts après le 10 : ils rétabliraient les
+   anciennes fonctions. Le script 10 est lui-même relançable sans effacement.
+4. Sur GitHub, dans src, remplace :
+   workshop.tsx
+   globals.css
+   reports.tsx
+   profile-announcement.tsx
+   planning-import.tsx
+   Ajoute, dans ce même dossier src :
+   custom-buttons.tsx
+   Puis clique Commit changes.
+5. Dans src/lib, remplace orquest-parser.ts et ajoute links.ts.
+   Puis clique Commit changes.
+6. Conserve aussi supabase/10-evolution-atelier.sql et ce guide dans le dépôt.
+7. Attends le succès du dernier déploiement Cloudflare, puis recharge le site
+   (Ctrl + F5 sur ordinateur ; fermer/rouvrir l’application sur téléphone).
+8. Dans Administration > Importer un planning PDF, importe à nouveau le PDF
+   avec les montants en euros. Vérifie l’aperçu des objectifs et les associations
+   de collaborateurs avant de valider.
+
+Aucune nouvelle dépendance, variable Cloudflare, configuration Storage ou
+fonction Edge n’est nécessaire. Le ZIP ne modifie pas automatiquement ton site.
+
+LES 10 CHANGEMENTS
+
+1. SIGNALEMENTS POUR LES ENCADRANTS ET RECHERCHE PAR PLAQUE
+   L’administrateur et toutes les fiches actives de l’équipe Encadrants
+   peuvent consulter les signalements de toute l’équipe, quel que soit
+   leur rôle (collaborateur ou modérateur).
+   Les autres comptes voient uniquement leurs propres signalements.
+   Dans Signalements, la recherche fonctionne sur la plaque entière ou
+   une partie de la plaque, sans tenir compte de la casse, espaces ou tirets.
+   La recherche se fait sur tout l’historique, avant pagination par 30.
+   Les encadrants disposent aussi du choix Toute l’équipe / Mes signalements.
+   Retirer une fiche de l’équipe Encadrants retire cet accès élargi au prochain
+   appel serveur. Les contrôles s’appliquent aussi aux photos et au détail.
+
+2. BONJOUR PERSONNALISÉ
+   Le titre devient « Bonjour » suivi du nom enregistré sur la fiche,
+   dans les espaces administrateur, modérateur et collaborateur.
+
+3. INDICATEURS DE TÂCHES CLIQUABLES
+   Clique Tâches à terminer pour ouvrir les tâches à faire.
+   Clique Urgentes ou en retard pour ouvrir directement le filtre correspondant.
+   Les collaborateurs conservent leur périmètre personnel ; les gestionnaires
+   retrouvent les tâches de l’équipe dans leur espace de gestion.
+
+4. LOGO ET TITRE : RETOUR À L’ACCUEIL
+   Le lien en haut à gauche renvoie à la page d’accueil de l’application.
+   Le profil reste accessible depuis l’avatar en haut à droite.
+
+5. BOUTON DE TÉLÉCHARGEMENT RETIRÉ
+   L’icône d’installation près de Déconnexion a été supprimée.
+   L’application reste installable depuis le menu habituel du navigateur.
+
+6. BANNIÈRE CENTRÉE AVEC LIEN
+   Le texte et le lien sont centrés dans la bannière rouge.
+   Dans Gérer l’annonce, ajoute éventuellement l’adresse complète d’un lien
+   et son libellé, par exemple « Répondre au sondage ».
+   Un lien HTTP ou HTTPS s’ouvre dans un nouvel onglet. Un champ vide signifie
+   qu’aucun lien n’est affiché. Un lien peut être changé ou retiré à tout moment.
+   L’annonce peut toujours être masquée sans effacer son texte.
+
+7. PHOTOS DANS LE MENU ÉQUIPES
+   Les photos enregistrées par les collaborateurs apparaissent sur leurs
+   fiches dans Administration > Équipes. En l’absence de photo, les initiales
+   restent affichées. Le compte est associé à la fiche par son adresse e-mail.
+   Chacun conserve la possibilité de modifier uniquement sa propre photo.
+
+8. ANNONCE MODIFIABLE PAR LES MODÉRATEURS
+   Dans l’espace Modération, le bouton Gérer l’annonce permet de créer,
+   modifier, activer ou masquer la bannière et son lien.
+   Être uniquement dans l’équipe Encadrants ne donne pas ce droit : il faut
+   être modérateur ou administrateur. Les permissions sont contrôlées au serveur.
+
+9. OBJECTIF DE CHIFFRE D’AFFAIRES DU JOUR
+   Un encart apparaît au-dessus des indicateurs, dans tous les espaces.
+   Il affiche toujours la date et l’objectif du jour courant à l’heure de Paris,
+   même si une autre date est sélectionnée pour consulter l’atelier.
+   Les montants sont lus dans la ligne en euros sous chaque date du PDF,
+   sans confondre le volume horaire ou les autres nombres de l’en-tête.
+   Les objectifs répétés sur plusieurs pages ne sont importés qu’une fois.
+   L’aperçu permet de corriger un montant ou de décocher une journée.
+   Une case sans montant est laissée non renseignée, jamais transformée
+   automatiquement en zéro. Aucun objectif importé aujourd’hui = Non renseigné.
+   Pour remplacer un montant déjà importé, coche l’option de remplacement.
+   Cette option s’applique aussi aux journées sélectionnées : décoche les
+   journées/personnes si tu souhaites remplacer uniquement les objectifs.
+   Les présences déjà confirmées restent protégées.
+   Les objectifs et journées sélectionnés sont enregistrés dans une même
+   transaction : une erreur bloque l’ensemble de cet import.
+
+   IMPORTANT POUR LE NOUVEAU FORMAT PDF
+   Le lecteur reconnaît aussi les noms en minuscules/majuscules mélangées.
+   Quand un même nom apparaît sur plusieurs lignes, toutes les lignes de ce
+   nom sont exclues de l’association automatique. Dans l’aperçu, choisis la
+   bonne ligne, puis associe-la à la fiche ; laisse l’autre sur Ne pas importer.
+   Deux lignes associées à la même personne et date bloquent la validation.
+   Les jours d’absence/formation/congé restent à vérifier avant inclusion.
+   Il est possible d’importer uniquement les objectifs sans importer de journées.
+
+10. GESTION DES BOUTONS PERSONNALISÉS
+   Administration > Gérer les boutons.
+   Renseigne un libellé et un lien HTTP(S), puis Ajouter le bouton.
+   Les raccourcis apparaissent sous les indicateurs.
+   Tu peux modifier, masquer ou supprimer chaque bouton créé.
+   Choisis un ordre (0 à 99) et une visibilité : toute l’équipe, encadrants
+   et administrateur, modérateurs et administrateur, ou administrateur seul.
+   La visibilité dépend des droits du compte, pas de la vue de prévisualisation
+   administrateur/collaborateur. Un administrateur voit donc tous les boutons actifs.
+   Cette gestion porte sur les boutons personnalisés : les commandes natives
+   comme Signaler, Déconnexion ou les onglets ne sont pas supprimables ici.
+
+VÉRIFICATIONS RÉALISÉES
+- Compilation TypeScript et build de production réussis.
+- Tests SQL locaux : migrations répétables, conservation des données,
+  accès Encadrants et révocation, recherche normalisée, liens d’annonce,
+  droits modérateur, boutons/visibilité, photos, objectifs du jour, protections
+  contre le remplacement et annulation complète en cas d’import invalide.
+- Lecture du PDF joint sur deux pages : extraction des montants en euros,
+  objectif absent laissé vide, noms mixtes et doublons détectés ; compatibilité
+  conservée avec l’ancien exemple de planning.
+- Tests Chromium avec quatre profils : administrateur, modérateur, encadrant
+  et collaborateur ; raccourcis de tâches, accueil, suppression de l’icône,
+  recherche, annonce/lien, boutons ajoutés-modifiés-supprimés, photos de fiches,
+  import réel du PDF dans l’aperçu, affichage sur ordinateur et mobile.
+- Aucune écriture ni aucun déploiement effectués sur ton Supabase réel.

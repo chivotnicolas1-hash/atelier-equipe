@@ -1,0 +1,7 @@
+ATELIER FAYET 33 — ACCÈS WORKORDER
+
+Remplace uniquement src/workshop.tsx sur GitHub par celui de cette archive. Valide avec Commit changes, attends le succès du déploiement Cloudflare puis actualise le site. Aucune modification Supabase nécessaire.
+
+Dans la vue Collaborateur, le bouton « Accédé à WorkOrder » apparaît au-dessus de Signaler lorsque la journée sélectionnée est aujourd’hui et que la présence du collaborateur est présente et confirmée. Il disparaît si cette confirmation est retirée ou si une autre date est consultée.
+
+Le bouton ouvre https://smartworkshop.digiforce.io/workorders-view/ dans un nouvel onglet ou le navigateur du téléphone. L’authentification WorkOrder reste gérée par Digiforce/Google. Le lien n’est pas intégré dans un cadre à l’intérieur de l’application.

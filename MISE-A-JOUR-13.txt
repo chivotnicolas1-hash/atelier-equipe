@@ -1,0 +1,8 @@
+ATELIER FAYET 33 — MISE À JOUR 13
+
+Sur GitHub, remplace uniquement src/workshop.tsx et src/globals.css aux mêmes emplacements. Valide avec Commit changes. Attends le succès du dernier déploiement Cloudflare, puis recharge l’application.
+
+Aucune modification Supabase, clé ou fonction nécessaire.
+
+- Urgentes ou en retard : fond rouge clair et bordure rouge foncé dès que le compteur est supérieur à zéro. Retour au style normal à zéro.
+- Plan administrateur/modérateur et liste d’affectation : présents, présences à renseigner, absents, congés, non travaillés. Ordre alphabétique français du nom affiché dans chaque groupe, sans distinction des accents ou de la casse. Le tri suit la date et les présences sélectionnées.

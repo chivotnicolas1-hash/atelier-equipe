@@ -1,0 +1,81 @@
+ATELIER FAYET 33 — MISE À JOUR 26
+
+1 — VOIR COMME CE COLLABORATEUR
+Administration > Équipes > Voir comme ce collaborateur.
+Aperçu en lecture seule de sa journée, son poste, ses horaires, ses tâches, son profil, du plan et des listes de signalements/consommables accessibles.
+Tu restes connecté en administrateur. Aucun mot de passe, jeton ou session du collaborateur n’est créé. Les notifications de son appareil ne sont pas reproduites.
+Les listes de signalements et commandes sont limitées aux 100 dernières entrées dans cet aperçu. Les outils de gestion d’un modérateur ne sont pas simulés : il s’agit de son espace collaborateur.
+Un bouton Revenir à mon espace administrateur ferme l’aperçu.
+
+2 — ACTIONS DIRECTES DES CONSOMMABLES
+Modifier la liste est visible sans cliquer Développer, ainsi que la validation pour admin/modérateurs et l’export PDF.
+Une commande validée affiche Consulter la liste pour les collaborateurs.
+
+3 — AUTEUR DES ARTICLES
+Dans le formulaire, administrateur et modérateurs voient Ajouté par pour chaque article.
+Le serveur enregistre l’auteur lors de l’ajout et le conserve lors des corrections ultérieures.
+Les anciens articles affichent Auteur non enregistré : l’application n’enregistrait pas cette information auparavant. Aucun auteur n’est inventé.
+
+4 — OBJECTIF SUR MOBILE
+L’objectif et le ratio sont sur la première ligne ; Modifier l’objectif apparaît en dessous sur toute la largeur. La disposition ordinateur est conservée.
+
+5 — SUPPRESSION D’UN SIGNALEMENT
+Administrateur et modérateurs peuvent consulter les signalements de l’équipe, ouvrir une fiche et cliquer Supprimer le signalement.
+Une confirmation est demandée. Le signalement et ses photos sont supprimés définitivement.
+La modification reste réservée à l’auteur et à l’administrateur, comme auparavant.
+
+6/7 — LISTES DES PRÉSENCES
+Clique Collaborateurs présents ou Présences confirmées.
+La fenêtre affiche les noms triés alphabétiquement et leur poste pour la date sélectionnée, sans appliquer le filtre métier. Les confirmations indiquent l’heure de Paris.
+
+8 — ACTIVATION DES NOTIFICATIONS
+Après une activation réussie, le profil se ferme, l’accueil s’affiche et les données ainsi que l’invitation aux notifications se rafraîchissent.
+Si l’utilisateur refuse l’autorisation ou si l’inscription échoue, le profil reste ouvert avec le message d’erreur.
+
+9 — PERSONNALISER L’APPLICATION
+Administration > Personnaliser l’application.
+- Nom et sous-titre affichés dans l’application.
+- Titre, description et aide de l’écran de connexion.
+- Signature de l’écran de chargement.
+- Couleurs de fond, cartes, texte, boutons et en-tête, séparément en clair et sombre.
+- Taille de texte, arrondis et espacement des cartes.
+- Noms des pôles et numéros affichés sur les ponts. Les identifiants techniques, emplacements et affectations sont conservés.
+- Aperçu des palettes, nom de thème et publication pour toute l’équipe.
+- Historique des 100 dernières versions et bouton Reprendre le design initial. Sélectionner une version remplit le formulaire ; cliquer Enregistrer et appliquer à tous pour la restaurer.
+Les changements sont visibles immédiatement sur ton écran puis au prochain rafraîchissement des autres appareils (au plus une minute lorsque la page est active).
+Les textes/couleurs de connexion doivent être lisibles avant connexion : seuls ces paramètres de présentation sont publics. Les données d’équipe restent protégées.
+L’éditeur ne permet pas de modifier les règles d’authentification, les autorisations, le code, la géométrie du plan, les icônes installées ou la structure complète des pages. Ces évolutions restent des modifications de projet. L’historique restaure les paramètres visuels, pas une ancienne version du code.
+
+INSTALLATION DEPUIS LA MAJ25
+
+A. SUPABASE — EN PREMIER
+Ouvre supabase/26-personnalisation-apercu.sql. Copie tout dans une nouvelle requête SQL Editor puis Run. Attends le succès. Script réexécutable.
+Ne réexécute pas une ancienne migration après celle-ci.
+Aucune Edge Function, clé ou programmation supplémentaire.
+
+B. GITHUB
+Remplace :
+- src/main.tsx
+- src/loading-screen.tsx
+- src/workshop.tsx
+- src/workshop-plan.tsx
+- src/order-requests.tsx
+- src/reports.tsx
+- src/notifications.tsx
+- src/profile-announcement.tsx
+- src/globals.css
+Ajoute :
+- src/design.tsx
+- src/design-settings.tsx
+- src/collaborator-preview.tsx
+- supabase/26-personnalisation-apercu.sql
+Tu peux aussi envoyer tous les fichiers du ZIP en conservant les dossiers.
+
+C. CLOUDFLARE
+Valide ton commit sur la branche déployée, attends le succès puis recharge l’application.
+Pas de nouvelle dépendance par rapport à MAJ25.
+
+VÉRIFICATIONS
+Compilation et essais navigateur des quatre profils, aperçu sans appel de mutation, activation des notifications, actions directes, attribution d’articles, suppression de signalement, listes de présences, personnalisation et poste renommé, mise en page mobile avec ratio.
+Tests SQL des droits, de l’attribution non falsifiable, des suppressions, du cloisonnement des données et de l’historique/restauration de design.
+La mise à jour n’est pas automatiquement déployée par le ZIP.

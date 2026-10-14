@@ -1,0 +1,71 @@
+ATELIER FAYET 33 — MISE À JOUR 29
+Récapitulatif du soir, déchets et présence via WorkOrder
+
+INSTALLATION (application déjà à jour jusqu’à la MAJ28)
+1. Dans Supabase > SQL Editor > New query, copie le contenu complet de
+   supabase/29-releves-dechets.sql puis clique Run.
+   Ce script est réexécutable. Il conserve les données existantes.
+2. Décompresse ce ZIP et remplace les fichiers du projet dans GitHub.
+   Le package.json doit rester à la racine du dépôt, pas dans un sous-dossier.
+3. Attends le déploiement Cloudflare. Recharge ensuite l’application.
+   Aucun nouveau secret, variable de build ou programme cron n’est nécessaire.
+
+RÉCAPITULATIF DU SOIR
+- Menu « Récapitulatif » : l’administrateur et les modérateurs préparent le
+  récapitulatif de la journée. Saisir les véhicules immobilisés (plaque,
+  poste et motif), anomalies et pièces manquantes, puis enregistrer.
+- Les tâches non terminées dont l’échéance est au plus tard cette journée
+  sont reprises automatiquement à chaque enregistrement. Il s’agit d’un
+  instantané : les changements ultérieurs des tâches ne réécrivent pas
+  un récapitulatif publié.
+- Les collaborateurs de l’équipe « Encadrants » peuvent consulter le
+  récapitulatif à partir de 7 h 30 le lendemain, heure de Paris (été/hiver).
+  L’accès est contrôlé côté serveur : changer l’heure du téléphone ne
+  donne pas accès au brouillon. La page s’actualise toutes les 30 secondes
+  et lorsqu’on revient dessus ; un bouton permet de l’actualiser immédiatement.
+- L’administrateur et les modérateurs peuvent voir/corriger le brouillon
+  avant publication. Après 7 h 30, le récapitulatif devient non modifiable.
+- Il faut préparer et enregistrer le récapitulatif chaque soir. Sa mise à
+  disposition le lendemain est automatique, même si l’application est fermée.
+  Les véhicules, anomalies et pièces sont saisis manuellement : aucune
+  immobilisation n’est déduite automatiquement des signalements.
+- « 7h3à » a été interprété comme 7 h 30. Pas de nouvelle notification
+  push pour ces récapitulatifs : ils sont disponibles dans le menu.
+
+DÉCHETS
+- Menu accessible à tous : cocher batteries, ferraille, fonte, aluminium
+  et/ou filtres usagés ; ajouter éventuellement des précisions.
+- Tous peuvent créer et consulter les demandes.
+- Seuls l’administrateur et les modérateurs peuvent les valider.
+- Le nom du validateur et la date/heure de Paris sont enregistrés côté
+  serveur et affichés. La validation est interne : elle ne contacte pas
+  de prestataire et ne signifie pas que le ramassage a déjà eu lieu.
+
+WORKORDER ET PRÉSENCE
+- Le bouton « Je suis à mon poste » est supprimé.
+- Dans l’espace collaborateur, pour la date réelle du jour et un
+  collaborateur présent affecté à un poste, « Accéder à WorkOrder »
+  est disponible avant la confirmation de présence.
+- Le premier clic enregistre la présence puis ouvre WorkOrder.
+- Les clics suivants ouvrent WorkOrder sans modifier l’heure de présence.
+- En cas d’échec de confirmation, un message d’erreur apparaît ; la fenêtre
+  vide se ferme et on peut réessayer. WorkOrder reste un site externe.
+- Administrateurs et modérateurs utilisent leur onglet Collaborateur
+  pour confirmer leur propre présence.
+
+FICHIERS CRÉÉS / MODIFIÉS DANS CETTE MISE À JOUR
+supabase/29-releves-dechets.sql
+src/shift-recap.tsx
+src/waste.tsx
+src/workshop.tsx
+src/collaborator-preview.tsx
+src/globals.css
+MISE-A-JOUR-29.txt
+
+VÉRIFICATION APRÈS DÉPLOIEMENT
+1. Créer une demande Déchets avec un compte collaborateur.
+2. Vérifier qu’il ne peut pas la valider ; la valider comme modérateur.
+3. Préparer un récapitulatif comme administrateur : un Encadrant simple
+   ne doit pas le voir avant le lendemain à 7 h 30.
+4. Avec un collaborateur présent affecté aujourd’hui, cliquer deux fois
+   sur WorkOrder : l’heure de présence doit rester celle du premier clic.

@@ -1,0 +1,36 @@
+ATELIER FAYET 33 — MISE À JOUR 21
+Nouveau logo et essai de thème clair
+
+Cette mise à jour reprend votre logo sur l’en-tête et la connexion, et remplace les icônes de l’application. Le thème utilise du bleu, des fonds blancs et bleu très pâle et des touches jaunes. Les alertes restent rouges et WorkOrder vert.
+
+1 — DÉCOMPRESSER
+Décompressez Atelier-Fayet-33-MAJ21.zip sur votre ordinateur.
+
+2 — GITHUB
+Dans le dépôt de votre application, remplacez les fichiers suivants en conservant leur emplacement :
+- index.html
+- src/main.tsx
+- src/workshop.tsx
+- src/globals.css
+- public/manifest.webmanifest
+- public/sw.js
+
+Ajoutez ces nouveaux fichiers dans public :
+- atelier-fayet-logo.png
+- favicon-fayet.png
+- apple-touch-icon-fayet.png
+- icon-fayet-192.png
+- icon-fayet-512.png
+- icon-fayet-maskable.png
+
+Validez les changements sur la branche utilisée par Cloudflare. Si vous partez d’une version antérieure à la mise à jour 20, utilisez tous les fichiers du projet et appliquez les instructions des mises à jour manquantes.
+
+3 — CLOUDFLARE
+Attendez la réussite du nouveau déploiement lié à votre commit GitHub, puis rechargez l’application. Si aucun déploiement ne démarre automatiquement, lancez un nouveau déploiement depuis votre projet Cloudflare.
+Aucune nouvelle variable, dépendance, clé ou migration SQL n’est nécessaire pour la mise à jour 21.
+
+4 — ICÔNE SUR LE TÉLÉPHONE
+L’icône d’une application déjà installée peut mettre du temps à se rafraîchir. Si elle reste ancienne après actualisation, retirez son raccourci ou son installation de l’écran d’accueil, puis ajoutez à nouveau l’application depuis son adresse habituelle. Ne supprimez pas votre compte ni les données Supabase. Une nouvelle connexion peut être nécessaire.
+
+VÉRIFICATIONS
+Compilation de production réussie. Rendu vérifié sur ordinateur et mobile, sans débordement horizontal ni erreur JavaScript dans les scénarios testés. Les fonctions existantes sont conservées.

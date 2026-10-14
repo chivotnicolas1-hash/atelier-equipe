@@ -1,3 +1,26 @@
+Dernière mise à jour : MISE-A-JOUR-20.txt (correction signalements, affectations, articles à commander).
+
+Dernière mise à jour : MISE-A-JOUR-18.txt (récurrences, lecture de plaques, bouton WorkOrder centré).
+
+Notifications : suivre MISE-A-JOUR-12.txt (SQL, fonction Supabase, clés, Cron et déploiement).
+
+Dernière correction : voir MISE-A-JOUR-11.txt (objectif selon la date sélectionnée).
+
+MISE À JOUR ACTUELLE : voir MISE-A-JOUR-10.txt. Sur une installation neuve,
+appliquer les scripts SQL 01 à 07, puis 09 et 10 dans l’ordre. Sur un site existant,
+appliquer uniquement les migrations manquantes, dans l’ordre.
+
+# Dernière mise à jour : Encadrants
+
+Pour le projet existant, suivre **MISE-A-JOUR-ENCADRANTS.txt**.
+Installation neuve : scripts 01, 03, puis 04 dans cet ordre.
+
+# Mise à jour : équipes métier
+
+Pour l’application déjà en ligne sur Cloudflare, suivez **MISE-A-JOUR-EQUIPES.txt**.
+Ne recommencez pas l’installation. Le script 03 s’applique après les scripts 01/02.
+Pour une installation neuve, exécutez 01 puis 03.
+
 # Atelier Équipe — connexion par identifiants
 
 Version mise à jour : connexion par adresse e-mail et mot de passe fournis par l’administrateur. Aucun compte Google ou ChatGPT requis. Administrateur : nchivot@norauto.fr.

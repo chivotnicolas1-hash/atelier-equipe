@@ -1,0 +1,51 @@
+MISE À JOUR 05 — IMPORT DU PLANNING ORQUEST
+
+1. Décompresse l’archive.
+2. Dans Supabase > SQL Editor, colle le contenu de
+   supabase/05-import-planning.sql puis clique Run.
+   Les scripts 03 et 04 doivent déjà avoir été appliqués.
+   Ne réexécute pas l’installation initiale.
+3. Dans ton dépôt GitHub existant, ajoute ou remplace ces fichiers
+   à leur emplacement exact (sans ajouter un dossier atelier-supabase) :
+   package.json
+   package-lock.json
+   src/workshop.tsx
+   src/globals.css
+   src/planning-import.tsx
+   src/simple-checkbox.tsx
+   src/lib/workshop.ts
+   src/lib/orquest-parser.ts
+   supabase/05-import-planning.sql
+4. Enregistre avec Commit changes, puis attends la réussite du
+   déploiement Cloudflare. Conserve tes variables de compilation Supabase.
+   Ne rétablis aucun fichier _redirects. Aucune fonction Edge à modifier.
+5. Recharge l’application. Dans Administration, clique
+   « Importer un planning PDF » et sélectionne l’export Orquest original.
+6. Vérifie les associations de noms, les horaires et les jours cochés,
+   puis clique « Valider l’import ». Consulte ensuite une date du planning.
+
+COMPORTEMENT
+- Non affecté / Libre / Repos : Non travaillé.
+- Les créneaux de travail sont associés aux fiches existantes par nom.
+  Accents, majuscules et ordre prénom/nom sont normalisés. En cas de
+  nom différent ou ambigu, choisis la fiche manuellement.
+- Les personnes sans association ne sont pas importées.
+- Absence, formation, congé ou lecture incertaine : journée décochée
+  par défaut. Vérifie le statut et les horaires avant de la cocher.
+- Les journées déjà enregistrées sont préservées par défaut. Coche
+  l’option Remplacer pour mettre à jour un planning déjà renseigné.
+- Une présence confirmée ne sera jamais remplacée par cet import.
+- Aucun poste de travail ni compte utilisateur n’est créé par l’import.
+- Les horaires sont prévisionnels : la présence au poste reste à confirmer.
+- Le PDF est lu dans le navigateur. Les motifs détaillés d’absence ne
+  sont pas enregistrés : seuls dates, statuts et créneaux sont envoyés.
+- Compatible avec le format hebdomadaire texte de l’exemple fourni.
+  Les scans/photos et autres mises en page ne sont pas pris en charge.
+- Pas d’API d’IA ni de facturation d’IA nécessaire pour ce format.
+
+Validation réalisée : compilation de production, lecture du PDF fourni,
+reconnaissance des 13 lignes et 91 journées, protections SQL contre les
+imports non administrateurs, les doublons, les horaires invalides et
+l’écrasement des présences confirmées.
+
+L’archive ne met pas automatiquement à jour ton site ou Supabase.

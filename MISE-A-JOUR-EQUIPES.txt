@@ -1,0 +1,33 @@
+MISE À JOUR DES ÉQUIPES — APPLICATION CLOUDFLARE EXISTANTE
+
+1. Dans Supabase > SQL Editor, exécute tout le fichier supabase/03-equipes.sql.
+   Il ajoute les équipes sans effacer tes noms, comptes, tâches ou présences.
+   Il peut être relancé. Ne relance pas les scripts 01 ou 02 après le 03.
+
+2. Dans GitHub, remplace uniquement ces deux fichiers, à leur emplacement actuel :
+   src/workshop.tsx
+   src/globals.css
+   Utilise le crayon Modifier sur chacun et remplace tout le contenu avec celui
+   fourni ici, ou dépose le dossier src à la racine avec Upload files.
+   Enregistre avec Commit changes. Ne place pas ces fichiers à la racine.
+
+3. Cloudflare reconstruira l’application automatiquement. Conserve tes variables
+   de compilation Supabase actuelles. Aucun réglage Cloudflare ni redéploiement
+   de la fonction workshop-accounts n’est nécessaire.
+
+4. Après le déploiement, recharge l’application (Ctrl+F5).
+   Ouvre Équipes > Modifier la fiche > Équipe > Enregistrer la fiche.
+   Les collaborateurs existants apparaissent d’abord Sans équipe.
+   Le filtre permet d’afficher une équipe dans les fiches et la liste du jour.
+   Le plan continue à afficher toutes les affectations pour garder une vue globale.
+
+Équipes disponibles : Technicien services rapide, Electrotechnicien,
+Mécatronicien, Mécanicien. Une équipe par collaborateur.
+
+Ce ZIP contient aussi le projet complet et une version compilée, mais les deux
+fichiers ci-dessus suffisent pour mettre à jour ton dépôt existant.
+Le fichier public/_redirects a été retiré pour conserver la correction Cloudflare.
+
+Contrôles : TypeScript, compilation et migration SQL avec données existantes,
+changement d’équipe administrateur et refus de modification collaborateur.
+Les changements ne sont pas appliqués automatiquement à GitHub ou Supabase.

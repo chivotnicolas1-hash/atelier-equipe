@@ -1,0 +1,14 @@
+CORRECTION — POSITION DU BOUTON SIGNALER
+
+Si la mise à jour 09 est déjà installée :
+1. Remplace uniquement src/workshop.tsx sur GitHub.
+2. Clique Commit changes et attends le succès Cloudflare.
+3. Recharge l’application.
+
+Aucun script Supabase à exécuter.
+Le bouton Signaler utilise le même emplacement sous les indicateurs,
+la même classe secondary, la même taille d’icône et le même comportement
+responsive que Gérer l’annonce dans la vue administrateur.
+Il ouvre toujours le formulaire de signalement.
+
+Si la version 09 n’est pas installée, suis MISE-A-JOUR-09.txt.

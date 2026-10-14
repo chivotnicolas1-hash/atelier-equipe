@@ -1,0 +1,67 @@
+MISE À JOUR 07 — ORIENTATION DES PONTS, ANNONCE ET PHOTO DE PROFIL
+
+INSTALLATION (après la mise à jour 06)
+1. Décompresse atelier-supabase.zip.
+2. Ouvre supabase/07-annonce-profil.sql dans le Bloc-notes, copie tout.
+3. Supabase > SQL Editor > New query : colle le script et clique Run.
+   Le résultat doit indiquer Success. Ne relance pas les anciens scripts.
+4. Sur GitHub, dans src, remplace :
+   workshop.tsx
+   workshop-plan.tsx
+   globals.css
+   Puis ajoute, toujours dans src :
+   profile-announcement.tsx
+   Clique Commit changes.
+5. Ajoute supabase/07-annonce-profil.sql dans le dossier supabase du dépôt
+   pour conserver la migration avec le projet, puis Commit changes.
+6. Attends le succès du dernier déploiement Cloudflare et recharge le site
+   avec Ctrl + F5. Sur mobile, ferme puis rouvre l’application.
+
+Aucune nouvelle dépendance, variable Cloudflare, configuration Storage ou
+fonction Edge n’est nécessaire. Les fichiers de la version 06 doivent déjà
+être présents, notamment src/lib/schedule.ts.
+
+PONTS
+Rotation de 90 degrés (sens horaire) des pictogrammes de :
+Pneus 1, Attelage & méca légère, Vidange 1, Vidange 2, Méca légère,
+Méca lourde et Distribution. Les textes restent lisibles normalement.
+Les trois autres ponts conservent leur orientation et tous les ponts gardent
+la même échelle graphique. Les espaces autour des dessins sont agrandis
+pour que les pictogrammes tournés ne recouvrent pas les noms.
+
+ANNONCE
+Administration > Gérer l’annonce.
+Saisis ton texte (1000 caractères maximum), coche « Afficher la bannière
+pour toute l’équipe », puis Enregistrer l’annonce.
+La bannière rouge apparaît sous la barre du haut pour tous les utilisateurs
+connectés, quel que soit leur rôle. Les autres appareils la récupèrent au
+prochain rafraîchissement automatique (environ 20 secondes), ou en rechargeant.
+Un bouton Modifier est aussi visible sur la bannière dans la vue Administration.
+Pour masquer l’annonce, décoche l’option et enregistre. Le texte est conservé.
+Les collaborateurs et modérateurs peuvent lire l’annonce, pas la modifier.
+Il s’agit d’un affichage dans l’application, pas d’une notification push.
+
+PROFIL
+Clique sur le logo Atelier en haut à gauche (ou l’avatar à droite).
+Le profil affiche le nom, l’adresse e-mail, l’équipe et le rôle du compte.
+Choisis une photo, vérifie l’aperçu puis clique Enregistrer mon profil.
+JPEG, PNG ou WebP, 8 Mo maximum. Le centre de l’image est recadré en carré,
+réduit à 256 × 256 pixels et enregistré en JPEG compact dans Supabase.
+La photo remplace le pictogramme dans le logo à gauche et l’avatar à droite.
+Elle réapparaît sur tes autres appareils après chargement de ton compte.
+« Retirer ma photo », puis Enregistrer mon profil restaure les icônes.
+La fermeture sans enregistrement annule la modification de photo.
+Chaque utilisateur, y compris administrateur et modérateur, ne peut modifier
+que sa propre photo. La photo est personnelle à son compte ; cette version
+ne l’ajoute pas aux fiches ou aux postes visibles par les autres collaborateurs.
+Le changement de photo ne modifie ni les identifiants ni les droits d’accès.
+
+VALIDATION
+Compilation de production et tests SQL locaux : droits des trois profils,
+isolation des photos, suppression/remplacement, formats et tailles limités,
+annonce réservée à l’administrateur, conservation des données si le script
+est relancé. Tests navigateur avec données de démonstration : rotation de
+sept ponts sans débordement, texte de bannière, ajout/enregistrement/rechargement
+et retrait de photo avec les trois rôles, affichage mobile et absence d’erreurs JS.
+
+Le ZIP ne met pas automatiquement à jour Supabase, GitHub ou Cloudflare.

@@ -1,0 +1,37 @@
+MISE À JOUR 08 — ATELIER FAYET 33
+
+CORRECTIONS
+- Le logo de l’application (clé sur fond vert) reste à gauche, même si
+  une photo de profil est enregistrée. Le clic ouvre toujours le profil.
+- La photo personnelle apparaît uniquement dans l’avatar à droite.
+- Organisation et Gestion devis sont dans la colonne immédiatement à
+  droite des ponts latéraux, plus proches de ceux-ci et plus accessibles
+  sur téléphone. Leurs affectations ne changent pas.
+- Nouveau nom : Atelier Fayet 33, dans la barre du haut, la connexion,
+  le pied de page, le titre de l’onglet et l’installation mobile.
+
+INSTALLATION (la version 07 doit déjà être installée)
+Aucun script Supabase à exécuter pour cette mise à jour.
+1. Décompresse l’archive.
+2. Dans GitHub, remplace à leur emplacement actuel :
+   src/workshop.tsx
+   src/main.tsx
+   src/profile-announcement.tsx
+   src/globals.css
+   src/lib/workshop.ts
+   public/manifest.webmanifest
+   public/sw.js
+   index.html (à la racine du dépôt)
+3. Clique Commit changes puis attends le succès du dernier déploiement
+   Cloudflare. Recharge ensuite l’application avec Ctrl + F5.
+4. Si le raccourci mobile conserve l’ancien nom après fermeture/réouverture,
+   retire le raccourci de l’écran d’accueil puis ajoute-le à nouveau.
+   Les données et la photo restent enregistrées dans Supabase.
+
+Ne renomme pas le dépôt GitHub ou le projet Cloudflare : ce n’est pas
+nécessaire. L’adresse actuelle du site reste la même.
+
+La compilation et l’interface avec les trois profils ont été vérifiées,
+notamment le logo fixe avec une photo enregistrée, l’avatar personnel,
+les bureaux dans la deuxième colonne et le nom sur petit écran.
+Le ZIP ne met pas automatiquement à jour le site.

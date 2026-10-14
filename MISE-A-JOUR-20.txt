@@ -1,0 +1,43 @@
+ATELIER FAYET 33 — SIGNALLEMENTS, AFFECTATIONS ET ARTICLES À COMMANDER
+
+INSTALLATION
+1. Supabase > SQL Editor : exécute supabase/20-signalements-commandes.sql après les migrations précédentes. La mise à jour 19 ne nécessitait pas de SQL.
+2. Sur GitHub, remplace :
+   src/workshop.tsx
+   src/reports.tsx
+   src/globals.css
+3. Ajoute :
+   src/order-requests.tsx
+4. Valide avec Commit changes. Attends le dernier déploiement Cloudflare réussi et recharge l’application.
+Aucune nouvelle dépendance, variable ni fonction Edge. Le dossier OCR existant reste nécessaire pour le scan des plaques.
+
+1. TITRE
+Le nom en haut à gauche devient ATELIER FAYET 33 en majuscules.
+
+2. CORRIGER UN SIGNALEMENT
+Dans Signalements, ouvre la fiche puis clique Modifier ce signalement.
+Tu peux corriger l’immatriculation, le commentaire, retirer une photo erronée ou en ajouter une nouvelle (5 maximum au total).
+L’auteur peut modifier ses propres signalements. L’administrateur peut modifier tous les signalements. L’appartenance à l’équipe Encadrants donne toujours accès à la lecture de tous les signalements, sans permettre de modifier ceux d’un autre auteur.
+La date et l’auteur de création sont conservés ; la date de dernière modification est affichée dans la fiche.
+En cas de modifications simultanées, ferme puis rouvre la fiche avant de réessayer : les corrections de l’autre personne ne sont pas écrasées.
+
+3. CHANGER DE POSTE
+Ouvre le poste actuel, puis clique Retirer pour le collaborateur.
+Ouvre ensuite le nouveau poste et clique Affecter.
+Un collaborateur déjà affecté ailleurs apparaît avec un bouton désactivé Déjà affecté.
+Cette règle s’applique aussi à l’administrateur et est contrôlée dans la base de données, même avec une ancienne interface. Le retrait annule la confirmation de présence : le collaborateur devra confirmer son nouveau poste.
+
+4. NOMS SUR LE PLAN
+Le nom et la mention Affectation prévue / Présence confirmée sont centrés dans chaque poste. La mention de déjeuner l’est aussi.
+
+5. ARTICLES À COMMANDER — PHASE ADMINISTRATEUR
+Dans l’espace Administration, nouvel onglet Articles à commander.
+Clique Nouvelle demande. Ajoute de 1 à 30 articles avec désignation, quantité, référence facultative et fournisseur facultatif. Un commentaire peut préciser le besoin.
+Enregistrer la demande la place En attente de validation. Ouvre-la pour modifier les articles ou leurs quantités.
+Pour la valider, ouvre la demande enregistrée et clique Valider la demande. Une confirmation avertit du verrouillage définitif.
+Les demandes validées restent consultables, avec la date et le nom du validateur, mais ne sont plus modifiables, y compris via un appel direct à la base.
+Pour l’instant, seul le compte administrateur accède à cet espace et réalise les validations de cette phase de préparation. Les autres collaborateurs, encadrants et modérateurs n’y ont pas encore accès. L’ouverture à l’équipe se fera dans une prochaine mise à jour, avec validation par les encadrants.
+Valider signifie approuver la demande interne : aucune commande n’est envoyée à un fournisseur et aucune notification n’est ajoutée pour ce formulaire dans cette version.
+
+VÉRIFICATIONS
+Compilation de production ; tests SQL des permissions, corrections de plaques/photos et conflits, changement de poste avec retrait préalable, accès administrateur aux demandes et verrouillage après validation. Parcours navigateur mobile : titre, centrage, correction de signalement, affectation bloquée et formulaire de demande.
