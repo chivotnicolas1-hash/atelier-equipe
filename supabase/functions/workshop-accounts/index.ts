@@ -15,19 +15,24 @@ Deno.serve(async(req:Request)=>{
  if(authError||!identity.user)return reply({error:'Session expirée. Reconnecte-toi.'},401);
  // La fonction de lecture contrôle l’adresse administrateur, le fournisseur et la session.
  const caller=createClient(url,key,{global:{headers:{Authorization:`Bearer ${token}`}},auth:{persistSession:false,autoRefreshToken:false}});
- const {data:workshop,error:roleError}=await caller.rpc('workshop_load',{p_date:new Date().toISOString().slice(0,10)});
- if(roleError||workshop?.admin!==true)return reply({error:'Action réservée à l’administrateur.'},403);
  const body=await req.json();
+ const {data:workshop,error:roleError}=await caller.rpc('workshop_load',{p_date:new Date().toISOString().slice(0,10)});
+ if(roleError)return reply({error:'Accès refusé.'},403);
+ let requestPerson:any=null;
+ if(body.requestId){const {data,error}=await caller.rpc('workshop_password_authorize',{p_id:body.requestId});if(error)return reply({error:'Demande inaccessible.'},403);requestPerson=data;body.staffId=data.staffId;}
+ else if(workshop?.admin!==true)return reply({error:'Action réservée à l’administrateur.'},403);
  if(typeof body.staffId!=='string'||typeof body.password!=='string'||body.password.length<12||body.password.length>128)return reply({error:'Choisis une fiche et un mot de passe de 12 à 128 caractères.'},400);
- const person=workshop.staff.find((s:{id:string})=>s.id===body.staffId);
+ const person=requestPerson||workshop.staff.find((s:{id:string})=>s.id===body.staffId);
  if(!person?.email)return reply({error:'Enregistre d’abord une adresse e-mail sur la fiche.'},400);
  const {data:userId,error:lookupError}=await server.rpc('workshop_account_id',{p_staff_id:body.staffId});
  if(lookupError)return reply({error:'Applique le script 02-connexion-identifiants.sql avant de créer les comptes.'},503);
  if(userId){
  const {error}=await server.auth.admin.updateUserById(userId,{password:body.password,email_confirm:true});
  if(error)return reply({error:'Le mot de passe n’a pas pu être remplacé : '+error.message},400);
+ if(body.requestId){const {error:closeError}=await server.rpc('workshop_password_resolved',{p_id:body.requestId,p_actor:identity.user.id});if(closeError)return reply({error:'Mot de passe remplacé, mais clôture impossible. Contacte l’administrateur.'},500);}
  return reply({ok:true,created:false});
  }
+ if(body.requestId)return reply({error:'Compte introuvable. Contacte l’administrateur.'},400);
  const {error}=await server.auth.admin.createUser({email:person.email,password:body.password,email_confirm:true});
  if(error)return reply({error:'Le compte n’a pas pu être créé : '+error.message},400);
  return reply({ok:true,created:true});
