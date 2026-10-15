@@ -1,0 +1,84 @@
+ATELIER FAYET 33 — MISE À JOUR 38
+Signalements, PDF Norauto, niveaux de litiges et plan adapté à l’écran
+
+INSTALLATION APRÈS LA MISE À JOUR 37
+1. Décompresse cette archive.
+2. Dans Supabase > SQL Editor > New query, colle le contenu COMPLET de
+   supabase/38-signalements-litiges.sql puis clique sur Run.
+   Attends le message Success. Ce script peut être réexécuté.
+3. Remplace dans ton dépôt GitHub les dossiers src, public et supabase,
+   ainsi que les fichiers de la racine fournis dans cette archive :
+   package.json, package-lock.json, index.html, vite.config.ts,
+   tsconfig.json et les autres fichiers de configuration présents.
+   Conserve tes variables de build Cloudflare et tes secrets Supabase.
+   Ne crée pas de fichier _redirects.
+4. Enregistre les changements sur la branche liée à Cloudflare.
+5. Attends le succès du déploiement, ferme puis rouvre l’application.
+   Si nécessaire, actualise complètement la page dans le navigateur.
+
+Aucune fonction Edge à redéployer. Aucun nouveau secret à créer.
+Les migrations des versions précédentes doivent déjà être installées.
+Ne désinstalle pas les anciennes fonctions SQL : certaines sont réutilisées.
+
+1 — SIGNALEMENTS SANS PÔLE
+Le choix du pôle disparaît de la création, de la modification, de la
+consultation et du PDF. L’enregistrement ne demande plus de lieu.
+La case « Avant intervention(s) » reste disponible.
+Les anciennes valeurs de pôle restent en base pour préserver l’historique,
+mais elles ne sont plus affichées ni utilisées dans ces écrans.
+
+2 — NOUVEAU PDF DE SIGNALEMENT
+- Bannière bleu Norauto, logo fourni en haut à gauche et filet jaune.
+- Immatriculation mise en évidence, auteur, date et heure de saisie,
+  dernière modification si différente, référence et informations saisies.
+- Mention avant intervention lorsque la case est cochée.
+- Photos numérotées, chacune sur une page, sans déformation ni recadrage.
+- Gestion des textes longs et pagination sur toutes les pages.
+- Pied de page : centre, adresse, téléphone, SIRET de l’établissement,
+  TVA, raison sociale, forme juridique, capital, RCS et siège social.
+Le logo est inclus dans public/norauto-report-logo.png : l’export ne
+nécessite pas de contacter le site externe qui hébergeait l’image.
+Le document reste une fiche de suivi atelier, pas une facture ou un devis.
+
+Identité utilisée (vérifiée le 15 octobre 2026) :
+Norauto Fayet — Centre Commercial Auchan, 02100 Fayet
+Téléphone : 03 23 67 81 81
+SIRET du centre : 480 470 152 02588
+NORAUTO FRANCE — SAS au capital de 72 883 499 €
+RCS Lille Métropole 480 470 152 — TVA : FR71480470152
+Siège : 2A boulevard Van Gogh, 59650 Villeneuve-d’Ascq
+
+Sources :
+https://centres.norauto.fr/aisne/fayet-saint-quentin/centre-commercial-auchan
+https://www.norauto.fr/e/mentions-legales.html
+https://recherche-entreprises.api.gouv.fr/search?q=48047015202588&per_page=1
+Logo fourni : https://www.blanccarroi.fr/wp-content/uploads/Logo-Norauto.png
+
+3 — LITIGES EN COURS
+Administrateur et modérateurs peuvent choisir Niveau 1, 2 ou 3 dans le
+formulaire. Une nouvelle fiche propose le niveau 1 par défaut.
+Les anciennes fiches indiquent « Niveau à préciser » jusqu’à leur édition :
+aucun niveau n’est inventé pour l’historique.
+Lecture réorganisée : client, plaque, badges de niveau/statut, situation,
+suivi et prochaines actions, auteur et heure de la dernière mise à jour.
+Seul l’administrateur peut supprimer un litige, après confirmation.
+La suppression est définitive. Les modérateurs n’ont pas ce droit,
+y compris côté serveur. Une modification concurrente bloque la suppression
+jusqu’à actualisation, afin de ne pas effacer une version non consultée.
+
+4 — UN SEUL PLAN DE L’ATELIER
+Le menu contient une seule entrée « Plan de l’atelier » pour tous les profils.
+- Écran de 900 pixels CSS ou moins : présentation mobile V2.
+- Écran plus large : présentation initiale V1.
+Le changement est automatique lorsque la largeur de la fenêtre change.
+La V2 n’est donc plus une page séparée réservée à l’administrateur.
+Positions, double affectation géométrie, horaires et coupures restent gérés
+comme avant. Les droits restent inchangés : seuls les gestionnaires peuvent
+modifier les affectations ; les autres profils consultent le plan.
+
+VÉRIFICATIONS EFFECTUÉES
+Compilation de production réussie ; migrations et droits testés ; tests
+navigateur avec administrateur, modérateur, collaborateur, encadrant et
+invité ; changement mobile/ordinateur ; PDF de plusieurs pages inspecté
+avec textes longs et photos horizontales/verticales.
+Ces vérifications ont été effectuées localement, pas sur votre production.

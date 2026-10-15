@@ -1,0 +1,130 @@
+ATELIER FAYET 33 — MISE À JOUR 37
+Paramètres, plan spatial mobile et litiges clients
+
+INSTALLATION APRÈS LA MAJ36
+1. Supabase > SQL Editor : exécuter le contenu complet de
+   supabase/37-parametres-litiges.sql.
+   Le script est réexécutable et conserve les données existantes.
+2. Remplacer les fichiers du projet GitHub par ceux du ZIP.
+3. Attendre la réussite du déploiement Cloudflare, puis rouvrir l’application.
+Aucune fonction Edge à redéployer pour cette mise à jour.
+Aucun nouveau secret ni changement des variables de build.
+Les fonctions et migrations des versions précédentes doivent être installées.
+
+1 — PARAMÈTRES DE L’APPLICATION
+Une page « Paramètres application » est ajoutée au menu des gestionnaires.
+Elle présente des cartes adaptées au téléphone :
+- Gérer l’annonce : administrateur et modérateurs ;
+- Gérer les boutons : administrateur uniquement ;
+- Personnaliser l’application : administrateur uniquement ;
+- Activer / désactiver la maintenance : administrateur uniquement.
+Les droits existants sont conservés, y compris côté serveur.
+Ces boutons sont retirés de leur ancienne position sur les pages métier.
+Importer un planning PDF reste disponible pour l’administrateur hors des
+pages Paramètres, Litiges, Mes notifications et Déchets.
+Le raccourci de modification sur une bannière publiée reste disponible
+aux gestionnaires pour modifier directement l’annonce affichée.
+
+Pendant une maintenance, l’administrateur voit un rappel en haut mais
+le bouton pour rétablir le service se trouve dans Paramètres application.
+Si nécessaire, repasser dans le mode Administration pour accéder au menu.
+
+2 — NOUVELLE PROPOSITION DU PLAN MOBILE V2
+Le plan V2 garde sa restriction : administrateur uniquement.
+Les colonnes et lignes des postes reprennent celles du plan initial,
+y compris Gestion devis et Organisation près des ponts de gauche.
+Deux présentations sont disponibles :
+- Vue d’ensemble : tout le plan tient en largeur sur le téléphone ;
+- Détails : postes agrandis, avec glissement horizontal dans le plan.
+Toucher un poste ouvre le panneau d’affectation habituel.
+Les numéros, noms personnalisés, affectations, doubles postes, coupures,
+confirmations, horaires et la sélection du jour sont conservés.
+Les données sont réelles et partagées avec le plan d’origine.
+La vue d’ensemble privilégie le repérage ; utiliser Détails pour lire
+confortablement les noms longs et les informations des collaborateurs.
+
+3 — TÂCHES DANS MES NOTIFICATIONS
+Lors de l’attribution d’une tâche, un message non lu est créé dans la
+boîte de notifications du collaborateur disposant d’un compte actif.
+Il contient le titre et l’échéance et contribue au compteur de la cloche.
+Le bouton « Voir mes tâches » marque ce message comme lu puis ouvre Tâches.
+Une modification significative d’une tâche en cours, sa réattribution ou
+sa réouverture crée également un message. Valider une tâche terminée ou
+réenregistrer ses mêmes données ne produit pas de nouveau message.
+Le mécanisme de notification mobile existant reste utilisé : ce nouvel
+historique n’ajoute pas un second envoi push pour la même opération.
+Les anciennes tâches ne sont pas réinjectées rétroactivement.
+L’affichage du compteur se rafraîchit automatiquement, ou à l’ouverture
+de la cloche. Les notifications lues restent masquées comme auparavant.
+
+4 — RECHERCHE DE PLAQUE
+Le champ de recherche des signalements demande un clavier mobile en
+majuscules, désactive la correction automatique et convertit la saisie
+en majuscules. Le clavier dépend toujours des réglages du téléphone,
+mais la recherche conserve le texte en majuscules dans tous les cas.
+
+5 — ÉCRAN DE MAINTENANCE
+Le bouton Se déconnecter est retiré du bloc de maintenance.
+Au-dessus, le bouton Accéder à WorkOrder reprend le logo, le vert et le
+style utilisés ailleurs dans l’application. Il ouvre le même site externe.
+Cet accès de secours est proposé aux comptes connectés bloqués par la
+maintenance, sans condition d’horaires et sans modifier leur présence.
+La vérification de fin de maintenance et le bouton Actualiser restent actifs.
+L’administrateur garde son accès pour rétablir le service.
+
+6 — LITIGES EN COURS
+Nouvelle page réservée à l’administrateur et aux modérateurs.
+Cliquer Nouveau litige et renseigner :
+- client ;
+- immatriculation ;
+- description des faits ;
+- suivi et actions ;
+- statut En cours ou Résolu.
+Les fiches affichent la personne ayant effectué la dernière modification
+et sa date/heure. Modifier le suivi permet de compléter la fiche ou de
+changer son statut. Le filtre Résolus permet de retrouver les fiches
+clôturées et de les rouvrir si nécessaire.
+La liste est paginée par 30 fiches. Une modification concurrente est
+refusée avec une invitation à actualiser pour ne pas écraser un autre suivi.
+Les collaborateurs, y compris ceux de l’équipe Encadrants sans rôle de
+modérateur, et les invités n’ont accès ni à cette page ni à ses données.
+Cette première version n’ajoute pas de pièces jointes ni de suppression
+aux litiges ; les signalements existants restent une fonctionnalité distincte.
+
+7 — PÔLE ET AVANT INTERVENTION(S)
+Le sélecteur Pôle / lieu du signalement dispose d’un encadré bleu contrasté
+et d’une zone de sélection plus visible, en mode clair comme en mode sombre.
+Une case « Avant intervention(s) » est ajoutée au formulaire.
+Elle est enregistrée avec la fiche, retrouvée lors d’une modification,
+affichée dans le détail lorsqu’elle est cochée et incluse dans le PDF.
+Les signalements existants restent décochés par défaut, sans supposition
+sur le moment où leurs observations ont été faites.
+
+8 — LOGO
+La barre du haut sur ordinateur et téléphone, ainsi que la page de connexion,
+utilisent la même image que l’icône mobile v34 avec des coins arrondis.
+Le fichier graphique d’origine reste conservé ; aucun nouveau dessin
+n’est généré pour cette mise à jour.
+
+VÉRIFICATIONS
+Compilation TypeScript/Vite, migration réexécutée, droits SQL des litiges,
+conflits d’édition, case avant intervention en création/modification,
+messages de tâches et absence de doublon push, parcours navigateur des
+cinq profils, disposition spatiale et zoom du plan, maintenance, clavier
+et affichage mobile sans débordement de la page.
+Les tests sont locaux ; l’application en ligne n’est pas modifiée avant
+l’installation de cette archive et de son script.
+
+FICHIERS PRINCIPAUX
+supabase/37-parametres-litiges.sql
+src/app-settings.tsx
+src/disputes.tsx
+src/maintenance.tsx
+src/workshop.tsx
+src/workshop-plan.tsx
+src/reports.tsx
+src/message-center.tsx
+src/lib/pdf-export.ts
+src/main.tsx
+src/globals.css
+MISE-A-JOUR-37.txt

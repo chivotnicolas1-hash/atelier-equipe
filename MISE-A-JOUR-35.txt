@@ -1,0 +1,49 @@
+ATELIER FAYET 33 — MISE À JOUR 35
+Barre du haut, profil et notifications
+
+INSTALLATION APRÈS LA MAJ34
+1. Décompresser le ZIP et remplacer les fichiers du projet sur GitHub.
+2. Attendre la réussite du déploiement Cloudflare.
+3. Fermer puis rouvrir l’application.
+Aucune nouvelle migration SQL. Aucune fonction Supabase à redéployer.
+Conserver les variables Cloudflare et les secrets Supabase existants.
+Si la MAJ34 n’a pas encore été installée, suivre d’abord son guide pour
+ses fonctions Supabase et son script SQL.
+
+CHANGEMENTS
+1. Le bouton Déconnexion est retiré de la barre du haut.
+   Ouvrir Mon profil avec la photo en haut à droite, puis descendre :
+   un bouton rouge « Se déconnecter » se trouve tout en bas du profil.
+   Disponible pour tous les comptes, y compris les invités.
+   La déconnexion conserve la désinscription des notifications de cet
+   appareil, pour éviter les messages du compte précédent après déconnexion.
+
+2. La barre du haut affiche la cloche Notifications, le bouton de mode
+   clair/sombre, puis la photo du profil. Le mode est donc juste à côté
+   de la photo. La cloche ouvre la page Notifications et affiche le
+   nombre de messages non lus. Le compteur disparaît lorsqu’il est à zéro.
+   L’entrée Notifications est retirée du menu de navigation général.
+   Les liens des notifications reçues continuent d’ouvrir la bonne page.
+
+3. Un message marqué comme lu disparaît de la liste et du compteur.
+   Il reste enregistré comme lu dans Supabase et ne revient pas après
+   actualisation. La page affiche « Aucune notification non lue » si vide.
+   Les demandes de mot de passe à traiter restent une liste distincte :
+   lire une notification ne clôture pas la demande correspondante.
+
+4. Sur la page Notifications, les blocs Collaborateurs présents et
+   Présences confirmées sont masqués pour administrateur et modérateurs.
+   Ils restent disponibles sur les pages où ils apparaissaient auparavant.
+
+FICHIERS MODIFIÉS
+src/workshop.tsx
+src/profile-announcement.tsx
+src/message-center.tsx
+src/globals.css
+MISE-A-JOUR-35.txt
+
+VÉRIFICATIONS
+Compilation TypeScript/Vite et essais navigateur des cinq profils :
+cloche et compteur, ordre des boutons, masquage des blocs, disparition des
+messages lus après actualisation, bouton rouge et déconnexion effective.
+Tests avec données locales ; aucune modification directe du site en ligne.

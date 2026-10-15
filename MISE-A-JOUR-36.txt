@@ -1,0 +1,112 @@
+ATELIER FAYET 33 — MISE À JOUR 36
+Mes notifications, nettoyage et maintenance
+
+INSTALLATION APRÈS LA MAJ35
+1. Supabase > SQL Editor > nouvelle requête : copier puis exécuter
+   supabase/36-maintenance-nettoyage.sql.
+   Le script est réexécutable. Il ne supprime aucun signalement lors de
+   l’installation et laisse la maintenance désactivée par défaut.
+2. Remplacer les fichiers du projet sur GitHub par ceux du ZIP.
+3. Attendre la réussite du déploiement Cloudflare puis rouvrir l’application.
+Aucune fonction Edge à redéployer pour cette mise à jour.
+Conserver les clés, les secrets et les variables Cloudflare existants.
+La MAJ34 doit déjà être installée avec ses deux fonctions Edge.
+
+1 — MES NOTIFICATIONS
+La page est renommée « Mes notifications ».
+Les blocs Tâches à terminer et Urgentes ou en retard sont retirés de cette page,
+ainsi que WorkOrder, Signaler et les boutons personnalisés.
+Les blocs de présence y restent masqués, comme à la MAJ35.
+Les fonctions d’envoi ciblé et les demandes de mot de passe restent disponibles
+aux gestionnaires autorisés. L’accès se fait toujours par la cloche du haut.
+
+2 — SUPPRIMER LES SIGNALEMENTS ANCIENS
+Administrateur > Signalements > Supprimer les signalements de plus de 30 jours.
+Une fenêtre affiche le nombre de fiches et de photos concernées, ainsi que
+la date limite. Cliquer « Confirmer la suppression définitive » pour exécuter.
+Annuler ferme la fenêtre sans supprimer les données.
+
+La sélection porte sur toute l’équipe, indépendamment de la recherche par
+plaque ou du filtre Mes signalements. L’ancienneté utilise la date de création,
+pas la dernière modification : plus de 30 périodes de 24 heures.
+Une fiche ayant exactement 30 jours n’est pas incluse à cet instant.
+La date limite affichée est conservée lors de la confirmation.
+
+Les lignes sont réellement supprimées : immatriculation, auteur enregistré,
+notes, lieu, dates et toutes les photos jointes. Aucune corbeille ni archive
+applicative n’est créée. Les photos sont stockées dans la base et supprimées
+avec leur fiche par une relation ON DELETE CASCADE.
+Si l’unique exemple invité est supprimé, sa sélection est retirée également.
+La suppression groupée est autorisée uniquement pour l’administrateur,
+y compris côté serveur. Les droits de suppression individuelle existants
+ne sont pas modifiés.
+
+3 — ANCIENNES PHOTOS DE PROFIL
+Vérification effectuée : il existe une seule ligne de profil par compte.
+Lors de l’enregistrement d’une nouvelle photo, la valeur précédente est
+remplacée dans cette ligne. Aucune ancienne photo n’est conservée dans une
+table d’historique ou dans un dossier de fichiers de l’application.
+Le fonctionnement existant satisfait donc déjà cette demande ; aucun second
+stockage ni procédure de nettoyage supplémentaire n’est ajouté.
+Les autres écrans récupèrent la nouvelle photo lors de leur actualisation.
+
+PORTÉE DES SUPPRESSIONS
+Ces opérations concernent la base active. Elles ne réécrivent pas les
+sauvegardes déjà conservées par Supabase, et ne suppriment pas les PDF ou
+photos précédemment téléchargés sur un appareil. Les copies de sauvegarde
+suivent la rétention du service ; l’application ne peut pas garantir leur
+purge immédiate. Les anciennes versions internes de PostgreSQL suivent
+également son nettoyage normal, sans rester consultables dans l’application.
+
+4 — MODE MAINTENANCE
+Une barre « Mode maintenance » apparaît au-dessus de l’application pour
+l’administrateur connecté. Cliquer « Activer la maintenance » suffit.
+Le bouton devient « Désactiver la maintenance ».
+
+Pendant la maintenance :
+- l’administrateur continue à utiliser l’application et peut la désactiver ;
+- les autres comptes voient « Application en maintenance » ;
+- les fonctions de lecture et modification métier vérifient ce blocage
+  côté Supabase, et non uniquement dans l’interface ;
+- les pages déjà ouvertes vérifient le statut toutes les 15 secondes et
+  lors du retour sur l’application ;
+- la connexion reste possible pour que l’administrateur puisse revenir ;
+- les envois push sont suspendus pendant la maintenance ;
+- le programme cron reste configuré. Les envois encore éligibles reprennent
+  après désactivation, selon leurs règles habituelles de délai et de tentative.
+Les autres automatisations de fond ne sont pas supprimées.
+Le changement de mot de passe natif Supabase reste une fonction de compte,
+indépendante du blocage des données métier.
+
+La maintenance n’effectue pas elle-même une mise à jour ou un déploiement.
+Pour remettre le site en service, cliquer « Désactiver la maintenance ».
+En cas de problème d’accès à l’interface administrateur, le propriétaire
+Supabase peut exécuter cette requête dans SQL Editor :
+update public.workshop_maintenance
+set enabled = false, updated_at = now()
+where id = 1;
+
+5 — MOT DE PASSE OUBLIÉ
+Le texte « Mot de passe oublié ? » reste cliquable et accessible au clavier,
+mais n’a plus l’apparence d’un bouton encadré et n’est pas souligné.
+Son formulaire comporte un fond contrasté, une bordure bleue plus visible
+et un champ e-mail renforcé. Le style s’adapte au mode clair et au mode sombre.
+Le traitement des demandes reste celui de la MAJ34.
+
+VÉRIFICATIONS
+Compilation TypeScript/Vite ; migration exécutée deux fois ; droits de
+suppression groupée et seuil de 30 jours ; suppression effective des fiches
+et photos ; remplacement de photo sans historique ; maintenance côté SQL,
+accès administrateur et reprise ; parcours navigateur des cinq profils.
+Essais locaux uniquement : le site en ligne sera modifié après installation.
+
+FICHIERS MODIFIÉS OU AJOUTÉS
+supabase/36-maintenance-nettoyage.sql
+src/maintenance.tsx
+src/main.tsx
+src/workshop.tsx
+src/reports.tsx
+src/message-center.tsx
+src/password-tools.tsx
+src/globals.css
+MISE-A-JOUR-36.txt
