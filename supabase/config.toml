@@ -5,3 +5,7 @@ verify_jwt = false
 [functions.workshop-push]
 verify_jwt = false
 # Secret dédié x-workshop-secret validé par la fonction, appelée uniquement par Cron.
+
+[functions.workshop-debrief]
+verify_jwt = false
+# Jeton validé par auth.getUser puis accès au récapitulatif contrôlé par SQL.
