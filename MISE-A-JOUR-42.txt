@@ -1,0 +1,112 @@
+ATELIER FAYET 33 — MISE À JOUR 42
+Contrôles qualité, signatures obligatoires, notifications et litiges
+
+INSTALLATION — À LIRE EN PREMIER
+1. Décompresse l’archive.
+2. Supabase > SQL Editor > New query : copie tout le contenu de
+   supabase/42-qualite-signatures-litiges.sql puis clique sur Run.
+   Le résultat attendu est Success. Le script peut être rejoué.
+   Prérequis : migrations jusqu’à 40-profils-signalements.sql incluses.
+   Si tu étais resté à la MAJ39, exécute d’abord 40-profils-signalements.sql.
+   Les scripts 40b-debrief-ia.sql et 41-debrief-sans-api.sql ne sont pas requis.
+3. Remplace les fichiers du projet GitHub par ceux de cette archive.
+   Cela comprend src, public, supabase, index.html, package.json,
+   package-lock.json, tsconfig.json, vite.config.ts et les autres fichiers
+   de configuration présents dans l’archive.
+   Supprime les anciens src/recap-debrief.tsx et src/lib/recap-summary.ts
+   s’ils sont encore présents sur GitHub (ils ne sont plus utilisés).
+   Ne téléverse pas node_modules ni dist. N’ajoute aucun _redirects.
+   Conserve tes variables Cloudflare et tes secrets Supabase existants.
+4. Attends la réussite du déploiement Cloudflare puis ferme et rouvre l’appli.
+   Important : appliquer le SQL avant le nouveau code, sinon l’écran de
+   signature affichera le message demandant d’installer la MAJ42.
+5. Teste avec ton compte administrateur, puis un compte collaborateur.
+
+AUCUNE NOUVELLE CLÉ API. AUCUNE NOUVELLE EDGE FUNCTION À CRÉER.
+
+DÉBRIEF SUPPRIMÉ
+Le débrief, sa synthèse automatique et la lecture vocale ont été retirés.
+Les récapitulatifs habituels, leur publication et leurs notifications restent.
+Le SQL bloque l’entrée de l’ancien débrief OpenAI si elle existe déjà.
+Si tu l’avais déployée, tu peux supprimer uniquement la fonction
+workshop-debrief depuis Supabase > Edge Functions, ou la redéployer avec
+le fichier de cette archive (il répond « fonction supprimée », sans appel API).
+Supprime OPENAI_API_KEY des secrets uniquement si aucune autre fonction
+ne l’utilise. Les clés des notifications VAPID ne doivent pas être modifiées.
+Les anciens récapitulatifs et caches privés ne sont pas effacés.
+
+1 — F9900 CONTRÔLES QUALITÉ
+Nouvelle page du menu administrateur et modérateur, inaccessible aux autres
+rôles dans l’application et via les fonctions de la base de données.
+Ouvre cette page > Configurer le formulaire.
+Colle le lien complet destiné aux répondants, au format
+https://docs.google.com/forms/d/e/IDENTIFIANT/viewform
+ou le code iframe fourni par Google Forms, puis Enregistrer le formulaire.
+Pour un lien court forms.gle, ouvre-le d’abord et copie l’adresse complète.
+Un champ vide retire le formulaire de l’application.
+Seul le lien Google Forms est enregistré ; le code HTML n’est jamais exécuté.
+Les réponses sont stockées dans Google Forms, pas dans Supabase.
+Les droits de partage du formulaire Google doivent autoriser les personnes
+concernées. La connexion Google peut nécessiter l’ouverture dans un nouvel
+onglet : un lien de secours est présent dans la page.
+Aucun vrai formulaire n’est préconfiguré : ajoute le tien après installation.
+Aide officielle : https://support.google.com/docs/answer/2839588?hl=fr
+
+2 — SIGNATURE OBLIGATOIRE
+À l’ouverture de l’application, les utilisateurs sans signature doivent la
+tracer et l’enregistrer avant d’accéder aux pages. Cela inclut administrateur,
+modérateurs, collaborateurs et invités. Les signatures existantes sont gardées.
+Cette étape ne revient pas à chaque connexion si une signature existe déjà.
+Dans Mon profil, la signature peut être retracée ; enregistrer une signature
+vide n’est plus autorisé. Le métier reste modifiable uniquement par l’admin.
+L’invité ne reçoit aucun droit de modification des données de l’atelier.
+Une signature tracée ici est une image de signature, pas une signature
+électronique qualifiée. Les anciens signalements ne sont pas signés rétroactivement.
+
+3 — NOTIFICATIONS
+Un bouton Supprimer retire une notification personnelle de la liste et du
+compteur. La suppression n’affecte pas les autres destinataires.
+Le texte est effacé et une trace technique minimale de l’événement est gardée
+pour empêcher qu’un rappel programmé soit recréé après suppression.
+Le bouton Marquer comme lue conserve son fonctionnement habituel.
+Cela ne retire pas une notification déjà affichée par Android ou iOS.
+
+4 — PLAN DE L’ATELIER
+Le cadre du nom est vert très clair quand la présence est confirmée et rouge
+très clair quand elle ne l’est pas, sur téléphone et ordinateur.
+L’indication textuelle et l’indication de pause déjeuner sont conservées.
+Aucun changement du déclenchement de confirmation via WorkOrder.
+
+5 — PLAQUE DU PDF
+Police condensée Oswald Medium et taille ajustée pour se rapprocher de la
+photo CL-564-BG fournie. Ce n’est pas l’identification certaine de la police
+exacte utilisée par le fabricant de la plaque photographiée.
+Les bandes bleues, les étoiles, le F, le logo de l’application et le 33 restent
+inchangés. Les tirets sont ajoutés au format français AA-123-AA.
+La nouvelle police est incluse localement avec sa licence libre : aucune API.
+
+6 ET 7 — LITIGES
+À la saisie, indique si le litige fait suite au service client Norauto.
+Oui : niveau 1, 2 ou 3 obligatoire. Non : aucun niveau enregistré ni affiché.
+Les anciens dossiers gardent leur historique ; leur origine doit être
+précisée à la prochaine modification, sans supposer un contact service client.
+Le bouton Clôturer le dossier ouvre le formulaire avec le statut Résolu.
+La résolution est obligatoire avant enregistrement.
+Le dossier résolu affiche la résolution, la personne et l’heure de clôture
+(heure de Paris). Il se retrouve via Afficher > Résolus.
+Les anciens dossiers résolus sans texte sont signalés comme tels.
+Les administrateurs et modérateurs peuvent modifier le suivi ou rouvrir un
+litige. La suppression complète reste réservée à l’administrateur.
+
+8 — ALLÈGEMENT DES PAGES
+Les cadres Collaborateurs présents et Présences confirmées sont retirés des
+pages Tâches, Signalements, Consommables, Sondages et Récapitulatif pour
+l’administration et la modération. Ils restent disponibles sur le plan.
+
+VÉRIFICATIONS EFFECTUÉES
+Compilation TypeScript/Vite, migrations SQL réexécutables, droits des rôles,
+conflits de version, suppression personnelle des notifications, signatures et
+clôture obligatoire ; parcours navigateur simulés pour les cinq profils ;
+contrôle visuel du PDF et de l’affichage mobile.
+Le formulaire Google réel n’a pas pu être testé car son lien n’est pas fourni.
+Aucun déploiement ni changement n’a été effectué sur ta base de production.

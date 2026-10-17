@@ -1,3 +1,5 @@
+NOTE : cette archive contient la MAJ42. Suivre MISE-A-JOUR-42.txt ; le débrief a été retiré.
+
 ATELIER FAYET 33 — MISE À JOUR 41
 Débrief automatique et lecture vocale sans frais d’API supplémentaires
 
