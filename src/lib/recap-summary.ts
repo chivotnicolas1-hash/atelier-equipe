@@ -1,0 +1,7 @@
+export type RecapSource={date:string,vehicles:string,missing_parts:string,tasks:{title:string,name:string,due:string,priority:string,details?:string}[]};
+export function recapSummary(r:RecapSource){
+ const date=new Date(r.date+'T12:00:00').toLocaleDateString('fr-FR');const urgent=r.tasks.filter(t=>t.priority==='urgent').length,late=r.tasks.filter(t=>t.due<r.date).length;
+ const tasks=[...r.tasks].sort((a,b)=>Number(b.priority==='urgent')-Number(a.priority==='urgent')||a.due.localeCompare(b.due));
+ return [`Débrief du ${date}`,`Véhicules immobilisés\n${r.vehicles.trim()||'Aucun véhicule renseigné dans cette rubrique.'}`,`Tâches non terminées : ${tasks.length}\n${urgent} tâche(s) urgente(s) ; ${late} tâche(s) en retard à la date du récapitulatif. Les deux catégories peuvent se recouper.`,...(tasks.length?[tasks.map((t,i)=>`${i+1}. ${t.priority==='urgent'?'URGENT — ':''}${t.title} — ${t.name||'Collaborateur non renseigné'} — échéance ${new Date(t.due+'T12:00:00').toLocaleDateString('fr-FR')}${t.details?'\n'+t.details:''}`).join('\n')]:[]),`Pièces manquantes\n${r.missing_parts.trim()||'Aucune pièce renseignée dans cette rubrique.'}`,'État enregistré lors de la préparation du récapitulatif. Une rubrique vide ne confirme pas l’absence de problème.'].join('\n\n');
+}
+export function speechChunks(text:string){return text.match(/[\s\S]{1,220}(?:\s|$)|[\s\S]{1,220}/g)?.map(s=>s.trim()).filter(Boolean)||[]}
