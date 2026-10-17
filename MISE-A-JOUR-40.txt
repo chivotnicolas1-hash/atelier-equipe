@@ -1,3 +1,5 @@
+IMPORTANT : depuis la MAJ41, ne plus suivre les étapes d’activation OpenAI ci-dessous. Lire MISE-A-JOUR-41.txt pour la version sans frais d’API.
+
 ATELIER FAYET 33 — MISE À JOUR 40
 Profil, certification, plaques et débrief IA avec lecture vocale
 

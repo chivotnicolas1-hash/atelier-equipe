@@ -1,0 +1,72 @@
+ATELIER FAYET 33 — MISE À JOUR 41
+Débrief automatique et lecture vocale sans frais d’API supplémentaires
+
+Cette version remplace l’option OpenAI de la MAJ40.
+N’active pas sa facturation et ne crée pas de clé API pour cette fonction.
+Les modifications de profil, signature et plaques de la MAJ40 sont conservées.
+
+INSTALLATION
+1. Si la MAJ40 n’a pas encore été installée, exécute d’abord
+   supabase/40-profils-signalements.sql dans Supabase > SQL Editor.
+   Les migrations jusqu’à la MAJ39 doivent déjà être en place.
+   Le fichier 40b-debrief-ia.sql n’est PLUS nécessaire.
+2. Dans SQL Editor, exécute supabase/41-debrief-sans-api.sql.
+   Ce script est sans effet gênant si l’ancienne IA n’a jamais été installée.
+   Il bloque l’accès de l’ancienne fonction payante si elle existe déjà,
+   y compris pour une ancienne version de l’application encore ouverte.
+   Il ne supprime aucun récapitulatif ni résultat précédemment enregistré.
+3. Remplace sur GitHub les fichiers du projet par ceux du ZIP.
+   Conserve tes variables Cloudflare et les secrets des autres fonctions.
+   N’ajoute pas de fichier _redirects.
+4. Attends le succès du déploiement Cloudflare puis ferme et rouvre l’appli.
+
+Aucune nouvelle fonction Edge à créer. Aucune clé API à ajouter.
+Aucun changement des notifications, des horaires ni de l’authentification.
+
+SI TU AVAIS DÉJÀ ACTIVÉ OPENAI POUR CE DÉBRIEF
+- Le SQL de l’étape 2 bloque les nouveaux appels autorisés à l’ancien service.
+- Si workshop-debrief existe dans Edge Functions, tu peux également remplacer
+  son index.ts par supabase/functions/workshop-debrief/index.ts fourni dans
+  ce ZIP, puis redéployer. Il renverra seulement un message d’arrêt, sans
+  jamais appeler de fournisseur externe.
+- Si OPENAI_API_KEY a été créé uniquement pour cette option, supprime ce
+  secret dans Supabase > Edge Functions > Secrets.
+- Si la clé OpenAI a été créée uniquement pour cette application, révoque-la
+  dans ton compte OpenAI. Ne supprime pas une clé utilisée par un autre projet.
+- Une consommation déjà effectuée n’est pas annulée par cette mise à jour.
+Il n’est pas nécessaire de redéployer workshop-push ou workshop-accounts.
+
+UTILISATION
+Récapitulatif > ouvre une fiche > Afficher le débrief.
+La synthèse est produite directement par l’application à partir des données
+que ton compte est déjà autorisé à consulter :
+- véhicules immobilisés ;
+- nombre de tâches restantes, urgentes et en retard à la date de la fiche ;
+- tâches urgentes en premier, puis classement par échéance ;
+- pièces manquantes.
+Les informations et les noms saisis sont repris sans inventer de faits.
+Il s’agit d’une synthèse structurée automatique, sans IA générative.
+Les délais et les tâches correspondent à l’état enregistré dans la fiche,
+pas à une nouvelle interrogation des tâches en temps réel.
+
+Clique sur Écouter le débrief pour utiliser la synthèse vocale de ton appareil.
+Pause, Reprendre et Arrêter la lecture sont disponibles.
+Les voix françaises proposées par le navigateur peuvent être sélectionnées.
+Les voix indiquées « sur cet appareil » sont prioritaires dans le choix
+automatique. Selon le navigateur, d’autres voix peuvent utiliser le service
+vocal de son fournisseur : aucun appel OpenAI n’est effectué par l’application.
+La qualité et la disponibilité de la lecture dépendent du téléphone,
+du navigateur et des voix installées. Aucun enregistrement MP3 n’est créé.
+Si la lecture n’est pas prise en charge, le débrief écrit reste disponible.
+Changer de page, masquer le débrief ou lancer un autre débrief arrête la
+lecture en cours. Le débrief se met à jour avec la version de la fiche.
+
+Cette option n’ajoute aucun abonnement ou frais d’API à l’application.
+L’hébergement habituel et la connexion Internet restent ceux déjà utilisés.
+
+VÉRIFICATIONS
+Compilation de production ; synthèse déterministe et découpage vocal ;
+blocage SQL de l’ancien point d’entrée ; tests navigateur pour la lecture,
+pause, reprise, arrêt, absence de service vocal et absence d’appel au débrief
+payant. Les voix ont été simulées pour ces tests : le son et sa qualité
+restent à vérifier sur tes appareils.
