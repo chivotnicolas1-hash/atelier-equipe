@@ -1,0 +1,74 @@
+ATELIER FAYET 33 — MISE À JOUR 47
+À installer après la MAJ46.
+
+1 — SUPABASE
+Ouvre ton projet Supabase > SQL Editor > New query.
+Ouvre supabase/47-suppression-horaires.sql depuis cette archive.
+Copie tout le contenu dans SQL Editor, puis clique sur Run.
+Attends la réussite avant de mettre à jour le site.
+Le script est réexécutable.
+
+2 — GITHUB ET CLOUDFLARE
+Décompresse le ZIP et remplace les fichiers du projet :
+src, public, supabase, index.html, package.json, package-lock.json,
+tsconfig.json, vite.config.ts et postcss.config.js.
+Conserve tes variables de BUILD Cloudflare.
+N’ajoute aucun fichier _redirects.
+Aucune nouvelle clé ni modification d’Edge Function n’est nécessaire.
+Attends le déploiement réussi, puis ferme et rouvre l’application.
+Le pied de page doit indiquer MAJ47.
+
+3 — SUPPRIMER DES HORAIRES : ADMINISTRATEUR UNIQUEMENT
+Deux accès :
+- Ma journée > Mes horaires prévus.
+- Plan de l’atelier > L’équipe du jour > Horaires de la semaine,
+  sous la fiche du collaborateur.
+
+Dans la fenêtre hebdomadaire, l’administrateur peut choisir le collaborateur,
+puis la semaine. Chaque journée contenant des créneaux affiche
+« Supprimer les horaires ».
+Clique dessus, puis confirme.
+
+Cette action supprime toutes les plages horaires de la journée sélectionnée.
+Le statut de présence, le poste principal, la géométrie et la confirmation
+de présence sont conservés.
+WorkOrder n’apparaît plus pour une journée sans horaires, conformément
+au fonctionnement existant.
+Si quelqu’un a modifié les horaires entre-temps, un message demande
+d’actualiser la semaine avant de recommencer.
+
+Les collaborateurs, modérateurs et invités ne peuvent pas supprimer les
+horaires depuis cette fenêtre, même si un modérateur est autorisé à les modifier
+dans le formulaire de gestion existant.
+L’import PDF et la saisie manuelle restent disponibles pour renseigner à nouveau
+les horaires.
+
+4 — POSITION DU DRAPEAU
+Le triangle et son drapeau sont placés à droite du groupe de titres :
+« L’atelier au quotidien » et « Bonjour + nom » ou le titre de la rubrique.
+Le libellé « Signaler » apparaît sous le triangle.
+Le bouton continue à ouvrir directement le formulaire de signalement.
+Les invités restent en lecture seule.
+
+5 — PLAN DE L’ATELIER
+Les éléments suivants n’y apparaissent plus :
+- Cibles du jour ;
+- Tâches à terminer ;
+- Urgentes ou en retard.
+
+Les compteurs de présence restent visibles pour les gestionnaires.
+La date, l’objectif du jour, le plan et les fonctions d’affectation sont conservés.
+Les cibles et les compteurs de tâches restent disponibles dans « Ma journée ».
+L’administrateur et les modérateurs peuvent ouvrir cet espace avec le bouton
+« Collaborateur ». Le suivi des ventes et les droits de gestion restent actifs ;
+l’administrateur y retrouve aussi l’import des cibles PDF.
+
+VÉRIFICATIONS
+Compilation TypeScript/Vite réussie.
+Tests locaux Supabase : droits, confidentialité des horaires, protection contre
+une suppression après modification et conservation du poste/de la présence.
+Parcours sur mobile et ordinateur vérifiés avec des données de test pour
+administrateur, modérateur, collaborateur et invité.
+Le déploiement sur tes comptes Supabase et Cloudflare reste à effectuer.
+
+Archive nettoyée : un nouveau script SQL et un nouveau guide.
