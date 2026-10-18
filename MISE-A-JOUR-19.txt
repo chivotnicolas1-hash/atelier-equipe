@@ -1,5 +1,0 @@
-ATELIER FAYET 33 — OBJECTIF ET DATE
-
-Remplace uniquement src/workshop.tsx sur GitHub, puis Commit changes. Attends le déploiement Cloudflare réussi et actualise l’application. Aucune modification Supabase.
-
-Le titre devient Objectif du jour atelier. Toute la barre des onglets et de la date est placée au-dessus du bloc objectif dans les trois espaces. Le montant continue de suivre la date sélectionnée.

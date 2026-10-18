@@ -1,7 +1,0 @@
-ATELIER FAYET 33 — CORRECTION MOBILE
-
-Remplace uniquement src/globals.css dans GitHub par celui de cette archive.
-Clique Commit changes, attends le déploiement Cloudflare réussi puis recharge l’application.
-Aucune modification Supabase.
-
-Sous le plan, les commandes de présence et le bouton Modifier les horaires sont désormais placés sous le nom du collaborateur sur mobile. Le nom bénéficie de la largeur disponible ; les noms très longs peuvent revenir naturellement à la ligne sans être découpés lettre par lettre. Le statut déjeuner dispose aussi de sa propre ligne.

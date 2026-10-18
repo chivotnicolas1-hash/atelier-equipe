@@ -1,9 +1,0 @@
-ATELIER FAYET 33 — BOUTON WORKORDER
-
-Dans GitHub :
-1. Remplace src/workshop.tsx.
-2. Remplace src/globals.css.
-3. Ajoute public/workorder-logo.png dans le dossier public.
-4. Valide les modifications, attends le déploiement Cloudflare réussi puis actualise le site.
-
-Aucune modification Supabase. Le bouton conserve sa condition de présence confirmée et son lien. Fond #3baf4c, logo officiel fourni à gauche, texte foncé lisible. Le logo est inclus dans l’application : son affichage ne dépend pas de l’accès à l’intranet.
