@@ -1,2 +1,0 @@
-// MAJ42 : ancien service payant désactivé. Aucun appel à un fournisseur externe.
-Deno.serve((req:Request)=>new Response(req.method==='OPTIONS'?null:JSON.stringify({error:'La fonction de débrief a été supprimée. Actualise la page.'}),{status:req.method==='OPTIONS'?204:410,headers:{'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'authorization,x-client-info,apikey,content-type','Access-Control-Allow-Methods':'POST,OPTIONS','Content-Type':'application/json','Cache-Control':'no-store'}}));
