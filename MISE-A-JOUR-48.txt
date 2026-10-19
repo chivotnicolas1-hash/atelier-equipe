@@ -1,0 +1,93 @@
+ATELIER FAYET 33 — MISE À JOUR 48
+À installer après la MAJ47.
+
+1 — SUPABASE EN PREMIER
+Ouvre ton projet Supabase > SQL Editor > New query.
+Ouvre supabase/48-cibles-demonstration.sql depuis cette archive.
+Copie tout le contenu dans SQL Editor et clique sur Run.
+Attends le message de réussite avant de mettre à jour le site.
+Le script est réexécutable. Il conserve les objectifs, les ventes et l’historique.
+
+2 — GITHUB ET CLOUDFLARE
+Décompresse le ZIP et mets à jour les fichiers du projet :
+src, public, supabase, index.html, package.json, package-lock.json,
+tsconfig.json, vite.config.ts et postcss.config.js.
+Conserve toutes les variables de BUILD Cloudflare déjà configurées.
+N’ajoute aucun fichier _redirects.
+Aucune nouvelle clé ni fonction Edge à déployer.
+Attends le déploiement réussi, puis ferme et rouvre l’application.
+Le pied de page doit indiquer MAJ48.
+
+Cette archive contient uniquement le nouveau guide et le nouveau script SQL.
+Les anciens scripts n’ont pas besoin d’être réexécutés s’ils sont déjà installés.
+
+3 — CIBLES DU JOUR : ADMINISTRATEUR ET MODÉRATEURS
+Le cadre revient dans le plan de l’atelier pour les gestionnaires.
+Il reste aussi disponible dans Ma journée.
+
+Suivi des ventes :
+- consulter le nom de l’auteur, la date, l’heure et la quantité ;
+- modifier la quantité ;
+- supprimer une saisie erronée, après confirmation.
+
+Modifier les cibles :
+- choisir la journée avec la date de l’application ;
+- cliquer sur Modifier les cibles ;
+- renseigner les cinq objectifs et enregistrer.
+Chaque objectif doit être un entier entre 0 et 100000.
+
+Les ventes déjà enregistrées sont conservées.
+Si quelqu’un a modifié ou importé les objectifs entre-temps, le formulaire
+demande d’actualiser avant d’enregistrer.
+L’import PDF reste réservé à l’administrateur et fonctionne toujours.
+Son option de remplacement peut remplacer les objectifs saisis manuellement.
+
+4 — DÉLAI DE 5 MINUTES PAR CIBLE
+Pour chaque collaborateur, le délai passe de 10 à 5 minutes.
+Il est désormais indépendant pour chacune des cinq catégories.
+
+Exemple :
+- batterie saisie à 10 h : prochaine batterie à 10 h 05 ;
+- purge de freins possible immédiatement ;
+- purge saisie à 10 h 01 : prochaine purge à 10 h 06.
+
+Chaque case affiche son propre décompte lorsqu’elle est temporairement bloquée.
+La limite est contrôlée dans Supabase, même avec plusieurs appareils ou onglets.
+La suppression d’une vente ne remet pas à zéro le délai de sa catégorie.
+Les administrateurs et modérateurs restent sans délai.
+Les collaborateurs saisissent leurs ventes uniquement sur la journée actuelle,
+heure de Paris.
+
+5 — COMPTE INVITÉ : DÉMONSTRATION ISOLÉE
+Le rôle Invité conserve son fonctionnement en lecture seule.
+
+Nouveautés :
+- mention « Compte de démonstration · Lecture seule » sous le titre ;
+- poste choisi aléatoirement à l’ouverture, stable entre les rubriques ;
+- même poste dans Ma journée et sur le plan ;
+- horaires fictifs : 08:00–12:00 et 13:00–17:00 ;
+- présence fictive validée sur le plan ;
+- horaires de la semaine également présentés comme fictifs ;
+- bouton WorkOrder visible, qui ouvre uniquement le message
+  « ne fonctionne pas en mode invité » ;
+- drapeau Signaler disponible : il ouvre les signalements de démonstration
+  en lecture seule, sans permettre la création ni la modification ;
+- explication sous les cibles : chaque collaborateur peut contribuer
+  directement dans l’application à la validation des ventes.
+
+Le poste aléatoire peut changer après rechargement complet de l’application.
+Les affectations et horaires fictifs sont créés uniquement dans l’affichage
+de l’invité. Aucune ligne de planning ni confirmation réelle n’est enregistrée.
+Ils n’apparaissent pas pour les collaborateurs, l’administrateur ou les modérateurs.
+WorkOrder n’ouvre aucun site ni nouvel onglet depuis le compte invité.
+
+VÉRIFICATIONS
+Compilation TypeScript/Vite réussie.
+Tests locaux Supabase : délai indépendant de 5 minutes, nouvelle tentative sans
+doublon, suppression, exemptions gestionnaires, droits de modification des
+objectifs, validation des valeurs et conflits avec l’import PDF.
+Parcours vérifiés avec données de test pour administrateur, modérateur,
+collaborateur et invité, sur mobile et ordinateur.
+Le parcours invité n’envoie aucune modification de planning, présence,
+vente ou signalement.
+Le déploiement sur tes comptes Supabase et Cloudflare reste à effectuer.
