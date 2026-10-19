@@ -1,0 +1,50 @@
+ATELIER FAYET 33 — MISE À JOUR 50
+À installer après la MAJ49.
+
+1 — SUPABASE
+Ouvre ton projet > SQL Editor > New query.
+Copie le contenu de supabase/50-suivi-ventes.sql puis clique sur Run.
+Ce script réexécutable permet de regrouper les ventes par compte réel,
+sans mélanger deux collaborateurs qui portent le même nom.
+L’historique reste réservé à l’administrateur et aux modérateurs.
+Aucune vente ni heure de saisie n’est supprimée ou fusionnée en base.
+
+2 — GITHUB ET CLOUDFLARE
+Décompresse cette archive et remplace les fichiers correspondants sur GitHub :
+src, public, supabase, index.html, package.json, package-lock.json,
+tsconfig.json, vite.config.ts et postcss.config.js.
+Conserve tes variables de BUILD Cloudflare.
+N’ajoute aucun fichier _redirects. Aucune nouvelle clé n’est nécessaire.
+Aucune fonction Edge à redéployer pour cette mise à jour.
+Attends le déploiement réussi, puis ferme et rouvre l’application.
+
+3 — CIBLES DU JOUR
+Retour à la présentation « ventes réalisées / cible », par exemple 2 / 5.
+Le chiffre de droite, la cible, est plus grand, en gras et dans le bleu de MAJ49.
+Le chiffre de gauche, le réalisé, reste plus discret.
+Le fond vert lorsque l’objectif est dépassé reste présent.
+Le délai de 5 minutes indépendant par cible reste inchangé.
+
+4 — SUIVI DES VENTES
+Une fiche regroupe les saisies d’un même collaborateur pour une même cible
+et pour la journée sélectionnée.
+Elle indique le total et les heures des saisies en heure de Paris, avec la quantité
+correspondante : par exemple « 09:00 × 1 · 09:15 × 2 ».
+Clique sur « Détail et corrections » pour retrouver chaque saisie individuelle,
+modifier sa quantité ou la supprimer. Le total est recalculé après correction.
+Les corrections précédentes restent consultables dans chaque saisie.
+Deux cibles différentes ou deux comptes différents restent séparés.
+Les anciennes saisies dont le compte n’est plus identifiable restent séparées.
+Il s’agit d’un regroupement d’affichage, sans perte du détail ni des horaires.
+
+5 — BOUTONS PERSONNALISÉS
+Sur Ma journée, les boutons personnalisés apparaissent juste au-dessus de Mon poste.
+Ils conservent leurs couleurs, liens et droits d’accès, y compris pour l’invité.
+Sur le plan de l’atelier, leur emplacement précédent est conservé.
+
+Les fonctions MAJ49 restent présentes, notamment la commande suivante après validation,
+le rappel du mardi à 9 h et la demande d’enlèvement fictive de l’invité.
+
+ARCHIVE ALLÉGÉE
+Uniquement le code à publier, les ressources et le script/guide de cette mise à jour.
+Pas de node_modules, dist, fichiers privés, tests internes ou anciens guides.
