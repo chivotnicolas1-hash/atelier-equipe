@@ -1,0 +1,102 @@
+ATELIER FAYET 33 — MISE À JOUR 51
+À installer APRÈS la MAJ50.
+
+1 — SUPABASE EN PREMIER
+Ouvre ton projet Supabase > SQL Editor > New query.
+Ouvre supabase/51-atelier-personnalisation.sql depuis ce ZIP.
+Copie tout le contenu, clique sur Run et attends le message de réussite.
+Le script est réexécutable. Il conserve tes ventes, plannings et thèmes existants.
+Il ajoute le catalogue des postes et les deux thèmes saisonniers enregistrés.
+Le thème actif n’est pas changé par l’installation.
+
+2 — GITHUB ET CLOUDFLARE
+Décompresse le ZIP et remplace les fichiers correspondants du projet GitHub :
+src, public (y compris le nouveau dossier themes), supabase, index.html,
+package.json, package-lock.json, tsconfig.json, vite.config.ts et postcss.config.js.
+Conserve les variables de BUILD Cloudflare existantes.
+N’ajoute aucun fichier _redirects.
+Aucune nouvelle clé, API payante ou fonction Edge à déployer.
+Attends le déploiement réussi, puis ferme et rouvre l’application.
+
+3 — VUE COLLABORATEUR DES ADMINISTRATEURS ET MODÉRATEURS
+Les boutons Suivi des ventes, Modifier les cibles et Importer les cibles PDF
+ne sont plus affichés lorsque tu passes en vue Collaborateur.
+Reviens en Administration ou Modération pour retrouver tes outils autorisés.
+L’import PDF reste réservé à l’administrateur, comme auparavant.
+
+4 — SUIVI DES VENTES ADDITIONNELLES
+Une seule fiche par collaborateur, pour la journée sélectionnée.
+Elle contient le total, les quantités par cible (ex. Purge de freins × 5),
+et la date et l’heure de chaque saisie, en heure de Paris.
+Le filtre de catégorie reste disponible.
+Déplie Détail et corrections pour corriger ou supprimer une saisie précise.
+Deux comptes de même nom restent séparés.
+
+Supprimer une saisie remet immédiatement à zéro le délai de sa cible pour
+le collaborateur concerné : il peut refaire une saisie sans attendre 5 minutes.
+Les autres cibles et les autres collaborateurs ne sont pas concernés.
+Une nouvelle saisie relance normalement le délai de 5 minutes sur cette cible.
+Les ventes valides restantes sont conservées dans les totaux.
+Le téléphone récupère le nouveau délai lors de son rafraîchissement automatique
+(30 secondes au maximum) ou en revenant dans l’application.
+La suppression conserve une trace interne de la saisie retirée.
+
+5 — AJOUTER, DÉPLACER ET SUPPRIMER DES POSTES
+Administrateur uniquement : Plan de l’atelier > Gérer les postes.
+- Ajouter un poste : nom, numéro, pont ou espace de gestion, orientation.
+- Choisis son emplacement en touchant une case libre de la grille.
+- Tu peux aussi préciser sa colonne et sa ligne, de 1 à 12.
+- Clique sur Enregistrer le poste pour publier le changement.
+- Pour déplacer ou renommer un poste existant, sélectionne-le dans la liste.
+Deux postes ne peuvent pas occuper la même case. Le plan peut défiler si agrandi.
+La disposition est partagée entre le téléphone et l’ordinateur.
+Pour supprimer un poste, sélectionne-le puis clique sur Supprimer le poste.
+Une confirmation rappelle les conséquences : les affectations sur ce poste
+pour aujourd’hui et les jours à venir sont retirées, mais les horaires et les
+présences confirmées sont conservés. Réaffecte les collaborateurs concernés.
+Les anciennes affectations restent conservées en base pour l’historique.
+La suppression du poste géométrie retire aussi ses affectations secondaires
+pour aujourd’hui et les jours à venir. Il faut garder au moins un poste.
+Les noms et numéros des postes se gèrent désormais ici ; changer de thème ne
+modifie pas la disposition ni les noms du catalogue des postes.
+
+6 — LISTES DES PRÉSENCES
+Dans Collaborateurs présents et Présences confirmées :
+- tri selon l’heure de début prévue, du plus tôt au plus tard ;
+- les collaborateurs en coupure déjeuner passent en bas ;
+- ceux ayant terminé leur journée selon le dernier créneau sont placés après eux.
+Les horaires inconnus passent après les horaires connus de leur groupe.
+Le classement se met à jour avec l’horloge de l’application, en heure de Paris.
+Les états déjeuner/fin de journée s’appliquent à la journée en cours ; pour une
+journée passée ou future, le tri se fait simplement selon les heures de début.
+Les photos, horaires, affectations et indications de déjeuner restent affichés.
+
+7 — NOM SUR LE PDF DE SIGNALEMENT
+Le nom est abrégé : Nicolas CHIVOT devient Nicolas.C.
+La même abréviation s’applique à la mention de certification.
+Le nom complet enregistré dans l’application reste inchangé.
+Le format habituel Prénom Nom et le format NOM Prénom (nom en capitales)
+sont pris en charge. La fonction dans l’atelier et la signature sont conservées.
+
+8 — HALLOWEEN ET NOËL
+Administrateur > Paramètres application > Personnaliser l’application >
+Historique et thèmes enregistrés.
+Choisis :
+- Halloween · Citrouilles et toiles : crème, orange et violet, citrouilles et toiles.
+- Noël · Neige et guirlandes : vert et blanc, flocons, guirlande et lumières.
+Puis clique sur Enregistrer et appliquer à tous.
+Les deux thèmes ont une palette claire et une palette sombre.
+Le changement s’applique à toute l’équipe ; le mode clair/sombre reste personnel.
+Le menu Thèmes clair et sombre permet aussi de choisir ou retirer la décoration.
+Pour revenir au thème habituel : sélectionne le Thème principal puis publie.
+Les décorations restent légères et statiques pour préserver la lisibilité.
+
+VÉRIFICATIONS
+Compilation réussie ; droits Supabase et conflits de modification testés.
+Gestion des postes, vues collaborateur, regroupement/correction/suppression,
+classement horaire, thèmes et export PDF vérifiés localement.
+Le déploiement sur ton compte reste à effectuer via les étapes 1 et 2.
+
+ZIP ALLÉGÉ
+Sans node_modules, dist, fichiers secrets, tests internes, anciens guides
+ou anciennes migrations. Le seul script à exécuter est celui de la MAJ51.
