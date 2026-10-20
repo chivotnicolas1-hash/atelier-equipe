@@ -1,0 +1,64 @@
+ATELIER FAYET 33 — MISE À JOUR 54
+Reprises déjeuner et navigation simplifiée
+
+Cette archive met à jour une application déjà installée jusqu’à la MAJ53.
+
+1 — SUPABASE
+Dans SQL Editor > New query, colle tout le contenu du fichier :
+  supabase/54-reprises-navigation.sql
+Clique sur Run et attends « Success ».
+Le script est réexécutable et conserve les reprises déjà enregistrées.
+Ne relance pas les anciens scripts d’installation.
+Aucun nouveau secret et aucun redéploiement de fonction Edge ne sont nécessaires pour cette MAJ54. La fonction workshop-push doit déjà être celle fournie dans la MAJ53.
+
+2 — GITHUB ET CLOUDFLARE
+Décompresse le ZIP. Remplace les dossiers src et public de ton dépôt par ceux de l’archive et ajoute le script SQL dans supabase.
+Remplace les fichiers de configuration fournis : package.json, package-lock.json, tsconfig.json, vite.config.ts, postcss.config.js, index.html et .gitignore.
+Conserve les variables de BUILD Cloudflare déjà renseignées.
+Enregistre sur la branche utilisée par Cloudflare, attends la réussite du déploiement, puis ferme et rouvre l’application.
+N’ajoute aucun fichier _redirects et aucune clé privée au dépôt.
+L’archive exclut les anciens guides/scripts SQL, les tests, node_modules et dist. Les polices, licences, ressources OCR et icônes restent nécessaires.
+
+3 — MODIFIER OU SUPPRIMER UNE REPRISE
+Dans Reprises déjeuner, administrateur et modérateurs voient « Reprises de l’équipe ».
+Chaque fiche possède désormais :
+- Modifier : corriger le numéro de BT et le reste à faire ;
+- Supprimer : suppression définitive après confirmation ;
+- Marquer pris en compte : fonctionnement existant.
+Ces commandes sont également disponibles sur les dates passées et les reprises déjà prises en compte.
+Une correction conserve l’auteur initial, la date de création et l’éventuelle prise en compte. « Modifié par », le nom du gestionnaire et la date/heure de modification sont affichés. Corriger une fiche ne signifie pas que les travaux sont terminés ni que la prise en compte est annulée.
+La suppression retire la fiche de la base ainsi que ses notifications internes et envois associés encore présents en file. Une notification déjà livrée au téléphone ne peut pas être retirée à distance.
+Une modification concurrente bloque l’opération : actualise avant de recommencer.
+Les collaborateurs gardent leurs droits précédents : consulter leurs propres reprises et corriger celles du jour avant prise en compte. Ils ne peuvent pas supprimer une fiche ni corriger celle d’une autre personne. Les invités restent exclus de cette rubrique.
+
+4 — BOUTON AU RETOUR DU DÉJEUNER
+Dans Ma journée, « Reprise BT en cours » apparaît directement sous « Accéder à WorkOrder » à partir de l’heure prévue de reprise après la première coupure déjeuner et jusqu’à la fin prévue du service.
+Il ouvre Mes reprises pour le jour réel, même si aucune fiche n’a été saisie. Il n’ouvre pas WorkOrder et ne valide aucun pointage.
+Exemple : 08:00–12:00 puis 13:00–17:00 → bouton visible de 13:00 inclus à 17:00 exclu, à l’heure de Paris. L’affichage se met à jour automatiquement, sous environ 15 secondes.
+Il faut être prévu présent, avoir des horaires avec une coupure déjeuner et consulter aujourd’hui. Pas de bouton pour les absences, les repos, les journées sans coupure, les dates passées/futures ou les invités.
+Le rappel mobile envoyé avant la pause reste celui de la MAJ53.
+
+5 — ÉQUIPES ET COMPÉTENCES
+Le menu Compétences séparé est retiré.
+Administrateur et modérateurs accèdent désormais à Équipes, où se trouve directement la matrice de compétences. Le filtre d’équipe s’applique aussi à la matrice.
+Les compétences existantes sont conservées. Leur modification reste possible pour les deux rôles.
+Les modérateurs voient également les noms, équipes et photos des collaborateurs, sans recevoir les droits d’administration des comptes. Ajout/suppression de collaborateurs et gestion des profils restent réservés à l’administrateur.
+
+6 — SONDAGES
+Le bouton Sondages est retiré du menu général.
+Nouveau chemin pour administrateur et modérateurs :
+  Paramètres application > Gérer les boutons > Gérer les sondages.
+Les fonctions de création, consultation et gestion des sondages restent disponibles avec les mêmes permissions.
+Les modérateurs peuvent ouvrir cet espace pour les sondages ; la création, modification et suppression des boutons personnalisés restent réservées à l’administrateur.
+Les liens des sondages existants et les boutons personnalisés utilisés par les collaborateurs restent valables.
+
+7 — BARRE SUPÉRIEURE
+L’espace entre notifications, tâches et photo de profil a été légèrement réduit, sur mobile et ordinateur.
+
+VÉRIFICATION RAPIDE
+- Ouvre une reprise avec un compte modérateur, corrige-la puis vérifie le nom de son auteur.
+- Vérifie que la suppression demande confirmation et retire la fiche.
+- Vérifie la présence de la matrice dans Équipes et l’accès aux sondages depuis Gérer les boutons.
+- Sur un compte collaborateur, consulte Ma journée après l’heure de retour déjeuner pour voir le nouveau bouton.
+
+La version a été compilée et testée localement. Elle n’a pas été déployée automatiquement sur Supabase ou Cloudflare.
