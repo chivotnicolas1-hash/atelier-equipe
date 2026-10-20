@@ -1,0 +1,97 @@
+ATELIER FAYET 33 — MISE À JOUR 53
+Organisation, état des ponts et reprises avant déjeuner
+
+Cette archive met à jour une application déjà installée jusqu’à la MAJ52, y compris ses trois scripts SQL. Ce n’est pas une installation initiale. Les données existantes sont conservées.
+
+1 — SUPABASE : LE SCRIPT SQL
+Dans Supabase > SQL Editor > New query :
+- Ouvre supabase/53-organisation-reprises.sql dans un éditeur de texte.
+- Copie tout son contenu, colle-le dans SQL Editor et clique sur Run.
+- Attends le message « Success ».
+Le script est réexécutable. Ne relance pas les anciens scripts d’installation.
+
+2 — SUPABASE : METTRE À JOUR LA FONCTION DE NOTIFICATIONS
+Cette étape est nécessaire pour limiter la durée de validité des rappels déjeuner.
+- Ouvre Supabase > Edge Functions > workshop-push.
+- Ouvre l’éditeur de code de cette fonction.
+- Remplace le contenu de index.ts par celui du fichier fourni :
+  supabase/functions/workshop-push/index.ts
+- Enregistre et redéploie la fonction (Deploy updates).
+Conserve la configuration d’authentification existante : le cron utilise le secret x-workshop-secret ; la vérification JWT de la passerelle doit rester désactivée pour cette fonction.
+Ne modifie aucun secret : PUSH_CRON_SECRET, VAPID_PUBLIC_KEY et VAPID_PRIVATE_KEY restent ceux déjà configurés. Le programme atelier-notifications existant, toutes les minutes, est réutilisé. Ne crée pas un deuxième programme.
+La fonction workshop-accounts fournie dans le projet n’a pas besoin d’être redéployée pour cette mise à jour.
+
+3 — GITHUB ET CLOUDFLARE
+- Décompresse le ZIP.
+- Remplace les dossiers src et public du dépôt par ceux de l’archive.
+- Ajoute le nouveau script SQL et remplace le fichier de fonction workshop-push dans supabase.
+- Remplace les fichiers de configuration fournis à la racine :
+  package.json, package-lock.json, tsconfig.json, vite.config.ts,
+  postcss.config.js, index.html et .gitignore.
+- Conserve les variables de BUILD Cloudflare, notamment Supabase et VITE_VAPID_PUBLIC_KEY.
+- Enregistre les changements sur la branche utilisée par Cloudflare et attends la réussite du déploiement.
+- Ferme puis rouvre l’application sur le téléphone pour charger la nouvelle version et son service worker.
+Aucun fichier _redirects ne doit être ajouté. Aucune clé privée dans GitHub.
+Le ZIP exclut node_modules, dist, les tests et les anciens guides/scripts SQL. Les ressources OCR, les polices, leurs licences et les icônes sont nécessaires et sont conservées.
+
+4 — CHARGEMENT ET TÂCHES
+Au démarrage, les différentes vérifications utilisent le même écran au grand logo de l’application. Changer de journée ne remplace plus toute la page par un écran de chargement ; les actions sont brièvement désactivées pendant l’actualisation.
+Les tâches sont accessibles pour tous depuis le pictogramme en haut à droite, près de la photo de profil, avec davantage d’espace entre les boutons. Le compteur indique les tâches personnelles à terminer et devient rouge en cas de retard.
+Les anciens blocs et la liste de tâches sur Ma journée sont retirés. Les filtres À faire / Urgentes / Terminées restent dans Mes tâches. Administrateur et modérateurs peuvent choisir Toute l’équipe pour gérer les tâches.
+Le choix clair/sombre se trouve dans Mon profil > Apparence pour tous les utilisateurs.
+
+5 — ASSISTANT D’ORGANISATION
+Administration ou Modération > Plan de l’atelier :
+1. Choisis la journée.
+2. Vérifie les horaires et les présences ; renseigne la matrice Compétences.
+3. Clique sur Préparer ce plan.
+4. Clique sur Générer une proposition d’affectation.
+5. Vérifie et ajuste le brouillon en cliquant sur les postes.
+6. Clique sur Publier le plan pour le rendre visible aux collaborateurs.
+
+Aucune proposition n’est publiée automatiquement. Le plan publié reste visible tant que tu ne valides pas la publication.
+L’assistant conserve les affectations déjà préparées et complète uniquement les postes libres. Il utilise les collaborateurs prévus présents avec des horaires pour la journée choisie et une compétence « Autonome » sur le poste. Les collaborateurs en formation ou non formés ne sont pas proposés automatiquement.
+Une personne déjà affectée, y compris en géométrie, n’est pas déplacée ni réutilisée par la génération. Les règles existantes des espaces de gestion restent applicables aux Encadrants.
+L’assistant évite les ponts en panne ET les ponts bloqués. Il privilégie les postes ayant peu de candidats puis les collaborateurs moins polyvalents et, à égalité, la durée de travail prévue.
+Il produit une affectation par poste pour la journée, pas un planning de rotations horaires. Vérifie les arrivées, départs et pauses avant publication : une proposition ne garantit pas la couverture continue du poste. Les postes et collaborateurs restant sans affectation sont indiqués.
+Si les horaires ou présences changent après la préparation, annule puis redémarre le brouillon pour repartir de données à jour.
+L’assistant fonctionne sans service d’IA externe et sans frais d’API supplémentaires.
+
+6 — MON POSTE ET ÉTAT DES PONTS
+Dans Ma journée, cliquer sur l’affectation ouvre directement le plan, centre l’écran sur le poste principal et le met en surbrillance bleue. Si une seconde affectation géométrie existe, elle est aussi mise en évidence.
+
+Administrateur ou modérateur : clique sur un pont, puis utilise État du pont :
+- Disponible : affectation habituelle.
+- Pont en panne : nouvelle affectation interdite, côté interface et base de données.
+- Pont bloqué : affectation manuelle autorisée ; l’assistant l’évite.
+Une précision facultative peut être ajoutée, par exemple « attente de pièces ».
+Clique sur Enregistrer l’état. Cet état est immédiat et global, pour toutes les dates, jusqu’à son changement. Il n’attend pas la publication du brouillon.
+Une affectation déjà présente sur un pont mis en panne n’est pas effacée automatiquement : retire-la puis réaffecte la personne. Un brouillon contenant une affectation sur un pont en panne doit être corrigé avant publication.
+Les états sont visibles aux collaborateurs et sur l’écran d’atelier. Les espaces de gestion ne possèdent pas d’état de pont.
+
+7 — RAPPEL AVANT DÉJEUNER ET REPRISE DE VÉHICULE
+Le programme de notifications existant vérifie les horaires chaque minute, à l’heure de Paris.
+Pour chaque collaborateur actif, prévu présent et disposant d’un compte : environ cinq minutes avant sa coupure déjeuner, il crée la notification :
+« Véhicule à faire reprendre ? »
+
+La coupure est déduite d’un intervalle entre deux créneaux : fin du premier créneau entre 11 h inclus et 15 h exclu, reprise au plus tard à 16 h. Exemple : 08:00–12:00 puis 13:00–17:00 donne un rappel vers 11:55. Avec un seul créneau continu, aucune coupure n’est déduite et aucun rappel n’est envoyé.
+Le rappel utilise le jour réel, indépendamment de la date consultée dans l’application. Aucun rappel pour un invité, une absence ou un repos.
+Un seul rappel par personne et par jour, même si le programme est rejoué, si les horaires changent ensuite ou si la notification est supprimée. Si le programme ne tourne pas avant le début du déjeuner, aucun rappel tardif n’est créé.
+
+Toucher la notification mobile ouvre le formulaire. Dans Mes notifications, Ouvrir la reprise mène au même endroit. Le menu Reprises déjeuner permet également d’y accéder :
+- Numéro de BT ;
+- Reste à faire.
+Le collaborateur transmet une fiche par véhicule. Il peut corriger ses propres fiches du jour tant qu’elles ne sont pas prises en compte. S’il n’a rien à faire reprendre, aucune saisie n’est nécessaire.
+Administrateur et modérateurs voient toutes les reprises de la date choisie et reçoivent une notification à la création d’une fiche. Ils peuvent la marquer prise en compte ; leur nom, la date et l’heure sont conservés. Cela signifie que la reprise a été prise en compte, pas que les travaux sont terminés.
+Les collaborateurs voient uniquement leurs propres fiches ; les invités n’ont pas accès à cette rubrique.
+
+La notification apparaît dans l’application. Sa réception sur le téléphone nécessite les notifications déjà activées sur cet appareil et une connexion. Le système du téléphone peut différer la réception ; les rappels mobiles expirent au début du déjeuner. Une fiche déjà créée reste consultable ensuite.
+
+8 — VÉRIFICATION APRÈS INSTALLATION
+- Vérifie le raccourci des tâches et clique sur Mon poste depuis un téléphone.
+- Prépare une proposition sur une journée future : un compte collaborateur ne doit pas voir ces nouvelles affectations avant publication.
+- Essaie les états en panne puis bloqué sur un pont libre et remets ensuite son état réel.
+- Pour tester un rappel, renseigne deux créneaux avec une vraie coupure déjeuner à venir, active les notifications et attends le passage du cron cinq minutes avant la coupure.
+- Envoie une reprise et vérifie son affichage dans Reprises déjeuner avec un compte administrateur/modérateur.
+
+La mise à jour a été compilée et testée localement. Elle n’est pas déployée automatiquement sur ton projet Supabase ou Cloudflare.
