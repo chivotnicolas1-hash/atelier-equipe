@@ -4,7 +4,7 @@ const key=import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 if(!url||!key)throw new Error('Configuration Supabase manquante : renseigne le fichier .env.');
 export const supabase=createClient(url,key,{auth:{flowType:'pkce',persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 function friendly(error:any){
- if(error.code==='PGRST202'||error.code==='42883')return new Error('La base doit être mise à jour : consulte MISE-A-JOUR-52.txt et exécute le script SQL fourni.');
+ if(error.code==='PGRST202'||error.code==='42883')return new Error('La base doit être mise à jour : consulte MISE-A-JOUR-53.txt et exécute le script SQL fourni.');
  return new Error(error.message||'Connexion impossible. Vérifie ta connexion Internet.');
 }
 export async function loadWorkshop(date:string){const {data,error}=await supabase.rpc('workshop_load',{p_date:date});if(error)throw friendly(error);return data;}
