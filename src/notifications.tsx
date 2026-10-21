@@ -28,3 +28,7 @@ export function NotificationInvite({onOpen}:{onOpen:()=>void}){
  useEffect(()=>{let live=true;if(!supported()){setShow(true);return}void navigator.serviceWorker.ready.then(async reg=>{const sub=await reg.pushManager.getSubscription();const d=await rpc('workshop_push_status');if(live)setShow(!sub||!d.endpoints.includes(sub.endpoint)||Notification.permission!=='granted')}).catch(()=>{});return()=>{live=false}},[]);
  return show?<div className="info-line"><span>Active les notifications pour recevoir les annonces et tes tâches sur ce téléphone.</span><button className="secondary" onClick={onOpen}>Configurer</button></div>:null
 }
+
+export function NotificationCheck({onMissing}:{onMissing:()=>void}){
+ useEffect(()=>{let live=true;async function check(){if(!supported()||Notification.permission!=='granted'){if(live)onMissing();return}try{const reg=await navigator.serviceWorker.ready;const sub=await reg.pushManager.getSubscription();const status=await rpc('workshop_push_status');if(live&&(!sub||Notification.permission!=='granted'||!status.endpoints.includes(sub.endpoint)))onMissing()}catch{/* Une erreur réseau ne doit pas déclencher une fausse redirection. */}}void check();window.addEventListener('focus',check);return()=>{live=false;window.removeEventListener('focus',check)}},[onMissing]);return null;
+}
