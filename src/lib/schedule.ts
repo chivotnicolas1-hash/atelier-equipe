@@ -23,3 +23,9 @@ export function afterLunch(day:{presence:string,slots?:Slot[]}|null|undefined,da
  const pause=lunchBreaks(day.slots)[0];const end=[...(day.slots||[])].map(s=>s.end).sort().at(-1);
  return !!pause&&!!end&&clock.time>=pause.end&&clock.time<end;
 }
+export function workingNow(day:{presence:string,slots?:Slot[]}|undefined,date:string,now=new Date()){
+ const clock=parisClock(now);return !!day&&date===clock.date&&day.presence==='present'&&!!day.slots?.some(s=>s.start<=clock.time&&clock.time<s.end);
+}
+export function currentTechnicians(staff:{id:string,team?:string|null,role?:string}[],days:{staff_id:string,presence:string,station:string|null,geometry?:boolean,slots?:Slot[]}[],stations:{id:string,office:boolean}[],date:string,now=new Date()){
+ return new Set(days.filter(d=>{const s=staff.find(s=>s.id===d.staff_id);return s&&s.role!=='guest'&&s.team?.trim().toLocaleLowerCase('fr')!=='encadrants'&&workingNow(d,date,now)&&stations.some(st=>!st.office&&(d.station===st.id||(st.id==='geometrie'&&d.geometry)))}).map(d=>d.staff_id)).size;
+}
