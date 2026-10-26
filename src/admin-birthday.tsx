@@ -1,9 +1,0 @@
-import {useEffect,useState} from 'react';
-import {supabase} from './lib/supabase';
-import {parisToday} from './lib/workshop';
-import {Dialog,DialogContent,DialogTitle,DialogDescription} from './components/ui/dialog';
-export default function AdminBirthday({staff,onClose,onSaved}:{staff:{id:string,name:string},onClose:()=>void,onSaved:()=>void}){
- const [value,setValue]=useState(''),[version,setVersion]=useState<number|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState('');
- useEffect(()=>{let live=true;void supabase.rpc('workshop_admin_birthday',{p_staff:staff.id}).then(({data,error})=>{if(!live)return;if(error)setError(error.message);else{setValue(data.birth_date||'');setVersion(data.version)}});return()=>{live=false}},[staff.id]);
- return <Dialog open onOpenChange={v=>!v&&!busy&&onClose()}><DialogContent className="app-dialog"><DialogTitle>Date de naissance · {staff.name}</DialogTitle><DialogDescription>Réservé à l’administrateur. Le message d’anniversaire sera affiché à la personne et sur l’écran d’atelier, sans âge ni date complète.</DialogDescription><form onSubmit={async e=>{e.preventDefault();setBusy(true);setError('');try{const {error}=await supabase.rpc('workshop_admin_birthday_save',{p_staff:staff.id,p_date:value||null,p_version:version});if(error)throw Error(error.message);window.dispatchEvent(new Event('workshop-birthday-change'));onSaved();onClose()}catch(e:any){setError(e.message)}finally{setBusy(false)}}}><label>Date de naissance<input type="date" min="1900-01-01" max={parisToday()} value={value} disabled={busy||version===null} onChange={e=>setValue(e.target.value)}/></label><p className="muted">Efface la date puis enregistre pour supprimer cette information.</p>{error&&<p role="alert" className="error-banner">{error}</p>}<button className="primary full" disabled={busy||version===null}>Enregistrer la date</button></form></DialogContent></Dialog>
-}
