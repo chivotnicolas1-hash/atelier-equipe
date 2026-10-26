@@ -1,0 +1,133 @@
+ATELIER FAYET 33 — MISE À JOUR 57
+Congés, notifications et ajustements d’interface
+
+INSTALLATION — BASE DÉJÀ À JOUR EN VERSION 56
+
+1 — SUPABASE
+Ouvre SQL Editor > New query.
+Copie tout le contenu de supabase/57-conges-notifications.sql.
+Exécute-le et attends « Success » avant de déployer le site.
+Le script est réexécutable. N’exécute pas à nouveau les anciens scripts.
+
+2 — GITHUB / CLOUDFLARE
+Décompresse le ZIP et remplace les dossiers src et public, index.html et
+les fichiers de configuration : package.json, package-lock.json,
+vite.config.ts, tsconfig.json et postcss.config.js.
+Ajoute aussi le nouveau script SQL et ce guide.
+Conserve toutes les variables de build et les secrets déjà configurés.
+N’ajoute aucun fichier _redirects.
+Attends la réussite du déploiement Cloudflare puis ferme et rouvre
+l’application. Le nouveau service worker est nécessaire pour ouvrir
+les demandes de congé depuis une notification mobile.
+
+Aucune nouvelle clé, API payante ou fonction Edge n’est nécessaire.
+Le programme de notifications existant doit continuer de tourner chaque
+minute. Il utilisera automatiquement la nouvelle logique SQL.
+
+LES MODIFICATIONS
+
+1. PLAN MOBILE
+Sur téléphone / fenêtre de 900 pixels ou moins, les photos et horaires
+ne sont plus affichés à l’intérieur des postes du plan.
+Les noms, affectations, confirmations et indications de pause restent.
+Sur ordinateur et dans le mode écran, photos et horaires sont conservés.
+
+2. FICHE COLLABORATEUR
+Équipes > Gérer le profil > Modifier la fiche : la fonction dans l’atelier
+et la date de naissance sont désormais dans le même formulaire.
+L’enregistrement est commun : une modification concurrente bloque
+l’ensemble pour éviter un enregistrement partiel.
+Seul l’administrateur peut modifier ces informations.
+Pour un collaborateur sans compte de connexion, la fiche et la date
+restent modifiables ; la fonction sera disponible après création du compte.
+Pour une nouvelle personne, crée sa fiche puis rouvre-la pour ces champs.
+
+3. NOTIFICATIONS DE L’ÉQUIPE
+Les personnes sans appareil inscrit apparaissent en rouge clair avec
+une bordure rouge foncé. Le suivi indique les abonnements enregistrés ;
+il ne permet pas de confirmer les réglages actuels du téléphone ni la lecture.
+
+4. NOTIFICATIONS DES TÂCHES
+Plus de notification mobile immédiate lors de l’ajout ou de la modification
+d’une tâche. La tâche et son message restent visibles immédiatement dans
+l’application et dans « Mes notifications ».
+Au début du premier créneau prévu du jour, un message groupé indique le
+nombre de tâches non terminées. Il est envoyé une seule fois par journée
+et par compte, à tous ses appareils inscrits.
+Les personnes absentes, sans horaires ou invitées ne reçoivent pas cet envoi.
+Le retour de pause déjeuner ne déclenche pas un second rappel.
+Une tâche ajoutée après cet envoi sera signalée à la prochaine prise de
+poste si elle n’est pas terminée.
+Le programme passe chaque minute : une fenêtre de cinq minutes après
+la prise de poste permet cet envoi. Un rappel manqué n’est pas rattrapé
+plus tard dans la journée. La livraison finale dépend aussi du téléphone.
+Les notifications du récapitulatif, des annonces, des BT et les autres
+notifications conservent leur fonctionnement.
+
+5. BT À REPRENDRE
+L’entrée « Reprises déjeuner » et le titre de sa page deviennent
+« BT à reprendre ». Les fonctions de reprise sont conservées.
+
+6. ANNIVERSAIRE
+Le message personnel utilise le prénom sans le nom de famille et se
+trouve au-dessus du menu. Une animation de confettis apparaît lors de
+la première ouverture ce jour-là, une fois par compte et par appareil.
+Le message reste affiché pendant la journée. Les préférences système
+de réduction des animations sont respectées.
+La date reste renseignée uniquement par l’administrateur.
+
+7. DEMANDE DE CONGÉ
+Une nouvelle entrée du menu ouvre le formulaire fondé sur le modèle
+Norauto fourni. Les invités n’y ont pas accès.
+
+Collaborateur et modérateur :
+- Créer une demande personnelle avec prénom, nom, centre/service.
+- Ajouter un ou plusieurs motifs : CP2 acquis, CP1 anticipés, absence
+  non payée, RTT, fractionnement, mariage, naissance, décès,
+  parents de moins de 21 ans ou autre motif à préciser.
+- Renseigner les dates incluses et, pour les trois premiers motifs,
+  le nombre de jours de repos. Un même motif apparaît une seule fois
+  par demande ; crée une autre demande pour une seconde période du même motif.
+- Confirmer la demande et l’apposition de la signature enregistrée.
+- Modifier sa propre demande tant qu’elle est en attente.
+- Consulter la réponse et recevoir une notification dans l’application,
+  ainsi que sur les appareils inscrits aux notifications mobiles.
+
+Administrateur :
+- Consulter toutes les demandes et répondre « Accepté », « Refusé »
+  ou « Autre proposition ».
+- Pour un refus ou une proposition, renseigner une explication.
+  Une proposition exige aussi de nouvelles dates.
+- Corriger une décision si nécessaire : l’historique conserve les
+  réponses successives, leur auteur, la date et l’heure.
+- Exporter le PDF complété depuis la liste ou le détail.
+
+Les modérateurs n’ont pas accès aux demandes des autres personnes et
+ne peuvent pas décider : ces fonctions sont réservées à l’administrateur.
+Une proposition ne vaut pas accord : le collaborateur crée une nouvelle
+demande pour confirmer les dates proposées.
+Une demande ayant reçu une réponse n’est plus modifiable par son auteur.
+Le planning n’est pas automatiquement modifié par une décision.
+
+SIGNATURE ET PDF
+La signature est copiée depuis le profil au moment de l’envoi : une
+modification ultérieure du profil ne change pas une demande déjà signée.
+Une modification de demande encore en attente utilise la signature
+actuelle du collaborateur et renouvelle la date de signature.
+Si aucune signature n’est enregistrée, il faut d’abord ouvrir Mon profil.
+L’administrateur ne signe pas à la place du collaborateur.
+
+La première page reprend le modèle Norauto rempli. Une annexe contient
+les détails, commentaires complets, référence de la demande et historique.
+Le nom de l’administrateur et l’horodatage matérialisent sa réponse ; aucune
+signature de responsable de secteur n’est ajoutée automatiquement.
+Le fichier public/leave-template.png est nécessaire à cet export.
+
+VÉRIFICATIONS
+Compilation TypeScript/Vite et tests locaux des rôles, validations,
+signatures, décisions, enregistrements concurrents et notifications.
+Contrôle visuel du formulaire sur mobile et du PDF exporté.
+La mise à jour n’a pas été déployée sur ton site de production.
+
+Le ZIP exclut les dépendances installées, fichiers compilés, tests,
+anciens guides, anciens scripts SQL et secrets.
