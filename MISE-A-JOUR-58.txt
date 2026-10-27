@@ -1,0 +1,132 @@
+ATELIER FAYET 33 — MISE À JOUR 58
+Écran d’atelier, congés, encadrants et sessions PC
+
+INSTALLATION — SUR UNE BASE DÉJÀ À JOUR EN VERSION 57
+
+1 — SUPABASE
+Ouvre SQL Editor > New query.
+Copie le contenu complet de supabase/58-ecran-conges-presences.sql.
+Exécute-le et attends « Success » avant de déployer le site.
+Le script peut être réexécuté. Ne réexécute pas les anciens scripts.
+
+2 — GITHUB / CLOUDFLARE
+Décompresse le ZIP et remplace src, public, index.html et les fichiers
+de configuration : package.json, package-lock.json, vite.config.ts,
+tsconfig.json et postcss.config.js.
+Ajoute le nouveau script SQL et ce guide.
+Conserve les variables de build et secrets déjà en place.
+N’ajoute aucun fichier _redirects.
+Attends la réussite du déploiement Cloudflare, puis ferme et rouvre
+l’application. Sur PC, reconnecte-toi après la mise à jour.
+
+Aucune nouvelle clé, fonction Edge ou API payante n’est nécessaire.
+
+1. ANNONCE SUR LE MODE ÉCRAN
+La bannière apparaît aussi sur l’écran d’atelier lorsqu’elle est active.
+Les annonces « Toute l’équipe » et celles des groupes de déjeuner y sont
+visibles, indépendamment du compte utilisé pour afficher l’écran.
+Une annonce réservée aux Encadrants n’est jamais affichée sur cet écran.
+La bannière n’affiche aucun bouton d’administration.
+Le libellé d’un éventuel lien est visible en lecture seule.
+Le bloc « Informations importantes » conserve son message personnalisé.
+
+2. SIGNALEMENTS ET CONSOMMABLES DES ENCADRANTS
+Un membre de l’équipe Encadrants qui n’est ni administrateur ni modérateur
+a désormais la même vue des signalements qu’un collaborateur : ses propres
+fiches, avec ses possibilités habituelles de création et correction.
+Il ne peut pas obtenir les fiches d’autres personnes via la recherche
+ou un appel direct à Supabase.
+Les consommables restent accessibles à toute l’équipe avec les droits
+collaborateur habituels. La validation, suppression et gestion restent
+réservées aux administrateurs et modérateurs.
+Le rôle de gestion prime sur l’appartenance à une équipe : un encadrant
+également modérateur conserve ses fonctions de modération.
+Les autres droits, notamment l’affichage du ratio, sont conservés.
+
+3. PDF DE DEMANDE DE CONGÉ
+Le PDF tient sur une seule page, sans annexe de détail ni traçabilité.
+Lors d’un accord, la signature enregistrée dans le profil du valideur
+est copiée avec la décision puis affichée sous « Accord ».
+Cette copie reste inchangée si le valideur change ensuite sa signature.
+Une signature dans Mon profil est nécessaire pour donner un nouvel accord.
+Les refus et autres propositions n’affichent pas une signature d’accord.
+
+Les anciens accords ne reçoivent pas une signature rétroactivement.
+Pour en apposer une : ouvrir la demande, conserver « Accepté », puis
+cliquer sur « Corriger la décision et notifier » avec le compte valideur.
+Le collaborateur sera notifié de cette nouvelle réponse.
+Les commentaires très longs restent complets dans l’application ; le PDF
+affiche les premières lignes et indique lorsque la suite y est consultable.
+L’historique des réponses reste consultable dans l’application.
+
+4. MODIFICATION ET SUPPRESSION DES CONGÉS
+L’administrateur dispose de « Modifier la demande » et « Supprimer la
+demande » dans la liste. Ces actions ne sont pas ouvertes aux modérateurs.
+
+Modifier une demande permet de corriger l’identité, le centre et les
+périodes. Si les informations changent, les signatures et l’accord
+précédents sont invalidés : la demande passe à « À confirmer et signer ».
+Le collaborateur reçoit une notification, ouvre « Vérifier et signer »,
+contrôle les informations et confirme sa demande. L’administrateur peut
+ensuite rendre sa nouvelle décision. Aucune signature n’est réutilisée
+sur des informations modifiées sans cette confirmation.
+
+La suppression demande confirmation et retire définitivement la demande,
+ses signatures enregistrées et son historique de la base. Les notifications
+associées dans l’application sont également retirées. Un PDF déjà téléchargé
+sur un ordinateur n’est pas supprimé à distance.
+Les modifications concurrentes sont protégées : en cas de conflit, actualise.
+
+5. PRÉSENCE EN DIRECT SUR L’ÉCRAN
+Les pictogrammes des ponts sont de nouveau visibles.
+Dans le plan et la liste de l’équipe :
+- Vert : personne dans un créneau de travail prévu à l’heure actuelle.
+- Jaune : coupure déjeuner en cours.
+- Gris : avant la prise de poste, après la fin ou sans créneau en cours.
+La liste place les personnes actuellement présentes en premier.
+Les états sont calculés avec l’heure de Paris, et actualisés environ
+toutes les 20 secondes. Ils reflètent les horaires renseignés.
+
+6. PDF DE SIGNALEMENT
+La mention « Client averti : Oui » apparaît uniquement si l’option a
+été cochée. Aucun texte « Non » ou « Non renseigné » n’est exporté
+quand le client n’a pas été signalé comme averti.
+L’information enregistrée dans la fiche elle-même reste conservée.
+
+7. CONFIRMATION AUTOMATIQUE DES ENCADRANTS
+Lorsque le compte d’un membre de l’équipe Encadrants charge l’application,
+sa présence du jour réel est confirmée automatiquement si sa journée est
+marquée présente et comporte des horaires.
+Cela fonctionne sur mobile, PC et mode écran, sans cliquer sur WorkOrder,
+et même sans affectation à un poste.
+La confirmation existante n’est pas remplacée à chaque actualisation.
+Une journée absente ou sans horaires n’est pas confirmée automatiquement.
+Consulter une autre date ne confirme pas cette date : seule la journée
+réelle en cours est concernée.
+Les autres collaborateurs conservent la confirmation via WorkOrder.
+
+8. DÉCONNEXION SUR ORDINATEUR
+Sur PC/Mac, la connexion n’est plus enregistrée durablement dans le navigateur.
+Fermer l’onglet ou la fenêtre puis rouvrir l’application nécessite une
+nouvelle connexion. Un nouvel onglet et un rechargement complet de la page
+nécessitent également de se reconnecter.
+La navigation interne, les actualisations automatiques des données et le
+passage en mode écran dans la même page ne déconnectent pas le compte.
+La connexion sur téléphone et tablette reste mémorisée comme auparavant.
+La détection dépend du type d’appareil, pas de la taille de la fenêtre.
+La fermeture tente aussi de fermer la session côté serveur et de désinscrire
+les notifications de cet ordinateur. Si le navigateur est arrêté brutalement,
+ces requêtes ne sont pas garanties ; la session locale ne sera pas restaurée.
+Les sessions ouvertes sur les autres appareils ne sont pas déconnectées.
+Référence technique : https://supabase.com/docs/reference/javascript/auth
+
+VÉRIFICATIONS
+Compilation TypeScript/Vite ; migrations cumulées et permissions Supabase ;
+signatures, modifications et suppressions des congés ; confirmation des
+encadrants ; confidentialité des annonces et signalements ; sessions PC ;
+interfaces mobile/ordinateur et contrôle visuel des PDF.
+Cette mise à jour n’a pas été déployée sur le site de production.
+
+Le ZIP contient les sources, ressources nécessaires, ce guide et le nouveau
+script SQL. Les dépendances installées, compilations, tests, anciens guides,
+anciens scripts SQL et secrets sont exclus.
