@@ -1,0 +1,105 @@
+ATELIER FAYET 33 — MISE À JOUR 59
+Présences, navigation PC, déchets par prestataire et rubriques indisponibles
+
+PRÉREQUIS
+La mise à jour 58 doit déjà être installée dans Supabase.
+Ce ZIP contient l’application complète et uniquement le nouveau script SQL.
+Les anciennes migrations et les anciens guides ne sont pas à réexécuter.
+
+1 — SUPABASE (AVANT LE DÉPLOIEMENT)
+Ouvre Supabase > SQL Editor > New query.
+Ouvre le fichier supabase/59-acces-prestataires.sql du ZIP avec un éditeur de texte.
+Copie tout son contenu dans SQL Editor puis clique sur Run.
+Attends le message de réussite. Le script peut être réexécuté.
+Aucune nouvelle clé, aucun nouveau secret, aucune fonction Edge à redéployer.
+
+2 — GITHUB ET CLOUDFLARE
+Décompresse le ZIP puis remplace les fichiers du projet GitHub :
+- src et public ;
+- supabase ;
+- index.html ;
+- package.json, package-lock.json, vite.config.ts, tsconfig.json et postcss.config.js ;
+- conserve les autres fichiers de configuration Cloudflare déjà utilisés par ton dépôt.
+Conserve les variables de BUILD Cloudflare existantes.
+Ne crée pas de fichier _redirects.
+Attends la réussite du déploiement Cloudflare, puis ferme et rouvre l’application.
+Sur PC, reconnecte-toi. Le clic sur le logo ne demandera ensuite plus de reconnexion.
+
+LES SIX CHANGEMENTS
+
+1. Présence automatique et horaires
+Les administrateurs et modérateurs connectés sont confirmés automatiquement
+uniquement pendant un créneau prévu du jour actuel, à l’heure de Paris.
+Début inclus, fin exclue. La coupure déjeuner ne déclenche pas de confirmation.
+Le contrôle se fait au chargement puis au rafraîchissement automatique (environ
+20 secondes, tant que la page reste active). Aucun poste n’est nécessaire.
+Choisir une autre date à l’écran ne confirme pas cette autre journée.
+Une confirmation déjà acquise reste enregistrée pour la journée ; cette règle
+ne supprime pas les confirmations historiques. Les créneaux et les indications
+de pause continuent à définir qui est disponible à l’instant présent.
+L’appartenance à l’équipe Encadrants, sans rôle administrateur/modérateur,
+ne déclenche plus cette confirmation automatique.
+
+2. Logo sur PC
+Un clic sur le titre ou le logo revient à l’accueil de l’espace en cours :
+Plan pour Administration/Modération, Ma journée pour Collaborateur.
+Le retour se fait sans rechargement et conserve la session.
+La fermeture ou un rechargement complet sur PC continue à demander une connexion,
+comme dans la mise à jour précédente. La connexion mobile reste mémorisée.
+
+3. Consommables
+Le bouton Actualiser a été retiré. La liste se charge à l’ouverture et se remet
+à jour après une action sur les commandes.
+
+4. Déchets
+Deux espaces distincts, avec leur propre formulaire, liste et pagination :
+- Grandidier : batteries, ferraille, fonte, aluminium — nombre de bacs.
+- Chimirec : filtres usagés — nombre de bacs ; huiles usagées — litres.
+Les huiles acceptent une décimale (ex. 250,5 litres).
+Une demande ne peut jamais regrouper les deux prestataires.
+Les anciennes demandes mixtes sont séparées automatiquement : auteur, dates,
+notes, quantités connues, validation et ramassage sont conservés des deux côtés.
+Les anciennes quantités inconnues restent inconnues, sans valeur inventée.
+Une correction ne peut pas changer le prestataire d’une demande.
+Validation, correction, suppression et confirmation du ramassage sont réservées
+aux administrateurs et modérateurs. Une correction remet le suivi en attente.
+Les actions ne contactent pas les prestataires.
+
+5. Équipe Encadrants
+L’équipe est une catégorie de collaborateurs, pas un rôle de gestion.
+Elle ne donne plus accès aux signalements des autres, aux récapitulatifs,
+au ratio réservé à la gestion, à la modification des affectations ou à la
+validation des consommables. Les contrôles sont faits aussi côté serveur.
+Les membres conservent les actions ordinaires d’un collaborateur : leur propre
+signalement, contribuer à une commande non validée, signaler des déchets, etc.
+Pour donner des droits de gestion à quelqu’un, attribue le rôle Modérateur
+dans sa fiche. Les restrictions existantes réservées au seul administrateur
+restent en place (comptes, congés, paramètres, etc.).
+
+6. Fermer temporairement une rubrique
+Administration > Paramètres application > Disponibilité des rubriques.
+Clique sur Désactiver à côté de la rubrique en difficulté.
+Collaborateurs et modérateurs n’y accèdent plus ; les accès directs aux actions
+concernées sont également bloqués. Un écran explique l’indisponibilité.
+Le menu se met à jour sur les appareils connectés sous environ 20 secondes.
+L’administrateur garde l’accès pour vérifier, corriger et cliquer sur Réactiver.
+Les paramètres et le profil restent disponibles pour éviter de bloquer la remise
+en service. Aucune donnée de la rubrique n’est supprimée.
+Les sondages sont inclus, même lorsqu’ils sont ouverts via un bouton personnalisé.
+La fermeture du Plan suspend aussi son affichage en mode écran pour un modérateur.
+Fermer une rubrique ne met pas en pause les notifications programmées : il s’agit
+d’un verrouillage de son accès et de ses actions.
+
+VÉRIFICATIONS EFFECTUÉES LOCALEMENT
+Compilation TypeScript et production Vite réussies.
+Migration réexécutée ; droits, horaires de début/fin et pause, séparation des
+anciennes demandes, quantités, corrections et verrous serveur testés.
+Interfaces PC et mobile vérifiées pour administrateur, modérateur et encadrant
+sans rôle de gestion ; retour au logo sans rechargement, formulaires distincts,
+bouton Actualiser retiré des consommables, fermeture/réouverture des rubriques.
+Ces vérifications ne constituent pas un déploiement sur ton site.
+
+CONTENU DU ZIP
+Sources, ressources utilisées, dépendances déclarées, configuration du projet,
+script SQL 59 et ce guide. Aucun node_modules, dist, cache, fichier de tests,
+clé privée, ancien guide ou ancien script de migration.
