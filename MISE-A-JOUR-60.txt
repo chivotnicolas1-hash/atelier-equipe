@@ -1,0 +1,94 @@
+ATELIER FAYET 33 — MISE À JOUR 60
+Congés verrouillés, déchets repliables, Gurdebeke et suppression BEG
+
+PRÉREQUIS
+La mise à jour 59 doit être installée dans Supabase.
+Ce ZIP contient l’application complète et uniquement la nouvelle migration SQL.
+
+INSTALLATION
+1. Supabase > SQL Editor > New query.
+   Ouvre supabase/60-dechets-conges-cibles.sql dans un éditeur de texte,
+   copie tout le contenu dans SQL Editor et clique sur Run.
+   Attends le message de réussite avant de déployer le site.
+   La migration est réexécutable.
+2. Décompresse le ZIP et remplace dans GitHub : src, public, supabase,
+   index.html, package.json, package-lock.json, vite.config.ts,
+   tsconfig.json et postcss.config.js.
+   Conserve les autres fichiers Cloudflare propres à ton dépôt.
+   Conserve les variables de BUILD existantes. N’ajoute pas de _redirects.
+3. Attends la réussite du déploiement Cloudflare, ferme puis rouvre l’application.
+   Sur PC, reconnecte-toi. Le logo continue à ramener à l’accueil sans déconnexion.
+Aucun nouveau secret ni redéploiement de fonction Edge n’est nécessaire.
+
+LES MODIFICATIONS
+
+1 — CONGÉS VALIDÉS
+Une demande acceptée ne peut être modifiée ou supprimée que par l’administrateur.
+Le collaborateur peut la consulter ; il voit un message de verrouillage.
+Les contrôles s’appliquent aussi côté serveur et aux anciens congés acceptés.
+Si l’administrateur corrige la demande, la signature précédente est invalidée.
+Le collaborateur peut vérifier et signer les informations corrigées, mais il
+ne peut plus en changer les champs lui-même. Les modérateurs n’obtiennent pas
+de droit de modification ou de suppression des demandes de congés.
+
+2 — DÉCHETS REPLIABLES
+Les trois catégories sont fermées à l’ouverture de la page.
+Clique sur un en-tête pour développer ou réduire son formulaire et son historique.
+Les types de déchets sont affichés en titre ; le prestataire apparaît en dessous.
+Chaque prestataire conserve ses demandes et son suivi indépendants.
+
+3 — CHIMIREC
+- Filtres usagés : nombre de bacs.
+- Huiles usagées : volume en litres, une décimale possible.
+- Bidons vides : nombre de bidons.
+- Fûts vides : nombre de fûts.
+- Matériaux souillés : nombre de fûts de 200 L.
+- Liquide de refroidissement : nombre de fûts de 200 L.
+- Aérosols : nombre de fûts de 200 L.
+Les quantités de contenants sont des entiers de 1 à 999.
+
+4 — ANCIENS PNEUS / GURDEBEKE
+Une nouvelle catégorie indépendante permet de signaler la benne à pneus.
+Réponse obligatoire à « La benne est-elle pleine ? » :
+- Oui : demande signalée comme benne pleine.
+- Non : date prévisionnelle de remplissage obligatoire (aujourd’hui à un an).
+Aucun nombre de bacs n’est demandé pour les pneus.
+La demande peut être corrigée, validée, supprimée et marquée ramassée par
+l’administrateur ou un modérateur, avec le suivi habituel.
+Les actions n’envoient pas de commande au prestataire.
+
+5 — MODE ÉCRAN SUR PC
+Le bouton texte du plan est remplacé par un pictogramme d’écran dans la barre
+bleue, à côté du nom de l’application. Disponible en Administration/Modération
+sur PC. Son infobulle indique « Passer en mode écran ».
+Le retour au compte reste protégé par le mot de passe.
+
+6 — BUREAUX ET ESPACES DE GESTION
+Les espaces de gestion sans collaborateur présent affecté sont masqués dans
+le schéma, y compris en mode écran. Les positions des autres postes sont conservées.
+Pour les remplir, les gestionnaires disposent d’un volet replié
+« Affecter un espace de gestion libre ». Dès qu’une personne y est affectée,
+le poste réapparaît sur le plan. Les bureaux ne sont pas supprimés de la configuration.
+
+7 — SUPPRESSION DÉFINITIVE DE BEG
+La migration supprime la colonne BEG des objectifs ainsi que les anciennes
+ventes BEG et leurs historiques de correction. Les autres cibles et ventes
+sont conservées. La saisie de nouvelles ventes BEG est refusée côté serveur.
+Les quatre cibles restantes : Purge de freins, Batteries montées, Géométrie, Clim.
+Elles restent modifiables et importables depuis le PDF.
+L’import reconnaît le tableau habituel avec ou sans la colonne BEG ; si cette
+colonne existe encore dans le PDF, elle est ignorée.
+
+VÉRIFICATIONS LOCALES
+Compilation TypeScript et Vite réussie.
+Migration exécutée plusieurs fois ; tests des droits des congés, signature
+après correction, demandes de déchets, unités et champs pneus obligatoires.
+Suppression BEG vérifiée avec conservation de l’import et de la modification
+des quatre autres cibles. Lecture du tableau PDF testée avec et sans BEG.
+Interfaces PC/mobile vérifiées pour administrateur, modérateur et collaborateur :
+catégories fermées, formulaires, congés verrouillés, raccourci écran et bureaux vides.
+Ces vérifications ne constituent pas un déploiement sur ton site.
+
+ZIP NETTOYÉ
+Sources, ressources utilisées, configuration, migration 60 et ce guide seulement.
+Sans node_modules, dist, tests, caches, clés privées, anciennes migrations ou guides.
