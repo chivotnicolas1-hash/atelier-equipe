@@ -1,9 +1,0 @@
-import {useEffect,useState} from 'react';
-import {Cake} from 'lucide-react';
-import {supabase} from './lib/supabase';
-export function birthdayFirstName(name:string){const parts=name.trim().split(/\s+/);const given=parts.filter(p=>p!==p.toLocaleUpperCase('fr-FR'));return given.length?given[0]:(parts[0]||'collègue');}
-export function BirthdayGreeting({name,today,userId}:{name:string,today:string,userId:string}){
- const [birthday,setBirthday]=useState(false),[celebrate,setCelebrate]=useState(false);
- useEffect(()=>{let live=true,timer:ReturnType<typeof setTimeout>|undefined;setBirthday(false);setCelebrate(false);const load=()=>void supabase.rpc('workshop_birthday_get').then(({data,error})=>{if(!live||error)return;setBirthday(!!data?.birthday_today);if(data?.birthday_today){const key='atelier-birthday-seen:'+userId;let seen=false;try{seen=localStorage.getItem(key)===today;localStorage.setItem(key,today)}catch{seen=sessionStorage.getItem(key)===today;sessionStorage.setItem(key,today)}if(!seen){setCelebrate(true);timer=setTimeout(()=>setCelebrate(false),6500)}}});load();window.addEventListener('workshop-birthday-change',load);return()=>{live=false;if(timer)clearTimeout(timer);window.removeEventListener('workshop-birthday-change',load)}},[today,userId]);
- return birthday?<section className={'birthday-greeting birthday-personal'+(celebrate?' celebrating':'')} role="status">{celebrate&&<div className="birthday-confetti" aria-hidden="true">{Array.from({length:24},(_,i)=><i key={i} style={{left:(i*41%100)+'%',animationDelay:(i%6)*.18+'s',background:['#ffc857','#2d90d5','#e778a6','#4eb58e'][i%4]}}/>)}</div>}<strong>Joyeux anniversaire, {birthdayFirstName(name)} ! <Cake size={20} aria-hidden="true"/></strong><p>Toute l’équipe d’Atelier Fayet 33 te souhaite une très belle journée !</p></section>:null;
-}
