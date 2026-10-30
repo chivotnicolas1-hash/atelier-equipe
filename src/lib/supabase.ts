@@ -16,12 +16,18 @@ if(desktopSession){
  window.addEventListener('pageshow',event=>{if(event.persisted)location.reload()});
 }
 function friendly(error:any){
- if(error.code==='PGRST202'||error.code==='42883')return new Error('La base doit être mise à jour : consulte MISE-A-JOUR-61.txt et exécute le script SQL fourni.');
+ if(error.code==='PGRST202'||error.code==='42883')return new Error('La base doit être mise à jour : consulte MISE-A-JOUR-62.txt et exécute le script SQL fourni.');
  return new Error(error.message||'Connexion impossible. Vérifie ta connexion Internet.');
 }
 export async function loadWorkshop(date:string){const {data,error}=await supabase.rpc('workshop_load',{p_date:date});if(error)throw friendly(error);return data;}
 export async function mutateWorkshop(payload:unknown){const {data,error}=await supabase.rpc('workshop_mutate',{p:payload});if(error)throw friendly(error);return data;}
-export async function loginPassword(email:string,password:string){const {error}=await supabase.auth.signInWithPassword({email:email.trim(),password});if(error)throw new Error(error.code==='invalid_credentials'?'Adresse e-mail ou mot de passe incorrect.':error.message);}
+export async function loginPassword(identifier:string,password:string){
+ const login=identifier.trim();
+ if(login.includes('@')){const {error}=await supabase.auth.signInWithPassword({email:login,password});if(error)throw new Error(error.code==='invalid_credentials'?'Identifiant ou mot de passe incorrect.':error.message);return;}
+ const {data,error}=await supabase.functions.invoke('workshop-login',{body:{matricule:login,password}});
+ if(error||!data?.session){let message='Connexion par matricule impossible. Vérifie les identifiants ou utilise ton e-mail.';try{const body=await error?.context?.json();if(body?.error)message=body.error}catch{}throw new Error(message)}
+ const {error:sessionError}=await supabase.auth.setSession(data.session);if(sessionError)throw new Error('Session impossible. Réessaie.');
+}
 export async function provisionAccount(staffId:string,password:string){
  const {data,error}=await supabase.functions.invoke('workshop-accounts',{body:{staffId,password}});
  if(error){let message='Création du compte impossible. Vérifie que la fonction workshop-accounts est déployée.';try{const body=await error.context?.json();if(body?.error)message=body.error;}catch{}throw new Error(message);}
