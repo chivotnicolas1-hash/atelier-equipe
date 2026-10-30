@@ -1,0 +1,163 @@
+ATELIER FAYET 33 — MISE À JOUR 63
+Congés, communication, reprises BT et droits individuels
+
+À INSTALLER SUR LA VERSION 62 DÉJÀ EN PLACE
+Ce ZIP contient le projet complet et uniquement les quatre nouveaux scripts SQL.
+Les anciennes migrations ne sont pas incluses : ne pas utiliser cette archive
+pour installer une base Supabase vide.
+La mise à jour a été vérifiée localement. Elle n’est pas encore déployée sur ton compte.
+
+1 — SUPABASE : EXÉCUTER LES QUATRE SCRIPTS DANS L’ORDRE
+Ouvre ton projet Supabase > SQL Editor > New query.
+Ouvre le premier fichier ci-dessous, copie TOUT son contenu, colle-le dans
+SQL Editor puis clique sur Run. Attends le message de réussite avant de passer
+au suivant. Utilise une nouvelle requête pour chaque fichier.
+
+A. supabase/63a-conges-droits.sql
+B. supabase/63b-reprises.sql
+C. supabase/63c-sondages-boutons.sql
+D. supabase/63d-annonces-programmees.sql
+
+Ils sont réexécutables. Si une requête échoue, conserve son message exact et
+ne déploie pas le nouveau code avant d’avoir terminé les quatre scripts.
+Aucune nouvelle Edge Function, aucun nouveau secret, aucune clé API à ajouter.
+Les Edge Functions déjà installées restent en place.
+
+2 — GITHUB ET CLOUDFLARE
+Décompresse l’archive. À la racine du dépôt GitHub, remplace :
+- le dossier src ;
+- le dossier public ;
+- le dossier supabase ;
+- index.html ;
+- package.json et package-lock.json ;
+- vite.config.ts, tsconfig.json, postcss.config.js et .gitignore.
+Ajoute MISE-A-JOUR-63.txt pour conserver les instructions.
+Ne crée pas un dossier supplémentaire englobant tout le projet.
+Ne transfère ni node_modules, ni dist, ni un fichier .env.
+Aucun fichier _redirects ne doit être ajouté.
+
+Conserve les variables de BUILD Cloudflare existantes, notamment
+VITE_SUPABASE_URL, VITE_SUPABASE_PUBLISHABLE_KEY et VITE_VAPID_PUBLIC_KEY.
+Le déploiement existant reste inchangé. Attends sa réussite puis ferme et
+rouvre l’application. La mention MAJ63 doit apparaître en bas de page.
+
+3 — CONGÉS
+- Le champ « Dont nombre de jours de repos » propose 1 jour par tranche
+  complète de 6 jours du lundi au samedi dans la période saisie : une semaine
+  complète = 1, trois semaines = 3. Les dimanches ne sont pas comptés.
+- Il s’agit d’une aide à la saisie, pas d’un calcul automatique de droits.
+  La valeur reste modifiable, notamment pour un planning particulier.
+  Changer les dates recalcule la proposition ; vérifie-la avant l’envoi.
+- En mode Collaborateur, même l’administrateur ne voit que ses propres demandes.
+  En mode Administration, « Congés de mon équipe » donne accès aux demandes.
+- Un sélecteur d’année est disponible dans les deux vues. Une période à cheval
+  sur deux années apparaît dans chacune des années concernées.
+- Une demande acceptée place le collaborateur « En congé » sur toutes les dates
+  incluses et retire ses affectations, horaires de présence et confirmation.
+  Un import PDF ou une modification manuelle ne peut pas contourner ce congé.
+- Si l’administrateur annule l’accord, supprime ou corrige la demande, les
+  horaires et le statut antérieurs sont restaurés, sauf autre congé accepté
+  sur les mêmes dates. Les affectations et confirmations ne sont pas remises
+  automatiquement : il faut vérifier et réaffecter le poste.
+- Le texte de verrouillage est désormais :
+  « Seul ton responsable atelier peut la modifier ou la supprimer ».
+  Les permissions réelles restent celles demandées : administrateur uniquement.
+
+4 — DROITS INDIVIDUELS
+Administration > Équipes > Gérer le profil > Droits individuels.
+L’administrateur peut autoriser séparément :
+- la modification des QUANTITÉS PRÉVUES des cibles, sans import PDF,
+  consultation de l’historique des ventes ni correction des ventes ;
+- le suivi des déchets : note d’avancement, validation de la demande,
+  confirmation du ramassage. Pas de suppression ni changement des quantités.
+Enregistre les droits puis demande au collaborateur de rouvrir l’application.
+Les contrôles sont également appliqués dans Supabase. Révoquer un droit prend
+effet côté serveur même si un ancien bouton est encore visible à l’écran.
+
+5 — BT À REPRENDRE
+Le formulaire permet de choisir « Confier la reprise à ».
+La liste propose les collaborateurs ayant un compte, prévus présents et dont
+au moins une plage horaire n’est pas terminée ce jour-là. Leurs horaires sont
+indiqués ; un collaborateur actuellement en pause mais revenant ensuite peut
+être choisi. L’auteur n’est pas proposé comme son propre destinataire.
+« À répartir par les gestionnaires » reste disponible sans destinataire.
+Le destinataire reçoit une notification dans l’application et le push habituel
+sur ses appareils inscrits. Il retrouve la fiche et peut la prendre en compte.
+Administrateur et modérateurs conservent l’accès à tous les envois et leurs
+actions de gestion. Les autres collaborateurs ne voient pas une fiche affectée
+à quelqu’un d’autre. Les reprises sans destinataire conservent leur affichage
+partagé pendant la fenêtre de retour de pause déjà en place.
+
+6 — SONDAGES ET ACTIONS OBLIGATOIRES
+Les sondages s’actualisent automatiquement toutes les 20 secondes, sans bouton
+« Actualiser le sondage ». Une réponse en cours de sélection est conservée.
+Après clôture, administrateur et modérateurs peuvent rédiger un bilan libre
+et cocher « Afficher les résultats et le bilan aux collaborateurs ».
+Les noms d’un sondage nominatif restent réservés aux gestionnaires ; un sondage
+anonyme reste anonyme. Les anciens sondages fermés doivent être publiés via
+cette option si leurs résultats doivent être visibles des collaborateurs.
+
+Pour rendre une action obligatoire :
+Administration > Paramètres application > Gérer les boutons > modifier/créer
+un bouton > cocher « Action obligatoire avant d’utiliser l’application ».
+Renseigne un motif, par exemple « Il manque ta réponse sur ce sondage ».
+Le groupe « Visible pour » détermine les collaborateurs concernés.
+- Pour un sondage interne, sélectionne-le dans « Sondage lié » : la réponse
+  effectivement enregistrée débloque automatiquement l’accès à l’interface.
+- Pour un site externe, le bouton ouvre le lien, puis le collaborateur confirme
+  avoir effectué l’action. L’application ne peut pas vérifier ce qui a été
+  réalisé sur un autre site.
+- Administrateur, modérateurs et invités sont exemptés de ce blocage.
+- Un sondage fermé, supprimé ou une rubrique Sondages désactivée ne bloque pas
+  les collaborateurs. Masquer le bouton retire aussi l’obligation.
+- Modifier et enregistrer un bouton obligatoire renouvelle la confirmation
+  pour un lien externe. Un sondage déjà rempli reste considéré comme rempli.
+Ce dispositif guide l’accès à l’interface ; il ne remplace pas les permissions
+Supabase existantes sur les données.
+
+7 — DÉCHETS ET CONSOMMABLES
+« Demandes en cours » rassemble les demandes non ramassées, séparées entre
+Grandidier, Chimirec et Gurdebeke. Le suivi peut être ouvert sous chaque demande.
+Une demande ramassée quitte cette liste mais reste dans l’historique de sa
+catégorie. Les formulaires par prestataire restent disponibles dans les
+catégories repliables, avec l’historique et les actions de modification.
+Les actions de suivi enregistrent l’avancement ; elles ne contactent pas le
+prestataire automatiquement.
+La page Consommables a une présentation plus structurée par semaine, avec
+les actions toujours accessibles sans développer la liste.
+
+8 — ANNONCES PROGRAMMÉES
+Paramètres application > Gérer l’annonce > Programmer une annonce.
+Renseigne message, début, fin facultative, groupe et éventuellement un lien.
+Les dates et heures sont interprétées dans le fuseau Europe/Paris, même si
+l’appareil utilise un autre fuseau.
+Une programmation à venir peut être modifiée ou annulée. Une annonce déjà
+commencée peut être annulée ; pour la modifier immédiatement, utilise le
+formulaire principal de l’annonce.
+La bannière programmée remplace celle affichée au début de sa période.
+À sa fin elle est masquée ; l’ancienne annonce n’est pas rétablie.
+Une annonce publiée manuellement après le début de la programmation ne sera
+pas effacée à la fin de celle-ci.
+Une seule bannière existe : les périodes programmées ne peuvent pas se
+chevaucher. Une annonce sans fin empêche de programmer une période suivante
+jusqu’à modification ou annulation de cette programmation.
+
+L’envoi automatique réutilise le programme de notifications déjà installé
+(atelier-notifications chaque minute). Il doit rester actif pour publier et
+notifier quand personne n’utilise l’application. Sans ce programme, l’annonce
+sera affichée à la prochaine ouverture/actualisation, mais le push hors
+application ne sera pas déclenché à l’heure attendue.
+Les notifications ciblent toujours le groupe choisi et les appareils inscrits.
+
+9 — PRÉSENTATION
+Mes notifications : hiérarchie plus lisible, actions séparées et cartes épurées.
+Connexion ordinateur : logo centré.
+Consommables : cartes de semaines et boutons réorganisés sur mobile et PC.
+
+VÉRIFICATIONS EFFECTUÉES
+Compilation TypeScript/Vite ; tests SQL locaux des permissions, des congés,
+des droits délégués, des reprises affectées, des sondages obligatoires et des
+annonces programmées ; parcours navigateur simulés sur mobile et ordinateur.
+Les quatre migrations ont aussi été exécutées deux fois dans la base de test.
+Après installation, vérifie une demande de congé, une annonce programmée et
+un sondage obligatoire avec un compte collaborateur de test.

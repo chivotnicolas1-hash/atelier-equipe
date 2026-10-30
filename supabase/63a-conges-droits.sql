@@ -1,0 +1,60 @@
+-- MAJ63 A : après MAJ62. Réexécutable.
+begin;
+create table if not exists public.workshop_individual_rights(staff_id text primary key references public.workshop_staff(id) on delete cascade,edit_targets boolean not null default false,waste_progress boolean not null default false,version integer not null default 1,updated_at timestamptz not null default now(),updated_by uuid references auth.users(id));
+alter table public.workshop_individual_rights enable row level security;
+revoke all on public.workshop_individual_rights from public,anon,authenticated;
+create or replace function workshop_private.has_right(p_key text) returns boolean language plpgsql security definer set search_path='' as $$
+declare a jsonb;begin a:=workshop_private.actor_before30();if a->>'role'='guest' then return false;end if;return coalesce((select case p_key when 'edit_targets' then edit_targets when 'waste_progress' then waste_progress else false end from public.workshop_individual_rights where staff_id=a->>'self'),false);end $$;
+create or replace function public.workshop_rights(p_staff text default null) returns jsonb language plpgsql security definer set search_path='' as $$
+declare a jsonb;sid text;begin a:=workshop_private.actor();sid:=coalesce(p_staff,a->>'self');if sid is distinct from a->>'self' and not (a->>'admin')::boolean then raise exception 'Réservé à l’administration.' using errcode='42501';end if;return coalesce((select to_jsonb(r)-'updated_by' from public.workshop_individual_rights r where staff_id=sid),jsonb_build_object('edit_targets',false,'waste_progress',false,'version',0));end $$;
+create or replace function public.workshop_rights_save(p_staff text,p_targets boolean,p_waste boolean,p_version integer) returns void language plpgsql security definer set search_path='' as $$
+declare a jsonb;r public.workshop_individual_rights%rowtype;begin a:=workshop_private.actor();if not (a->>'admin')::boolean then raise exception 'Réservé à l’administration.' using errcode='42501';end if;
+if p_targets is null or p_waste is null or not exists(select 1 from public.workshop_staff where id=p_staff and active and role<>'guest') then raise exception 'Collaborateur invalide.';end if;
+perform pg_advisory_xact_lock(hashtextextended('rights:'||p_staff,0));select * into r from public.workshop_individual_rights where staff_id=p_staff for update;if coalesce(r.version,0) is distinct from p_version then raise exception 'Droits modifiés ailleurs. Recharge la fiche.';end if;
+insert into public.workshop_individual_rights(staff_id,edit_targets,waste_progress,updated_by) values(p_staff,p_targets,p_waste,auth.uid()) on conflict(staff_id) do update set edit_targets=excluded.edit_targets,waste_progress=excluded.waste_progress,updated_by=auth.uid(),updated_at=now(),version=workshop_individual_rights.version+1;end $$;
+-- Conserver toutes les validations existantes, élargir uniquement la quantité prévue.
+do $$declare b text;begin b:=pg_get_functiondef('public.workshop_save_service_targets(date,jsonb,jsonb)'::regprocedure);if position('workshop_private.has_right' in b)=0 then
+if position('if not coalesce((a->>''manager'')::boolean,false) then' in b)=0 then raise exception 'Version des cibles incompatible : appliquer MAJ62 avant MAJ63.';end if;
+execute replace(b,'if not coalesce((a->>''manager'')::boolean,false) then','if not (coalesce((a->>''manager'')::boolean,false) or workshop_private.has_right(''edit_targets'')) then');end if;end $$;
+create or replace function public.workshop_leave_list_v63(p_year integer,p_team boolean default false,p_offset integer default 0) returns jsonb language plpgsql security definer set search_path='' as $$
+declare a jsonb;items jsonb;years jsonb;n integer;begin a:=workshop_private.actor();if a->>'role'='guest' or (p_team and not (a->>'admin')::boolean) then raise exception 'Demandes inaccessibles.' using errcode='42501';end if;
+if p_year is null or p_year not between 2020 and 2100 or p_offset is null or p_offset<0 or p_team is null then raise exception 'Année ou page invalide.';end if;
+select coalesce(jsonb_agg(y order by y desc),'[]') into years from(select distinct generate_series(extract(year from (p->>'start')::date)::int,extract(year from (p->>'end')::date)::int) y from public.workshop_leave_requests r cross join lateral jsonb_array_elements(r.periods)p where p_team or r.author_id=auth.uid())v;
+select count(*) into n from public.workshop_leave_requests r where (p_team or r.author_id=auth.uid()) and exists(select 1 from jsonb_array_elements(r.periods)p where (p->>'start')::date<=make_date(p_year,12,31) and (p->>'end')::date>=make_date(p_year,1,1));
+select coalesce(jsonb_agg(v.item order by v.created_at desc),'[]') into items from(select r.created_at,to_jsonb(r)-'signature'-'decided_signature'-'author_id'-'staff_id'-'decided_by'-'history'||jsonb_build_object('own',r.author_id=auth.uid()) item from public.workshop_leave_requests r where (p_team or r.author_id=auth.uid()) and exists(select 1 from jsonb_array_elements(r.periods)p where (p->>'start')::date<=make_date(p_year,12,31) and (p->>'end')::date>=make_date(p_year,1,1)) order by r.created_at desc limit 30 offset p_offset)v;
+return jsonb_build_object('items',items,'years',years,'total',n);end $$;
+create table if not exists workshop_private.leave_day_backup(staff_id text references public.workshop_staff(id) on delete cascade,date date,snapshot jsonb,primary key(staff_id,date));
+create or replace function workshop_private.on_leave(p_staff text,p_date date) returns boolean language sql stable security definer set search_path='' as $$select exists(select 1 from public.workshop_leave_requests r cross join lateral jsonb_array_elements(r.periods)p where r.staff_id=p_staff and r.status='accepted' and p_date between (p->>'start')::date and (p->>'end')::date)$$;
+create or replace function workshop_private.sync_leave_days(p_staff text) returns void language plpgsql security definer set search_path='' as $$
+declare d date;b jsonb;dayrow public.workshop_days%rowtype;begin
+perform pg_advisory_xact_lock(hashtextextended('leave-days:'||p_staff,0));
+for d in select date from workshop_private.leave_day_backup where staff_id=p_staff union select x::date from public.workshop_leave_requests r cross join lateral jsonb_array_elements(r.periods)p cross join lateral generate_series((p->>'start')::date,(p->>'end')::date,interval '1 day')x where r.staff_id=p_staff and r.status='accepted' loop
+if workshop_private.on_leave(p_staff,d) then
+insert into workshop_private.leave_day_backup values(p_staff,d,(select to_jsonb(dy) from public.workshop_days dy where dy.staff_id=p_staff and dy.date=d)) on conflict do nothing;
+insert into public.workshop_days(date,staff_id,presence,station,geometry,confirmed,slots) values(d,p_staff,'leave',null,false,null,'[]') on conflict(date,staff_id) do update set presence='leave',station=null,geometry=false,confirmed=null,slots='[]';
+else select snapshot into b from workshop_private.leave_day_backup where staff_id=p_staff and date=d;
+if b is null then delete from public.workshop_days where staff_id=p_staff and date=d;else dayrow:=jsonb_populate_record(null::public.workshop_days,b);update public.workshop_days set presence=dayrow.presence,slots=dayrow.slots,station=null,geometry=false,confirmed=null where staff_id=p_staff and date=d;end if;
+delete from workshop_private.leave_day_backup where staff_id=p_staff and date=d;end if;end loop;end $$;
+create or replace function workshop_private.leave_sync63() returns trigger language plpgsql security definer set search_path='' as $$begin if tg_op='DELETE' then perform workshop_private.sync_leave_days(old.staff_id);return old;end if;perform workshop_private.sync_leave_days(new.staff_id);return new;end $$;
+drop trigger if exists leave_sync63 on public.workshop_leave_requests;
+create trigger leave_sync63 after insert or update or delete on public.workshop_leave_requests for each row execute function workshop_private.leave_sync63();
+create or replace function workshop_private.leave_protect63() returns trigger language plpgsql security definer set search_path='' as $$begin
+if tg_op='DELETE' then if workshop_private.on_leave(old.staff_id,old.date) then return null;end if;return old;end if;
+if workshop_private.on_leave(new.staff_id,new.date) then new.presence:='leave';new.slots:='[]';new.station:=null;new.geometry:=false;new.confirmed:=null;end if;return new;end $$;
+drop trigger if exists aaa_leave_day63 on public.workshop_days;
+create trigger aaa_leave_day63 before insert or update or delete on public.workshop_days for each row execute function workshop_private.leave_protect63();
+do $$declare s text;begin for s in select distinct staff_id from public.workshop_leave_requests where status='accepted' loop perform workshop_private.sync_leave_days(s);end loop;end $$;
+alter table public.workshop_waste add column if not exists progress_note text not null default '';
+alter table public.workshop_waste add column if not exists progress_name text;
+alter table public.workshop_waste add column if not exists progress_at timestamptz;
+create or replace function public.workshop_waste_pending() returns jsonb language plpgsql security definer set search_path='' as $$declare a jsonb;begin a:=workshop_private.actor();perform workshop_private.assert_section('waste');return jsonb_build_object('can_progress',coalesce((a->>'manager')::boolean,false) or workshop_private.has_right('waste_progress'),'items',(select coalesce(jsonb_agg(to_jsonb(w)-'author_id'-'validated_by' order by w.created_at),'[]') from public.workshop_waste w where collected_at is null));end $$;
+create or replace function public.workshop_waste_progress(p_id uuid,p_version integer,p_stage text,p_note text) returns void language plpgsql security definer set search_path='' as $$declare a jsonb;r public.workshop_waste%rowtype;person text;begin a:=workshop_private.actor();perform workshop_private.assert_section('waste');if not (coalesce((a->>'manager')::boolean,false) or workshop_private.has_right('waste_progress')) then raise exception 'Droit de suivi requis.' using errcode='42501';end if;
+if p_stage is null or p_stage not in ('note','validate','collect') or p_note is null or length(p_note)>2000 then raise exception 'Suivi invalide.';end if;
+select * into r from public.workshop_waste where id=p_id for update;if not found or r.version is distinct from p_version or r.collected_at is not null then raise exception 'Demande modifiée ou déjà terminée. Actualise.';end if;
+if p_stage='collect' and r.validated_at is null then raise exception 'Valide la demande avant le ramassage.';end if;
+select name into person from public.workshop_staff where id=a->>'self';
+update public.workshop_waste set progress_note=trim(p_note),progress_name=person,progress_at=now(),validated_at=case when p_stage='validate' then coalesce(validated_at,now()) else validated_at end,validated_name=case when p_stage='validate' and validated_at is null then person else validated_name end,validated_by=case when p_stage='validate' and validated_at is null then auth.uid() else validated_by end,collected_at=case when p_stage='collect' then now() else collected_at end,collected_name=case when p_stage='collect' then person else collected_name end,version=version+1 where id=p_id;end $$;
+revoke all on function workshop_private.has_right(text),workshop_private.on_leave(text,date),workshop_private.sync_leave_days(text),workshop_private.leave_sync63(),workshop_private.leave_protect63() from public,anon,authenticated;
+revoke all on function public.workshop_rights(text),public.workshop_rights_save(text,boolean,boolean,integer),public.workshop_leave_list_v63(integer,boolean,integer),public.workshop_waste_pending(),public.workshop_waste_progress(uuid,integer,text,text) from public,anon,authenticated;
+grant execute on function public.workshop_rights(text),public.workshop_rights_save(text,boolean,boolean,integer),public.workshop_leave_list_v63(integer,boolean,integer),public.workshop_waste_pending(),public.workshop_waste_progress(uuid,integer,text,text) to authenticated;
+notify pgrst,'reload schema';commit;
