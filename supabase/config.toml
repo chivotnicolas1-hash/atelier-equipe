@@ -6,3 +6,6 @@ verify_jwt = false
 verify_jwt = false
 # Secret dédié x-workshop-secret validé par la fonction, appelée uniquement par Cron.
 
+[functions.workshop-login]
+verify_jwt = false
+# Fonction de connexion publique : le mot de passe est vérifié par Supabase Auth.

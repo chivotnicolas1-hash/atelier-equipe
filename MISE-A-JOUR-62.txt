@@ -1,0 +1,121 @@
+ATELIER FAYET 33 — MISE À JOUR 62
+
+À appliquer après la MAJ61. Cette archive n'est pas une installation initiale.
+Les modifications ont été vérifiées localement, mais ne sont pas encore
+installées dans votre Supabase ni sur Cloudflare.
+
+IMPORTANT : cette fois, il faut exécuter le SQL ET déployer une nouvelle
+fonction Supabase avant de mettre à jour le site. La connexion par e-mail
+reste disponible même si la nouvelle fonction n'est pas encore déployée.
+
+1 — SUPABASE : BASE DE DONNÉES
+• Ouvrez le projet Supabase > SQL Editor > New query.
+• Ouvrez le fichier supabase/62-equipe-matricule-directeur.sql de cette archive.
+• Copiez TOUT le texte dans l'éditeur et cliquez sur Run.
+• Attendez la réussite. Le script est réexécutable.
+Il ajoute les matricules privés, le rôle Directeur et la synchronisation de
+la fonction des collaborateurs avec leur équipe. Les signatures dessinées
+et les informations déjà enregistrées dans les signalements sont conservées.
+
+2 — SUPABASE : NOUVELLE FONCTION workshop-login
+Cette fonction permet de se connecter avec un matricule et un mot de passe.
+
+Avec l'éditeur du tableau de bord Supabase :
+• Ouvrez Edge Functions, puis l'option de création/déploiement d'une fonction.
+• Choisissez l'éditeur de code et nommez la fonction exactement workshop-login.
+• Remplacez le contenu de index.ts par TOUT le contenu du fichier :
+  supabase/functions/workshop-login/index.ts
+• Désactivez la vérification JWT automatique de cette fonction uniquement
+  (réglage pouvant être nommé « Verify JWT » ou « Enforce JWT verification »).
+  La connexion arrive avant l'authentification : la fonction vérifie elle-même
+  le mot de passe auprès de Supabase Auth. Ne changez pas ce réglage sur les
+  autres fonctions.
+• Déployez la fonction et attendez la réussite.
+
+Si vous utilisez déjà la CLI Supabase depuis le dossier du projet :
+  supabase functions deploy workshop-login --no-verify-jwt
+Le projet doit être lié au bon projet Supabase avant cette commande.
+
+Les variables SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY et SUPABASE_ANON_KEY
+sont les variables intégrées de l'environnement des Edge Functions utilisées
+par ce code. Aucun secret supplémentaire à créer pour cette mise à jour.
+N'ajoutez jamais la clé service_role au site, à GitHub ou aux variables VITE.
+Ne remplacez pas les fonctions workshop-accounts et workshop-push : elles
+restent nécessaires et leur fonctionnement n'est pas modifié par cette MAJ.
+
+3 — GITHUB ET CLOUDFLARE
+• Décompressez l'archive et mettez à jour src, public, supabase et index.html.
+• Mettez aussi à jour les configurations fournies : package.json,
+  package-lock.json, tsconfig.json, vite.config.ts, postcss.config.js.
+• Conservez vos variables de build Cloudflare existantes et vos réglages de
+  déploiement spécifiques. Aucune nouvelle variable VITE n'est nécessaire.
+• N'ajoutez ni node_modules, ni dist, ni fichier _redirects.
+• Enregistrez les changements GitHub et attendez la réussite Cloudflare.
+• Fermez et rouvrez l'application. Le pied de page indique MAJ62.
+
+4 — UTILISATION
+
+Page conservée sur mobile
+Un rafraîchissement conserve la rubrique courante, la date sélectionnée et
+le mode Administration/Collaborateur. Le plan reste accessible après un
+rafraîchissement. Une ouverture normale sans rubrique prédéfinie continue
+d'afficher l'accueil habituel. Les formulaires non enregistrés ne sont pas
+sauvegardés automatiquement. Les règles de session PC restent inchangées.
+
+Litiges
+Chaque dossier est fermé par défaut. Le résumé montre le nom complet du
+client, la plaque, l'origine service client et le statut. Cliquez sur
+« Voir le dossier » pour retrouver le suivi, la clôture et les actions.
+
+Cibles du jour
+Le pourcentage global est maintenant à droite, à côté du bloc titre/date.
+Son calcul reste la somme des ventes divisée par la somme des quatre cibles
+pour la date choisie. Il peut dépasser 100 %.
+
+Équipe
+Nouvelle présentation des fiches, recherche par nom, e-mail ou matricule
+(pour l'administrateur), filtre par équipe et classement alphabétique.
+Les outils de profil restent regroupés sous « Gérer le profil ».
+La matrice et les notifications restent accessibles dans leurs panneaux
+repliables. Les droits des modérateurs ne sont pas élargis.
+
+Matricule
+Administrateur > Équipes > Gérer le profil > Modifier la fiche.
+Renseignez le matricule, puis enregistrez. Il est facultatif et doit être
+unique : 1 à 32 caractères, lettres, chiffres, tiret ou tiret bas.
+Les zéros initiaux sont conservés. Les lettres ne distinguent pas les
+majuscules des minuscules. Effacer ce champ retire la connexion par matricule.
+L'adresse e-mail reste obligatoire pour créer le compte Supabase.
+Créer la fiche ne suffit pas : utilisez toujours « Créer / réinitialiser
+l'accès » si le compte de connexion n'existe pas encore.
+Sur la page de connexion, saisissez l'e-mail OU le matricule avec le même
+mot de passe. Le changement de matricule ne change pas le mot de passe.
+Après 10 tentatives sur un matricule en 15 minutes, les tentatives suivantes
+sont temporairement bloquées ; la connexion par e-mail reste disponible.
+Les demandes de mot de passe oublié continuent d'utiliser l'e-mail.
+
+Directeur
+L'administrateur peut choisir « Directeur » dans le rôle d'une fiche.
+Ce rôle distinct dispose pour le moment de l'espace collaborateur ; il ne
+reçoit pas les permissions d'administration ou de modération. Il est prêt
+pour une prochaine évolution vers un espace Directeur spécifique.
+
+Fonction dans l'atelier
+Pour les comptes Collaborateur, le champ disparaît de la fiche administrative
+et suit automatiquement le nom de l'équipe, y compris lors d'un changement
+d'équipe. Les administrateurs, modérateurs, directeurs et invités sont exclus
+de cette synchronisation automatique. Les fonctions personnalisées des rôles
+spécifiques sont conservées. Les anciens signalements gardent leur contenu.
+
+5 — CONTRÔLES APRÈS INSTALLATION
+• Modifiez le matricule d'un compte de test et connectez-vous avec celui-ci.
+• Vérifiez aussi la connexion par e-mail.
+• Sur téléphone, ouvrez Consommables ou Plan de l'atelier et rafraîchissez.
+• Vérifiez l'affichage compact d'un litige et le pourcentage à droite.
+• Vérifiez la fonction d'un collaborateur après changement de son équipe.
+
+Validation locale : compilation TypeScript/Vite ; tests de migration SQL,
+droits par rôle, unicité/confidentialité des matricules, limitation des
+connexions, enregistrement atomique de la fiche et conservation des signatures ;
+tests d'interface PC/mobile et de la fonction de connexion avec services simulés.
+La connexion réelle devra être vérifiée après déploiement dans votre projet.
