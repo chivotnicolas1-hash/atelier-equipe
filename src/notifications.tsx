@@ -1,3 +1,4 @@
+import {useAutoRefresh} from './lib/sync';
 import {useEffect,useState} from 'react';
 import {supabase,trackDesktopPush} from './lib/supabase';
 async function rpc(name:string,args?:Record<string,unknown>){const {data,error}=await supabase.rpc(name,args);if(error)throw Error(error.code==='PGRST202'?'Les notifications ne sont pas encore configurées (script 12).':error.message);return data}
@@ -21,7 +22,8 @@ export function NotificationDirectory(){
  const [rows,setRows]=useState<{name:string,devices:number}[]>([]),[error,setError]=useState('');
  async function load(){try{const d=await rpc('workshop_push_status');setRows(d.team);setError('')}catch(e:any){setError(e.message)}}
  useEffect(()=>{void load()},[]);
- return <section className="panel"><div className="panel-head"><h2>Notifications de l’équipe</h2><button className="secondary" onClick={load}>Actualiser</button></div><p className="muted">Appareils inscrits : ce suivi ne confirme pas la réception ni la lecture d’une notification.</p>{error&&<p role="alert">{error}</p>}<div className="team-grid">{rows.map((r,i)=><div className={"team-card"+(!r.devices?" notifications-missing":"")} key={i}><strong>{r.name}</strong><p>{r.devices?`${r.devices} appareil(s) inscrit(s)`:'Aucun appareil inscrit'}</p></div>)}</div></section>
+ useAutoRefresh(()=>load());
+ return <section className="panel"><div className="panel-head"><h2>Notifications de l’équipe</h2><></></div><p className="muted">Appareils inscrits : ce suivi ne confirme pas la réception ni la lecture d’une notification.</p>{error&&<p role="alert">{error}</p>}<div className="team-grid">{rows.map((r,i)=><div className={"team-card"+(!r.devices?" notifications-missing":"")} key={i}><strong>{r.name}</strong><p>{r.devices?`${r.devices} appareil(s) inscrit(s)`:'Aucun appareil inscrit'}</p></div>)}</div></section>
 }
 export function NotificationInvite({onOpen}:{onOpen:()=>void}){
  const [show,setShow]=useState(false);

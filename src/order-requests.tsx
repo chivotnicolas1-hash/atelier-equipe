@@ -1,3 +1,4 @@
+import {useAutoRefresh} from './lib/sync';
 import {exportOrderPdf} from './lib/pdf-export';
 import {Checkbox} from './simple-checkbox';
 import {useEffect,useState} from 'react';
@@ -18,8 +19,9 @@ export default function OrderRequests({readonly=false}:{readonly?:boolean}){
  const [canManage,setCanManage]=useState(false);
  const [list,setList]=useState<Order[]>([]),[offset,setOffset]=useState(0),[total,setTotal]=useState(0),[error,setError]=useState(''),[loading,setLoading]=useState(false);
  const [draft,setDraft]=useState<Order|null>(null),[items,setItems]=useState<Item[]>([]),[busy,setBusy]=useState(false),[formError,setFormError]=useState(''),[dirty,setDirty]=useState(false);
- async function load(page=offset){setLoading(true);setError('');try{const result=await rpc('workshop_list_orders',{p_offset:page});setList(result.items);setCanManage(!!result.can_manage);setTotal(result.total);setOffset(page)}catch(e:any){setError(e.message)}finally{setLoading(false)}}
+ async function load(page=offset,quiet=false){if(!quiet)setLoading(true);setError('');try{const result=await rpc('workshop_list_orders',{p_offset:page});setList(result.items);setCanManage(!!result.can_manage);setTotal(result.total);setOffset(page)}catch(e:any){setError(e.message)}finally{setLoading(false)}}
  useEffect(()=>{void load(0)},[]);
+ useAutoRefresh(()=>{if(!busy)return load(offset,true)});
  useEffect(()=>{if(!dirty)return;const handler=(e:BeforeUnloadEvent)=>e.preventDefault();window.addEventListener('beforeunload',handler);return()=>window.removeEventListener('beforeunload',handler)},[dirty]);
  function open(order:Order){setDraft(order);setItems(order.items.map(x=>({...x})));setFormError('');setDirty(false)}
  function close(){if(busy)return;if(dirty&&!confirm('Abandonner les modifications non enregistrées ?'))return;setDraft(null);setDirty(false)}

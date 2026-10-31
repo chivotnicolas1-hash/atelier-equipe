@@ -1,3 +1,4 @@
+import {setSyncInterval,clearSyncInterval} from './lib/sync';
 import {createContext,useContext,useEffect,useState} from 'react';
 import {supabase,desktopSession} from './lib/supabase';
 import {stations as defaults} from './lib/workshop';
@@ -12,7 +13,7 @@ export function useDisplayTheme(){const {setDisplayTheme}=useDesign();useEffect(
 export function useStations(){const {design,stationRecords}=useDesign();return stationRecords?stationRecords.map(s=>({...s,short:s.name})):defaults.map((s,i)=>({...s,office:['organisation','devis'].includes(s.id),rotate:s.col===1,version:0,name:design.stations[s.id]?.name||s.name,short:design.stations[s.id]?.name||s.short,number:design.stations[s.id]?.number||String(i+1).padStart(2,'0')}))}
 export function DesignProvider({children}:{children:React.ReactNode}){const [displayTheme,setDisplayTheme]=useState(false),[design,setDesign]=useState(baseDesign),[revision,setRevision]=useState(0),[stationRecords,setStationRecords]=useState<Station[]|null>(null);
  async function refresh(){const layout=await supabase.rpc('workshop_get_stations');if(!layout.error&&Array.isArray(layout.data))setStationRecords(layout.data);const {data,error}=await supabase.rpc('workshop_get_design');if(!error&&data?.settings){setDesign(mergeDesign(data.settings));setRevision(data.revision)}}
- useEffect(()=>{void refresh();const id=setInterval(()=>void refresh(),60000);return()=>clearInterval(id)},[]);
+ useEffect(()=>{void refresh();const id=setSyncInterval(()=>void refresh(),60000);return()=>clearSyncInterval(id)},[]);
  useEffect(()=>{const el=document.documentElement,visual=!desktopSession||displayTheme?design:baseDesign;el.dataset.themeScope=displayTheme?'screen':desktopSession?'desktop':'mobile';el.dataset.season=visual.season;for(const mode of ['light','dark'] as const)for(const [key,value] of Object.entries(visual[mode]))el.style.setProperty('--design-'+mode+'-'+key,value);for(const key of ['fontSize','radius','spacing'] as const)el.style.setProperty('--design-'+key,visual[key]+'px');document.title=design.appName},[design,displayTheme]);
  return <Context.Provider value={{design,revision,stationRecords,refresh,setDisplayTheme}}>{children}</Context.Provider>;
 }

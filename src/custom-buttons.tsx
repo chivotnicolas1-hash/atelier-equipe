@@ -1,3 +1,4 @@
+import {useAutoRefresh} from './lib/sync';
 import {customButtonStyle} from './lib/button-colors';
 import {pollUrl} from './polls';
 import {useState,useEffect} from 'react';
@@ -11,6 +12,7 @@ const audiences:Record<string,string>={all:'Toute l’équipe',encadrants:'Encad
 export default function CustomButtonsDialog({buttons,onClose,onSaved,admin=true,onPolls}:{admin?:boolean,onPolls:()=>void,buttons:CustomButton[],onClose:()=>void,onSaved:()=>Promise<unknown>}){
  const [polls,setPolls]=useState<any[]>([]);useEffect(()=>{void supabase.rpc('workshop_poll_list').then(({data})=>setPolls(data||[]))},[]);
  const [required,setRequired]=useState(false),[reason,setReason]=useState('');
+ useAutoRefresh(async()=>{const {data,error}=await supabase.rpc('workshop_poll_list');if(!error)setPolls(data||[])});
  const [color,setColor]=useState('#eaf1ff'),[colored,setColored]=useState(false);
  const [editing,setEditing]=useState<string|null>(null),[label,setLabel]=useState(''),[url,setUrl]=useState(''),[audience,setAudience]=useState('all'),[enabled,setEnabled]=useState(true),[position,setPosition]=useState('0'),[busy,setBusy]=useState(false),[error,setError]=useState('');
  const reset=()=>{setRequired(false);setReason('');setEditing(null);setLabel('');setUrl('');setAudience('all');setEnabled(true);setPosition('0');setColored(false);setColor('#eaf1ff');setError('')};
