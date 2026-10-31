@@ -1,0 +1,76 @@
+ATELIER FAYET 33 — MISE À JOUR 64
+
+INSTALLATION (application existante déjà mise à jour en version 63)
+
+1. SUPABASE
+Dans SQL Editor, crée une nouvelle requête. Copie tout le contenu de :
+supabase/64-qualite-suspension.sql
+Clique sur Run. Le script est réexécutable.
+Les quatre scripts 63a, 63b, 63c et 63d doivent avoir été appliqués auparavant.
+Ce ZIP ne contient que le nouveau SQL, pas les anciennes migrations.
+Si un ancien script est en erreur, conserve le message exact pour le diagnostic.
+Le SQL 64 active aussi explicitement la protection RLS de deux tables privées
+créées en version 63.
+
+2. GITHUB
+Décompresse l’archive. Remplace src, public, supabase/functions et les fichiers
+racine fournis (index.html, package.json, package-lock.json, tsconfig.json,
+vite.config.ts, postcss.config.js). Ajoute le SQL 64 dans supabase.
+Conserve les anciennes migrations déjà dans ton dépôt si tu souhaites garder
+leur historique ; elles ne sont pas réexécutées par Cloudflare.
+Ne publie aucun fichier .env ni aucune clé privée.
+Aucun fichier _redirects ne doit être ajouté.
+
+3. CLOUDFLARE
+Conserve toutes les variables de build existantes, dont les variables Supabase
+et VITE_VAPID_PUBLIC_KEY. Lance le déploiement du nouveau commit et attends sa
+réussite. Ferme puis rouvre l’application.
+Aucune nouvelle clé, aucun service payant ni redéploiement de fonction Edge
+n’est nécessaire pour cette mise à jour.
+
+NOUVEAUTÉS
+
+CONTRÔLE QUALITÉ
+Une cinquième case figure dans Cibles du jour : 2 contrôles par défaut du lundi
+au samedi, 0 le dimanche. La cible peut être modifiée pour la journée affichée.
+Seuls l’administrateur et les modérateurs peuvent enregistrer un contrôle,
+consulter son historique nominatif ou retirer une saisie erronée.
+Le droit individuel existant de modification des cibles permet également de
+modifier la quantité prévue, mais jamais d’enregistrer un contrôle réalisé.
+Les contrôles qualité ne comptent pas dans le pourcentage des ventes
+additionnelles. L’import PDF des quatre cibles commerciales reste inchangé.
+
+SUSPENSION
+Administrateur : Équipes > Gérer le profil > Suspendre le collaborateur.
+Le collaborateur disparaît de l’équipe active et ne peut plus accéder aux
+informations de l’application. Son compte et son historique sont conservés.
+Une session déjà ouverte est bloquée visuellement au prochain contrôle
+automatique (20 secondes lorsque l’application est active) ; les fonctions
+protégées refusent immédiatement les demandes du compte suspendu.
+Pour réactiver : Équipes > Comptes suspendus > Réactiver le collaborateur.
+Les anciennes affectations et données sont conservées : vérifie le planning
+lors d’une réactivation. L’administrateur ne peut pas suspendre son propre compte.
+
+SYNCHRONISATION
+Les vues chargées de l’application utilisent une horloge commune de 20 secondes.
+Les boutons d’actualisation ont été retirés. Il s’agit d’un rafraîchissement des
+données, pas d’un rechargement complet de la page : les formulaires en cours
+restent ouverts. Une synchronisation a également lieu au retour sur l’application.
+Un téléphone peut suspendre les temporisateurs quand l’application est en
+arrière-plan ; une fréquence de 20 secondes n’est donc pas garantie écran fermé.
+Les pages externes intégrées (WorkOrder, Google Forms) ne sont pas rechargées.
+
+PRÉPARATION DU PLAN
+Tous les pôles identifiés comme espaces de gestion/bureau apparaissent dans
+le brouillon, y compris les postes vides. Après publication, seuls ces espaces
+vides sont masqués ; les autres postes restent visibles.
+
+SONDAGE OBLIGATOIRE
+Les boutons Déconnexion et Vérifier sont retirés de cet écran. Après une réponse,
+la vérification est automatique ; elle est aussi effectuée lors de la synchronisation.
+
+VALIDATION
+Compilation TypeScript et production vérifiées localement. Tests SQL de droits,
+suspension/réactivation, objectifs et saisies qualité effectués sur une base de
+validation. Vérifications d’interface avec données de test sur ordinateur et mobile.
+Le ZIP est prêt à installer ; il n’a pas été déployé sur ton compte Cloudflare.
