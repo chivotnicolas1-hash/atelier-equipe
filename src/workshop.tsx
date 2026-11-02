@@ -178,7 +178,7 @@ export default function Workshop(){
 
  </>}
  {reportLoaded&&!unavailable('reports')&&<div hidden={tab!=='reports'||!data}><Suspense fallback={<p>Chargement des signalements…</p>}><Reports admin={!!data?.admin} readonly={guest} all={!!(data?.admin||data?.manager)} openRequest={reportRequest}/></Suspense></div>}
- {data&&<footer><span>{design.appName.toUpperCase()} · MAJ65</span><span>{error?'Connexion à rétablir':`Actualisé à ${synced} · toutes les 20 s`}</span></footer>}
+ {data&&<footer><span>{design.appName.toUpperCase()} · MAJ66</span><span>{error?'Connexion à rétablir':`Actualisé à ${synced} · toutes les 20 s`}</span></footer>}
  </main>
   {rightsStaff&&admin&&<IndividualRights id={rightsStaff.id} name={rightsStaff.name} onClose={()=>setRightsStaff(null)}/>}
  {showDesign&&<DesignSettings onClose={()=>setShowDesign(false)}/>}
