@@ -1,4 +1,0 @@
-ATELIER FAYET 33 — MAJ 67, après la version 66
-Consommables > Divers liquides : les trois cuves à l’étage ouvrent une fenêtre. Saisir un nombre entier de litres (500 L proposés, minimum 500 L), puis confirmer. Annuler ne commande rien. Le volume choisi est inscrit sur la ligne de commande et dans son export PDF. La quantité de cette ligne compte les livraisons de ce volume : deux demandes identiques de 600 L donnent deux livraisons de 600 L. Les anciennes lignes sont conservées.
-Sous le plan, les neuf nouveaux liquides s’ajoutent par unité ou conditionnement, sans fenêtre de volume.
-Installation : mettre à jour GitHub avec les fichiers de l’archive puis attendre le déploiement Cloudflare. Conserver les variables existantes. Aucun nouveau SQL, secret ou redéploiement de fonction Edge pour passer de la version 66 à 67.
