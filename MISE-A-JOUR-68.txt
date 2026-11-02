@@ -1,0 +1,5 @@
+ATELIER FAYET 33 — Version affichée V1.0
+Après la MAJ67 : mettre à jour GitHub avec les fichiers de cette archive, sans changer les variables Cloudflare. Attendre le déploiement puis rouvrir l’application. Aucun nouveau SQL.
+Le thème Noël affiche le logo enneigé dans l’application sur mobile et en mode écran. L’icône installée sur le téléphone reste celle d’origine.
+Mes notifications : retrait du bloc Non lues et de ses deux boutons. Les actions individuelles restent disponibles.
+Déchets : chaque demande est repliée ; toucher le nom des déchets dévoile ses informations et les actions autorisées.
