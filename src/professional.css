@@ -266,3 +266,4 @@ html[data-theme-scope=screen][data-season=halloween] .workshop-display{backgroun
 .quality-cible>.cible-exceeded{background:#e5f6e9;border:1.5px solid #23783b;color:#174f28}
 .quality-cible small{display:block}.quality-actions:empty{display:none}
 @media(max-width:700px){.daily-cibles.cibles-compact .cibles-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.daily-cibles.cibles-compact .cibles-grid>.quality-cible{grid-column:1/-1}.quality-cible>.cible-sale{min-height:78px}}
+.switch65{display:flex;gap:8px;flex-wrap:wrap}.brief65{margin:16px 0}.brief65>summary,.brief-category>summary{cursor:pointer;padding:16px}.brief65>summary small{display:block;color:var(--ui-muted);margin-top:4px}.brief-category{border-top:1px solid var(--ui-line)}.brief65 li{margin:6px 0;overflow-wrap:anywhere}

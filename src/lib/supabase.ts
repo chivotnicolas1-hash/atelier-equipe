@@ -21,12 +21,12 @@ function friendly(error:any){
 }
 export async function loadWorkshop(date:string){const {data,error}=await supabase.rpc('workshop_load',{p_date:date});if(error)throw friendly(error);return data;}
 export async function mutateWorkshop(payload:unknown){const {data,error}=await supabase.rpc('workshop_mutate',{p:payload});if(error)throw friendly(error);return data;}
-export async function loginPassword(identifier:string,password:string){
+export async function loginPassword(identifier:string,password:string,client=supabase){
  const login=identifier.trim();
- if(login.includes('@')){const {error}=await supabase.auth.signInWithPassword({email:login,password});if(error)throw new Error(error.code==='invalid_credentials'?'Identifiant ou mot de passe incorrect.':error.message);return;}
- const {data,error}=await supabase.functions.invoke('workshop-login',{body:{matricule:login,password}});
+ if(login.includes('@')){const {error}=await client.auth.signInWithPassword({email:login,password});if(error)throw new Error(error.code==='invalid_credentials'?'Identifiant ou mot de passe incorrect.':error.message);return;}
+ const {data,error}=await client.functions.invoke('workshop-login',{body:{matricule:login,password}});
  if(error||!data?.session){let message='Connexion par matricule impossible. Vérifie les identifiants ou utilise ton e-mail.';try{const body=await error?.context?.json();if(body?.error)message=body.error}catch{}throw new Error(message)}
- const {error:sessionError}=await supabase.auth.setSession(data.session);if(sessionError)throw new Error('Session impossible. Réessaie.');
+ const {error:sessionError}=await client.auth.setSession(data.session);if(sessionError)throw new Error('Session impossible. Réessaie.');
 }
 export async function provisionAccount(staffId:string,password:string){
  const {data,error}=await supabase.functions.invoke('workshop-accounts',{body:{staffId,password}});
