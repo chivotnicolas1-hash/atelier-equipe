@@ -1,0 +1,5 @@
+ATELIER FAYET 33 — Mise à jour 71
+Déchets > Demandes en cours : ouvrir la demande pour la valider, la modifier ou la supprimer. Les administrateurs et modérateurs disposent des mêmes commandes que dans l’historique. Après validation, la confirmation du ramassage est disponible.
+Consommables : la rubrique Divers liquides reprend la présentation des rubriques Déchets. Le fonctionnement du plan est conservé.
+Congés : pour l’année et la page sélectionnées, les demandes sont regroupées en demandes en cours (y compris propositions et demandes à signer), CP validés et CP refusés. Les droits et l’accès aux PDF sont conservés.
+Depuis la version 70 : mettre à jour les fichiers dans GitHub et attendre le déploiement Cloudflare. Aucun SQL supplémentaire. Conserver les anciennes migrations, les variables Cloudflare et les secrets Supabase.
