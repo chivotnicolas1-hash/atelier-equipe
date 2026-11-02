@@ -1,0 +1,6 @@
+ATELIER FAYET 33 — MISE À JOUR 66 (après MAJ65)
+Consommables > Divers liquides (huile, refroi, frein, …)
+Déplie le plan puis touche une référence : une unité est ajoutée à la commande ouverte indiquée. Un second appui après confirmation augmente la quantité de la même ligne. La contenance affichée désigne le conditionnement, pas la quantité commandée.
+Les trois cuves de l’étage figurent en bas du plan. LG est repris tel quel, sans contenance précisée sur le plan fourni. L’ancienne cuve et le cadre divers refroidissement sont exclus.
+La commande ouverte de la semaine est prioritaire, puis la prochaine ouverte si la semaine est clôturée. Les anciennes commandes et les comptes invités ne sont pas modifiés.
+Installation : décompresse le ZIP, mets à jour le dépôt GitHub avec les fichiers de l’archive, conserve les anciennes migrations et les variables Cloudflare. Attends le succès du déploiement et rouvre l’application. Aucun nouveau SQL ni fonction Edge à déployer pour passer de 65 à 66.
