@@ -1,6 +1,0 @@
-ATELIER FAYET 33 — Mise à jour 70 (après la MAJ69)
-1. Supabase > SQL Editor : exécute supabase/70-qualite-reprises.sql. Attends la réussite avant de publier le code.
-2. Remplace les fichiers du projet sur GitHub par ceux fournis. Conserve les anciennes migrations et les variables Cloudflare. Attends le déploiement puis rouvre l’application.
-Déchets : badge bleu contrasté et demandes plus rapprochées.
-Cibles du jour : Modifier le lien du contrôle permet de définir une adresse HTTPS pour l’atelier. Sans lien personnalisé, le formulaire F9900 existant est utilisé. Si aucun lien n’est disponible, le premier clic ouvre le réglage sans ajouter de contrôle. Un clic sur la case par un admin ou modérateur ajoute un contrôle pour le jour affiché et ouvre le lien. Le décompte constate l’ouverture, pas la soumission du formulaire externe. En cas d’erreur, Suivi qualité > Supprimer cette saisie. Le pourcentage des ventes additionnelles reste inchangé.
-BT à reprendre : Transmettre aussi à permet de choisir un collaborateur prévu présent avec des horaires pour la date du BT. Les encadrants et les gestionnaires restent destinataires ; le collaborateur désigné reçoit également la notification. Les notifications sur téléphone dépendent de l’activation sur cet appareil.
