@@ -1,0 +1,4 @@
+Atelier Fayet 33 — Mise à jour 69
+Déchets : Demandes en cours est replié à l’ouverture. Le total reste visible. Déplier puis sélectionner le type de déchets pour voir la fiche et les actions autorisées. Les noms des prestataires sont masqués dans ce suivi.
+Consommables : une commande validée se replie ; cliquer sur le titre pour voir ses articles, sa validation et les actions autorisées. Les commandes ouvertes conservent leur fonctionnement.
+Depuis la version 68 : mettre à jour les fichiers dans GitHub, conserver les variables Cloudflare et attendre le déploiement. Aucun nouveau SQL. La version affichée dans l’application reste V1.0.
