@@ -1,0 +1,11 @@
+ATELIER FAYET 33 — VERSION 65 (après la version 64)
+
+1. Dans Supabase > SQL Editor, exécuter tout le fichier supabase/65-assistant-acces.sql.
+2. Décompresser ce ZIP. Dans le dépôt GitHub, remplacer src, public et les fichiers de configuration fournis ; ajouter le SQL 65. Conserver les migrations présentes dans le dépôt. Aucun fichier _redirects.
+3. Garder les variables actuelles sur Cloudflare et attendre la réussite du déploiement du commit. Fermer puis rouvrir l’application. Aucune clé IA ni nouvelle fonction Edge à déployer.
+
+Sur ordinateur, l’interface est réservée aux comptes actifs administrateur, modérateur ou directeur. Les collaborateurs et invités gardent leur accès sur mobile. Le type d’appareil est détecté par le navigateur : il s’agit d’une restriction d’interface, pas d’une certification matérielle.
+En mode écran, « Quitter le mode écran » conserve la vérification du mot de passe du compte actuel. « Changer de compte » accepte un e-mail ou un matricule et un mot de passe. Le compte candidat est vérifié avant de fermer la session actuelle. Un changement de compte ouvre l’espace du nouveau compte, avec ses propres droits.
+
+Administration > Plan de l’atelier > Assistant atelier : ouvrir la rubrique puis choisir La veille ou Semaine passée. Le lundi à 08 h 30 (Paris) le bilan hebdomadaire bascule sur la semaine du lundi au dimanche qui vient de se terminer ; il reste consultable ensuite. Avant 08 h 30 le bilan précédent reste disponible. Calcul à la consultation et synchronisation écran ouvert ; aucun rappel push n’a été ajouté.
+La synthèse utilise un classement extractif local (TextRank) : elle sélectionne des extraits des fiches et privilégie les suites à donner. Aucun modèle distant, aucune clé, aucun frais d’API IA. Les états sont les états actuels, pas une photographie figée de la veille. Le détail par catégorie permet de vérifier les faits. Les congés encore en attente toutes dates confondues sont distingués de ceux déposés sur la période. Les listes de consommables sont sélectionnées par création ou dernière modification connue ; ce n’est pas un journal exhaustif des modifications successives.
