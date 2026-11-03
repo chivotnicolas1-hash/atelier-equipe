@@ -1,0 +1,7 @@
+ATELIER FAYET 33 — Mise à jour 73 (après la version 72)
+1. Supabase > SQL Editor : exécute supabase/73-relances-dechets.sql.
+2. Mets à jour GitHub puis attends la réussite du déploiement Cloudflare. Conserve les variables et les migrations existantes. Ferme puis rouvre l’application.
+Contrôle qualité : pictogramme et titre au-dessus du compteur ; lien et comptabilisation inchangés.
+Signalements : accès direct à la rubrique même après restauration de la page, sans téléchargement différé du module au clic. Gestion des dates et immatriculations absentes ou incorrectes. Une erreur d’affichage reste isolée, avec une option Réessayer. La cause exacte des incidents sur le téléphone ne peut être établie sans le journal correspondant.
+Huiles : confirme l’ajout d’un conditionnement. Les cuves conservent la saisie du volume minimum de 500 L et la confirmation dans la même fenêtre. Autres liquides conserve sa saisie de quantité sans seconde confirmation.
+Déchets : ouvre la demande en cours > Enregistrer une relance, puis confirme après avoir contacté le prestataire. Le nom du compte connecté, la date et l’heure sont enregistrés côté serveur et consultables en heure de Paris dans le suivi et l’historique. Les relances successives sont conservées. Autorisé aux administrateurs, modérateurs et collaborateurs disposant du droit de suivi. Aucun message n’est envoyé au prestataire par ce bouton.
