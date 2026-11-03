@@ -1,3 +1,0 @@
-Après la MAJ73, exécute supabase/74-catalogue-pneus.sql dans Supabase puis mets les fichiers à jour sur GitHub. Conserve les variables Cloudflare et attends la réussite du déploiement.
-Consommables > Pneus : 82 désignations du PDF et les photos fournies. Touche un article pour choisir la quantité. Administrateur : Modifier le catalogue pneus permet de renommer ou retirer un article ; enregistre pour appliquer les changements. Réexécuter le SQL ne réinitialise pas le catalogue personnalisé.
-Déchets > Demandes en cours : compteur visible, statut coloré, quantités et auteur séparés.
