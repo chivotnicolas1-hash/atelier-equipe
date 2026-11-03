@@ -1,0 +1,6 @@
+Reconnaissance locale : Tesseract.js 6.0.1 et tesseract.js-core 6.1.2, licences Apache-2.0 incluses.
+https://github.com/naptha/tesseract.js
+https://github.com/naptha/tesseract.js-core
+Données anglaises LSTM : tesseract-ocr/tessdata_fast, licence Apache-2.0 (voir LICENSE-core.txt pour le texte).
+Source : https://github.com/tesseract-ocr/tessdata_fast/blob/main/eng.traineddata
+Ces fichiers sont servis depuis le même site que l’application. Les photos restent traitées dans le navigateur.
