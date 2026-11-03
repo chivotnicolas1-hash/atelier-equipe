@@ -8,7 +8,7 @@ import {Dialog,DialogContent,DialogTitle,DialogDescription} from './components/u
 import {supabase} from './lib/supabase';
 type Report={client_notified?:boolean|null,author_job?:string|null,author_signature?:string|null,signed_at?:string|null,can_sign?:boolean,before_intervention?:boolean,location?:string,guest_example?:boolean,can_share_guest?:boolean,can_delete?:boolean,can_edit?:boolean,version?:number,updated_at?:string|null,id:string,registration:string,author_name:string,created_at:string,notes:string,photo_count?:number,photos?:string[]};
 const normalizeRegistration=(value:string)=>value.normalize('NFKC').toUpperCase().replace(/[\u200B-\u200D\u2060\uFEFF]/g,'').replace(/[‐‑‒–—−]/g,'-').replace(/\s+/g,' ').trim();
-const when=(value:string)=>new Intl.DateTimeFormat('fr-FR',{timeZone:'Europe/Paris',dateStyle:'short',timeStyle:'medium'}).format(new Date(value));
+const when=(value:string)=>!value||!Number.isFinite(Date.parse(value))?'Date non renseignée':new Intl.DateTimeFormat('fr-FR',{timeZone:'Europe/Paris',dateStyle:'short',timeStyle:'medium'}).format(new Date(value));
 async function rpc(name:string,args:Record<string,unknown>){const {data,error}=await supabase.rpc(name,args);if(error)throw Error(error.code==='PGRST202'?'Applique le script 40-profils-signalements.sql dans Supabase après les migrations précédentes.':error.message);return data;}
 async function prepare(file:File){
  if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw Error('Utilise des photos JPEG, PNG ou WebP.');
@@ -26,7 +26,7 @@ export default function Reports({all,openRequest=0,readonly=false,admin=false}:{
  useEffect(()=>{if(openRequest>0&&!readonly)setForm(true)},[openRequest]);
  const requestId=useRef(crypto.randomUUID());const generation=useRef(0);const alive=useRef(true);
  useEffect(()=>{alive.current=true;return()=>{alive.current=false;generation.current++}},[]);
- const load=useCallback(async(page=0,quiet=false)=>{const gen=++generation.current;if(!quiet)setLoading(true);setListError('');try{const result=await rpc('workshop_list_reports',{p_offset:page,p_own:!all||onlyMine,p_search:query});if(gen!==generation.current)return;setItems(result.items);setTotal(result.total);setOffset(page);}catch(e:any){if(gen===generation.current)setListError(e.message)}finally{if(gen===generation.current)setLoading(false)}},[all,onlyMine,query]);
+ const load=useCallback(async(page=0,quiet=false)=>{const gen=++generation.current;if(!quiet)setLoading(true);setListError('');try{const result=await rpc('workshop_list_reports',{p_offset:page,p_own:!all||onlyMine,p_search:query});if(gen!==generation.current)return;if(!Array.isArray(result?.items))throw Error('Liste des signalements indisponible.');setItems(result.items.filter((r:any)=>r&&typeof r.id==='string').map((r:any)=>({...r,registration:typeof r.registration==='string'?r.registration:'Non renseignée'})));setTotal(Number(result.total)||0);setOffset(page);}catch(e:any){if(gen===generation.current)setListError(e.message)}finally{if(gen===generation.current)setLoading(false)}},[all,onlyMine,query]);
  useEffect(()=>{setDetail(null);setItems([]);void load(0)},[load]);
  useAutoRefresh(()=>{if(!busy)return load(offset,true)});
  const dirty=!!plate||!!notes||photos.length>0||beforeIntervention||clientNotified||certified;
