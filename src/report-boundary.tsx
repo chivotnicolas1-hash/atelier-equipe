@@ -1,0 +1,2 @@
+import {Component,type ReactNode} from 'react';
+export default class ReportBoundary extends Component<{children:ReactNode},{failed:boolean}>{state={failed:false};static getDerivedStateFromError(){return {failed:true}}render(){return this.state.failed?<section className="panel operations-content" role="alert"><h2>Signalements</h2><p>La rubrique n’a pas pu être affichée. Tu peux réessayer ou utiliser le menu.</p><button className="secondary" onClick={()=>this.setState({failed:false})}>Réessayer</button></section>:this.props.children}}

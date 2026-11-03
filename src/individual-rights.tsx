@@ -1,0 +1,9 @@
+import {useEffect,useState} from 'react';
+import {supabase} from './lib/supabase';
+import {Dialog,DialogContent,DialogTitle,DialogDescription} from './components/ui/dialog';
+import {Checkbox} from './simple-checkbox';
+export default function IndividualRights({id,name,onClose}:{id:string,name:string,onClose:()=>void}){
+ const [data,setData]=useState<any>(null),[busy,setBusy]=useState(false),[error,setError]=useState('');
+ useEffect(()=>{void supabase.rpc('workshop_rights',{p_staff:id}).then(({data,error})=>{if(error)setError(error.message);else setData(data)})},[id]);
+ return <Dialog open onOpenChange={v=>!v&&!busy&&onClose()}><DialogContent className="app-dialog"><DialogTitle>Droits individuels · {name}</DialogTitle><DialogDescription>Ces autorisations ne changent pas le rôle du collaborateur.</DialogDescription>{error&&<p className="error-banner" role="alert">{error}</p>}{data&&<form className="waste-form" onSubmit={async e=>{e.preventDefault();setBusy(true);setError('');const {error}=await supabase.rpc('workshop_rights_save',{p_staff:id,p_targets:data.edit_targets,p_waste:data.waste_progress,p_version:data.version});setBusy(false);if(error)setError(error.message);else onClose()}}><Checkbox label="Modifier les quantités prévues des cibles du jour" checked={data.edit_targets} disabled={busy} onChange={v=>setData({...data,edit_targets:v})}/><p className="muted">Sans accès à l’import PDF ni à la correction des ventes.</p><Checkbox label="Suivre les demandes d’enlèvement de déchets" checked={data.waste_progress} disabled={busy} onChange={v=>setData({...data,waste_progress:v})}/><p className="muted">Ajouter un suivi, valider la demande et confirmer son ramassage. Sans modification des quantités ni suppression.</p><button className="primary" disabled={busy}>Enregistrer les droits</button></form>}</DialogContent></Dialog>
+}
