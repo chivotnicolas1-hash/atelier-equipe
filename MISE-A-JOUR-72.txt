@@ -1,0 +1,7 @@
+ATELIER FAYET 33 — Mise à jour 72 (après la version 71)
+1. Dans Supabase > SQL Editor, exécute supabase/72-plan-liquides-ramassage.sql.
+2. Mets à jour les fichiers sur GitHub, conserve les variables Cloudflare et attends la réussite du déploiement. Ferme puis rouvre l’application.
+Consommables : l’ancienne cuve en haut à droite n’est pas commandable. Les trois cuves de l’étage restent commandables à partir de 500 L. Les boutons Autres liquides demandent le nombre de conditionnements ; les références de boîte sont côte à côte avant le liquide de frein.
+Administration > Consommables > Divers liquides > Modifier le plan et les boutons : choisis une référence ou ajoutes-en une, règle le nom, le conditionnement, le type, la couleur et les coordonnées, puis enregistre. La grille du plan comporte 11 colonnes et celle des autres liquides en comporte 2. Le catalogue est partagé, sans modifier les lignes déjà commandées.
+Déchets > Demandes en cours : après validation, ouvre Enregistrer le ramassage. Pour un enlèvement partiel, renseigne les quantités parties ; zéro ou vide signifie que l’élément reste à enlever. Tout est parti clôture le restant. Les enlèvements partiels sont conservés dans l’historique de la demande. La benne à pneus conserve son fonctionnement en enlèvement complet.
+Cibles : nouveau pictogramme pour Contrôle qualité. Le total du cadre Collaborateurs présents exclut invités et directeurs.
