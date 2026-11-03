@@ -1,0 +1,7 @@
+ATELIER FAYET 33 — Mise à jour 76 après MAJ75
+1. Dans Supabase > SQL Editor, exécuter supabase/76-equipe-consommables.sql.
+2. Mettre les fichiers de cette archive sur GitHub, conserver les variables Cloudflare et attendre le déploiement.
+Tâches > Tâches communes : un administrateur ou modérateur indique un titre et une action par ligne. Dans la liste, chacun peut cocher/décocher une action pour toute l’équipe. Les comptes invités ne peuvent pas participer. La progression est partagée.
+Consommables : le nouveau catalogue Freins, transmissions, roulements reprend 20 désignations du PDF. Dans les trois catalogues illustrés, les photos sont visibles dans l’éditeur administrateur. Mettre en rupture ou remettre en stock prend effet dès l’enregistrement. La commande conserve ses lignes déjà saisies, mais une quantité en rupture ne peut pas être ajoutée ou augmentée.
+Dans le plan des huiles : Modifier le plan et les boutons > choisir la référence > photo ou case Produit en rupture > Enregistrer le plan. Les produits sans photo d’origine peuvent recevoir une photo depuis l’appareil.
+Les catalogues sont classés par nombre de commandes distinctes contenant le produit, hors commandes supprimées. En cas d’égalité, l’ordre initial reste stable. La liste Produits les plus commandés est aussi disponible au-dessus du plan pour conserver ses positions physiques.
