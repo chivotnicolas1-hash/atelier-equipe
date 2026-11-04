@@ -1,0 +1,77 @@
+ATELIER FAYET 33 — MISE À JOUR 81
+
+INSTALLATION APRÈS LA MISE À JOUR 80
+1. Supabase > SQL Editor > New query : copie TOUT le contenu de
+   supabase/81-reglages-rappels.sql et clique Run. Attends Success.
+2. Copie les fichiers du ZIP dans ton dépôt GitHub.
+   GitHub Desktop : Commit to main puis Push origin.
+3. Conserve tes variables Cloudflare et attends le déploiement réussi.
+4. Ferme puis rouvre l’application.
+Aucune nouvelle clé, aucun service payant, aucune Edge Function à redéployer.
+Le Cron Supabase et la fonction d’envoi push déjà installés doivent rester actifs.
+Aucun fichier _redirects à ajouter.
+
+1 — RÉGLER LES RAPPELS
+Mode administrateur > Paramètres application > Rappels et noms des sections > Configurer.
+Deux réglages indépendants : commande des consommables et gestion des déchets.
+Pour chacun : activer/désactiver, jour hebdomadaire OU date précise, heure.
+Heure de Paris, changement été/hiver automatique.
+Au premier lancement : Consommables le mardi à 09:00 ; Déchets désactivé,
+à activer à l’heure et au jour souhaités. Vérifie ces valeurs après installation.
+
+Les destinataires sont l’administrateur et les modérateurs actifs.
+Un rappel n’est créé que s’il existe une commande en attente ou une demande
+d’enlèvement non terminée. Une fois par rubrique, personne et date.
+Le rappel apparaît dans Mes notifications ; le push nécessite un appareil abonné.
+Une date précise n’est utilisée que ce jour-là. Un rappel hebdomadaire revient chaque semaine.
+Si l’heure est dépassée le jour prévu, le prochain passage du Cron peut envoyer le rappel.
+Un rappel déjà envoyé n’est pas renvoyé le même jour après modification de l’heure.
+Les rappels automatiques historiques Consommables/Déchets de l’ordonnanceur sont
+remplacés ; les tâches, récapitulatifs et messages manuels conservent leur fonctionnement.
+Les notifications déjà créées avant l’installation ne sont pas effacées.
+
+2 — NOMS ET DESCRIPTIONS
+Au même endroit : développer Noms et descriptions des sections.
+Modifie le nom et/ou la description, puis Enregistrer les réglages.
+Les noms des rubriques apparaissent dans le menu et l’en-tête des pages.
+Les sous-sections Consommables et Déchets ont aussi leurs propres titres et descriptions.
+Réinitialiser restaure le texte d’origine de la section.
+Les changements se synchronisent sur les autres appareils au rafraîchissement habituel.
+Les données, les prestataires et les références des catalogues restent inchangés.
+Les intitulés des formulaires et les anciens PDF ne sont pas renommés rétroactivement.
+Ces réglages sont réservés à l’administrateur côté interface ET côté Supabase.
+
+3 — PICTOGRAMMES
+Le bouton du menu montre le pictogramme de la page actuellement ouverte.
+Déchets : la section Huiles/filtres/déchets souillés utilise le bidon d’huile.
+Les bidons et les catégories en fûts disposent d’un dessin de fût d’huile,
+dans le formulaire et les listes de demandes.
+
+4 — PHOTOS DES SIGNALEMENTS
+« Prendre une photo » demande l’appareil photo arrière sur mobile compatible.
+Le navigateur ou le système peut proposer un sélecteur ; il n’est pas possible
+de forcer universellement la caméra ni de l’ouvrir sans action de l’utilisateur.
+Sur PC, ce bouton peut ouvrir le choix de fichier.
+« Choisir dans la galerie » reste disponible.
+
+Après l’ajout, l’éditeur s’ouvre pour la première photo ajoutée :
+- Fais glisser ton doigt ou la souris pour entourer un élément en rouge.
+- Répète pour ajouter d’autres cercles ou ovales.
+- Annuler le dernier tracé / Effacer les tracés permettent de corriger.
+- Utiliser cette photo intègre les tracés à l’image du formulaire.
+- Conserver la photo sans ces tracés annule cette séance d’annotation.
+- Le bouton Entourer un élément sous chaque photo permet de rouvrir l’éditeur.
+
+ENREGISTRER LE SIGNALEMENT reste nécessaire pour conserver les photos dans la base.
+Les annotations sont incluses dans les photos exportées en PDF.
+Les tracés déjà enregistrés font partie de l’image : pour les retirer plus tard,
+remplace la photo par l’original depuis la galerie.
+Limites conservées : 5 photos maximum, 10 Mo par fichier avant réduction.
+Pas d’envoi de photo à une API d’IA.
+
+VÉRIFICATIONS
+Compilation TypeScript/Vite, tests SQL locaux (droits, conflits, calendrier Paris,
+dédoublonnage, désactivation, préservation des autres messages) et test navigateur
+sur données de contrôle (réglages, titre synchronisé, capture et photo annotée).
+L’ouverture de l’appareil photo dépend du téléphone et doit être essayée sur ton appareil.
+Cette archive n’effectue pas elle-même le déploiement de ton application.
