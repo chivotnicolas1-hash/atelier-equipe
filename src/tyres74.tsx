@@ -1,5 +1,4 @@
-import {TyreIcon79} from './section-icons79';
-import {Wind,Disc3} from 'lucide-react';
+import {TyreIcon79,GasCloudIcon80,BrakeDiscIcon80} from './section-icons79';
 import CatalogImport78,{type Item78,type Change78} from './catalog-import78';
 import {useEffect,useRef,useState} from 'react';import {supabase} from './lib/supabase';import {useAutoRefresh} from './lib/sync';import {Dialog,DialogContent,DialogTitle,DialogDescription} from './components/ui/dialog';
 type Product={unavailable:boolean,id:string,name:string,photo:string};
@@ -8,7 +7,7 @@ export default function Tyres({section,admin,disabled,add,notice}:{section:strin
  const [importing,setImporting]=useState<{items:Item78[],token:string,manual:boolean}|null>(null);
  async function openImport(manual:boolean){setBusy(true);setErr('');try{const r=await supabase.rpc('workshop_catalog78',{p_section:section});if(r.error)throw r.error;setImporting({items:r.data.items,token:r.data.token,manual})}catch(e:any){setErr(e.code==='PGRST202'?'Exécute le SQL 78 dans Supabase.':e.message)}finally{setBusy(false)}}
  async function publish(changes:Change78[]){const r=await supabase.rpc('workshop_publish78',{p_section:section,p_token:importing!.token,p_changes:changes});if(r.error)throw r.error;await load(true)}
- const SectionIcon=section==='Pneus'?TyreIcon79:section==='5gaz'?Wind:Disc3;
+ const SectionIcon=section==='Pneus'?TyreIcon79:section==='5gaz'?GasCloudIcon80:BrakeDiscIcon80;
  const sequence=useRef(0);const [removeError,setRemoveError]=useState<{id:string,text:string}|null>(null);
  async function load(force=false){const ticket=++sequence.current;const r=await supabase.rpc('workshop_catalog76',{p_section:section,p_known:force?-1:rev.current});if(ticket!==sequence.current)return;if(r.error){setErr(r.error.message);return}if(Array.isArray(r.data.items)){setItems(r.data.items);rev.current=r.data.rev}}
  useEffect(()=>{void load();const f=()=>void load(true);window.addEventListener('workshop-catalog-refresh',f);return()=>window.removeEventListener('workshop-catalog-refresh',f)},[]);useAutoRefresh(()=>load(),!editing&&!pick&&!busy&&!importing);
