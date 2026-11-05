@@ -1,0 +1,95 @@
+ATELIER FAYET 33 — MISE À JOUR 82
+
+INSTALLATION — APRÈS LA MISE À JOUR 81
+1. Supabase > SQL Editor > New query.
+   Ouvre supabase/82-stock-bilans.sql, copie tout son contenu et clique Run.
+   Attends Success avant de remplacer le code du site.
+   Le script est réexécutable et ne supprime aucune donnée.
+2. Décompresse le ZIP. Remplace les fichiers du projet GitHub par ceux
+   de cette archive : src, public, supabase, index.html et configurations.
+   GitHub Desktop : Commit to main, puis Push origin.
+3. Conserve les variables de build Cloudflare existantes.
+   Attends la réussite du déploiement, puis ferme et rouvre l’application.
+
+Aucune nouvelle clé, aucun abonnement et aucune API payante.
+Aucune Edge Function à redéployer. Le Cron et la fonction push existants
+restent nécessaires pour l’envoi automatique des notifications.
+Aucun fichier _redirects à ajouter. Le pied de page reste V1.0.
+Les anciennes mises à jour SQL doivent déjà être installées, notamment la 81.
+Cette archive est un projet complet, pas une installation Supabase vierge.
+
+1 — RUPTURES DE CONSOMMABLES
+Le changement d’état est enregistré immédiatement, pour un article précis.
+Il ne dépend plus de la version du classement des produits : une nouvelle
+commande ne doit plus empêcher une mise en rupture dans un éditeur déjà ouvert.
+Le bouton devient « Remettre en stock » après succès.
+Pour les huiles, l’état est aussi enregistré immédiatement sans avoir à
+cliquer ensuite sur « Enregistrer le plan ».
+La synchronisation du catalogue est suspendue pendant l’édition du plan.
+Les modifications simultanées du plan restent protégées : si une autre
+personne le change, ferme et rouvre l’éditeur avant d’enregistrer le plan.
+Une nouvelle référence doit d’abord être enregistrée avant de changer son stock.
+La propagation des ruptures lors de la commande, installée précédemment,
+est conservée. Les droits existants restent inchangés.
+
+2 — NOMS ET DESCRIPTIONS DES SECTIONS
+Mode administrateur > Consommables ou Déchets.
+Clique sur « Modifier les noms et descriptions des sections ».
+Les quatre sections Consommables et les trois catégories de prestataires
+Déchets peuvent être renommées et recevoir une description personnalisée.
+Les rappels et les données des demandes ne sont pas modifiés.
+Ces réglages restent également accessibles dans Paramètres application.
+
+3 — BILAN MENSUEL
+Mode administrateur > Plan de l’atelier ou Récapitulatif.
+Ouvre « Bilan mensuel de l’atelier » et choisis le mois.
+Le bilan comprend :
+- les ventes additionnelles par personne et par cible, avec les quantités ;
+- le nombre de contrôles qualité, séparé des ventes additionnelles, par personne ;
+- le nombre de signalements créés pendant le mois sélectionné ;
+- les demandes de déchets encore ouvertes, regroupées par prestataire.
+
+Le premier jour ouvré du mois, à partir de 8 h 30 (heure de Paris),
+l’administrateur reçoit « Le bilan mensuel de l’atelier est disponible ».
+La notification apparaît dans Mes notifications et est envoyée en push
+sur ses appareils abonnés. Une seule notification par mois.
+Un retard du Cron est rattrapé lors d’un passage ultérieur après 8 h 30.
+Pour cette application, les jours ouvrés sont du lundi au samedi,
+hors jours fériés nationaux français. Les fermetures exceptionnelles
+ou locales de l’atelier ne sont pas prises en compte.
+
+Le bilan est calculé à la consultation, à partir des données conservées :
+les saisies de ventes supprimées sont exclues ; les signalements supprimés
+définitivement ne peuvent pas être reconstitués. Ce n’est pas une archive figée.
+Les déchets affichés sont ceux encore en cours AU MOMENT DE LA CONSULTATION,
+y compris les demandes plus anciennes, et non leur situation historique.
+
+4 — PICTOGRAMME DES FÛTS
+Dans Déchets > Demandes en cours, les demandes comprenant bidons,
+fûts ou déchets conditionnés en fût affichent le pictogramme du fût
+sur leur ligne repliée, avant même de les ouvrir.
+
+5 — RÉCAPITULATIF À LA PREMIÈRE PRISE DE POSTE
+Le popup s’adresse à l’équipe « Encadrants », avec un compte actif,
+des horaires affectés et une présence prévue ce jour.
+Il concerne la personne dont le premier horaire de début est le plus tôt.
+En cas d’égalité, chaque encadrant concerné reçoit son popup.
+Les congés acceptés sont exclus de ce calcul.
+Il apparaît seulement pendant un créneau de travail, si le récapitulatif
+est publié ce matin-là. Pas de popup avant la prise de poste ni en pause.
+Le lundi, il peut donc montrer le récapitulatif du samedi publié le lundi.
+Il affiche les véhicules immobilisés, les tâches non terminées et les pièces
+manquantes. Aucune partie « anomalies » n’a été réintroduite.
+Après fermeture ou « J’ai pris connaissance du récapitulatif », la lecture
+est enregistrée dans Supabase et le popup ne revient plus ce jour pour ce compte.
+Il n’interrompt pas le mode écran d’atelier.
+
+VÉRIFICATIONS AVANT LIVRAISON
+Compilation TypeScript/Vite réussie.
+Tests SQL locaux : double exécution de la migration, droits d’accès,
+ruptures avec anciennes versions de classement, conservation du plan huiles,
+agrégats mensuels, jours fériés, notification mensuelle sans doublon,
+horaires/égalité/congés/pause/lundi/lecture du popup.
+Tests d’interface avec données de démonstration sur mobile et ordinateur :
+bilan, fermeture du popup, édition des sections et mise en rupture/retour en stock.
+La base de production et les envois réels seront à vérifier après installation.
