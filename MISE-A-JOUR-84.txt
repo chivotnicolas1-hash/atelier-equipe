@@ -1,0 +1,35 @@
+ATELIER FAYET 33 — CORRECTIF 84
+Prérequis : mise à jour 83 et ses trois scripts SQL déjà installés.
+Version affichée dans l’application : V1.0.
+
+1. Dans Supabase > SQL Editor, colle tout le contenu du fichier
+   supabase/84-renommer-consommables.sql puis clique sur Run.
+   Attends Success. En cas d’erreur, conserve le message et arrête ici.
+2. Décompresse le ZIP et remplace les fichiers du projet GitHub.
+   Commit puis Push dans GitHub Desktop.
+3. Attends le succès du déploiement Cloudflare puis ferme et rouvre l’app.
+   Conserve tes variables Cloudflare. N’ajoute aucun fichier _redirects.
+
+CORRECTION
+Le bouton « Enregistrer le nom » des catalogues Pneus, 5gaz et
+Freins/transmissions/roulements utilise une opération ciblée sur l’article,
+indépendante de la révision globale du catalogue. Le nouveau nom confirmé
+par la base est affiché immédiatement, avec un message de réussite.
+Une actualisation complète du catalogue suit l’enregistrement.
+En cas d’erreur, le texte saisi est conservé pour pouvoir réessayer.
+Si un autre administrateur a déjà renommé le même article, l’application
+refuse d’écraser son nom et demande de fermer puis rouvrir le catalogue.
+Le stock, la photo, l’identifiant, le code et la position sont conservés.
+Les anciennes désignations enregistrées dans les commandes historiques
+ne sont pas remplacées rétroactivement.
+Les droits existants sont conservés : modification réservée à l’admin.
+Le plan des huiles utilise son éditeur distinct, non modifié ici.
+
+VÉRIFICATIONS LOCALES
+Compilation production et TypeScript.
+Script SQL exécuté deux fois ; droits, nom vide, conflit de renommage,
+conservation photo/stock/ordre et modification du nom persistante.
+Parcours navigateur mobile (390 px) et ordinateur (1280 px) avec base de
+ test : renommer, enregistrer, recharger et rouvrir ; simulation d’échec
+pour vérifier la conservation de la saisie.
+Aucune modification effectuée dans ta base ou ton site de production.
