@@ -1,0 +1,81 @@
+ATELIER FAYET 33 — MAJ85
+Écran atelier en fenêtre + suppression groupée des notifications
+Prérequis : application et SQL de la mise à jour 84 installés.
+Version affichée : V1.0.
+
+INSTALLATION
+1. Dans Supabase > SQL Editor, exécuter tout le contenu de
+   supabase/85-ecran-fenetre.sql. Attendre Success.
+   Ce script installe les DEUX fonctionnalités et peut être réexécuté.
+2. Remplacer les fichiers du projet GitHub par ceux du ZIP.
+   Commit puis Push dans GitHub Desktop.
+3. Attendre la réussite du déploiement Cloudflare, fermer et rouvrir l’app.
+Conserver les variables Cloudflare. Aucun nouveau secret ni coût API.
+Aucun déploiement Edge Function requis. Ne pas ajouter de fichier _redirects.
+
+ACTIVER LE MODE ÉCRAN EN FENÊTRE SUR WINDOWS 11
+1. Ouvrir l’application installée avec Edge sur le PC concerné.
+2. Se connecter avec le compte administrateur.
+3. Ouvrir Paramètres de l’application.
+4. Développer « Écran atelier au démarrage · PC autorisés ».
+5. Donner un nom au PC, par exemple « PC réception atelier ».
+6. Cliquer « Autoriser ce PC et tester l’ouverture ».
+   La session administrateur se ferme et l’écran atelier s’affiche.
+7. Fermer puis rouvrir l’application : elle ouvre directement cet écran.
+8. Conserver l’option Edge de lancement automatique à la connexion Windows
+   déjà configurée. Redémarrer le PC pour vérifier le lancement réel.
+
+L’application ne force ni plein écran ni redimensionnement. Windows et
+Edge conservent la gestion de la taille et de la position de la fenêtre.
+Le contenu s’adapte et reste accessible par défilement si nécessaire.
+Le bouton « Se connecter » permet de retrouver l’écran de connexion.
+Le mode écran habituel reste disponible ; ce nouvel accès est facultatif.
+
+DONNÉES AFFICHÉES ET DROITS
+Plan publié, affectations, horaires, pauses déjeuner, états des ponts,
+objectif atelier, effectifs, informations importantes, annonces et
+anniversaires activés. Actualisation toutes les 20 secondes et au retour
+sur la fenêtre. Aucune présence n’est validée et aucune donnée métier
+n’est modifiée par cette consultation.
+Les brouillons de plan et les annonces encadrants sont exclus. Les comptes
+invités/directeurs/inactifs ne sont pas dans les effectifs affichés.
+Les congés acceptés excluent les journées concernées du plan.
+En cas de perte de connexion, maintenance ou révocation, les anciennes
+données sont masquées et remplacées par un message.
+
+DÉSACTIVER OU RÉVOQUER
+Dans les mêmes paramètres administrateur :
+- « Désactiver l’ouverture automatique sur ce PC » rétablit l’accueil
+  habituel de ce navigateur.
+- « Retirer l’autorisation » bloque son droit d’affichage. Cette action
+  peut être effectuée depuis un autre PC ; effet à la prochaine vérification,
+  normalement sous 20 secondes pour un écran actif et connecté.
+L’autorisation expire au bout d’un an. Effacer les données du navigateur
+supprime également son accès local. Il faut alors autoriser à nouveau.
+Aucun mot de passe administrateur n’est mémorisé. L’autorisation concerne
+le profil du navigateur, pas tous les navigateurs/utilisateurs du PC.
+Ne pas exporter ses données de navigateur vers un autre appareil.
+
+SUPPRIMER TOUTES LES NOTIFICATIONS
+Dans Mes notifications, le bouton rouge clair apparaît lorsqu’au moins
+4 notifications sont affichées (non lues). Il est absent avec 0 à 3
+notifications et pour le compte invité en lecture seule.
+Une confirmation est demandée. Après validation, toutes les notifications
+personnelles sont supprimées, y compris les anciennes notifications lues
+et celles au-delà de la limite d’affichage. Celles des autres comptes ne
+sont jamais touchées. Le contenu des messages est effacé ; leur clé
+technique est conservée pour ne pas recréer les rappels déjà traités.
+La liste et le compteur de la cloche sont actualisés. Cela ne supprime pas
+les tâches, les récapitulatifs, les demandes de mot de passe ou les messages
+programmés non encore envoyés. Les prochaines notifications restent actives.
+
+VÉRIFICATIONS
+Compilation TypeScript/production et tests SQL locaux réussis : installation
+réexécutable, accès administrateur, lecture restreinte, révocation,
+maintenance, absence de données privées, annonces encadrants exclues.
+Suppression testée sur 105 notifications : seul le compte concerné est
+modifié, invité refusé et clés anti-doublons conservées.
+Interface vérifiée sur des données fictives : mode écran en fenêtre ;
+bouton absent à 3 notifications, présent à 4, confirmation puis liste vide.
+Le démarrage Windows 11 doit être vérifié sur ton PC. Aucun changement
+n’a été appliqué à ta base Supabase ni à ton site Cloudflare de production.
