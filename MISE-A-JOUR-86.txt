@@ -1,0 +1,40 @@
+ATELIER FAYET 33 — MISE À JOUR 86
+
+À appliquer sur la version 85 déjà installée.
+
+1. SUPABASE
+Dans SQL Editor, exécuter dans cet ordre :
+- supabase/86a-cibles-personnalisees.sql
+- supabase/86b-attribution-taches-communes.sql
+Attendre Success après chaque script. Les scripts peuvent être relancés.
+
+2. GITHUB ET CLOUDFLARE
+Remplacer les fichiers du projet par ceux de cette archive, puis commit et push.
+Conserver les variables de build Cloudflare existantes.
+Attendre le déploiement réussi, puis fermer et rouvrir l’application.
+Ne pas ajouter de fichier _redirects.
+
+3. NOUVELLES CIBLES
+Dans l’espace administrateur, Cibles du jour > Ajouter une cible.
+Indiquer le nom et la quantité à atteindre. La cible commence à la date sélectionnée.
+La quantité est reprise du lundi au samedi (dimanche : zéro par défaut).
+Modifier les cibles permet ensuite de changer la quantité pour une journée.
+Les cibles personnalisées participent au pourcentage global, au suivi des ventes et au bilan mensuel.
+Les contrôles qualité restent exclus du pourcentage des ventes additionnelles.
+L’import PDF des cibles existantes reste disponible et ne remplace pas les nouvelles cibles.
+Le délai de 5 minutes reste indépendant pour chaque cible, hors administrateur et modérateurs.
+
+4. TÂCHES COMMUNES
+Développer une tâche > Attribuer à un technicien > Enregistrer l’attribution.
+Les membres de l’équipe Encadrants peuvent attribuer une tâche ; administrateur et modérateurs conservent la gestion.
+Une fois attribuée, seuls le technicien désigné et les membres de l’équipe Encadrants peuvent cocher ou décocher les éléments.
+Un administrateur/modérateur qui n’appartient pas à Encadrants conserve la gestion mais ne valide pas une tâche attribuée à quelqu’un d’autre.
+Choisir Toute l’équipe (sans attribution) pour rendre la validation à nouveau collective.
+Les éléments déjà cochés sont conservés lors d’un changement d’attribution.
+Les restrictions sont appliquées aussi dans Supabase, pas seulement à l’écran.
+
+5. CONTINUITÉ ET VÉRIFICATIONS
+Les fonctions de la version 85 sont conservées, dont le mode écran en fenêtre et la suppression de toutes les notifications quand il y en a plus de trois.
+Archive nettoyée : pas de dépendances, compilation, données de test ou anciens scripts de mise à jour.
+Compilation et tests SQL locaux réalisés ; parcours de création et d’attribution vérifiés avec des données fictives.
+La base Supabase et le site en production n’ont pas été modifiés automatiquement.
