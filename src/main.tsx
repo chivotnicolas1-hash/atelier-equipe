@@ -1,3 +1,4 @@
+import './maj88.css';
 import WindowScreen85,{autoScreen85} from './window-screen85';
 import ChristmasLogo from './christmas-logo';
 import RequiredActions from './required-actions';
