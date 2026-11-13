@@ -1,0 +1,71 @@
+ATELIER FAYET 33 — MISE À JOUR 89
+
+Cette archive met à jour une application ayant déjà reçu la mise à jour 88.
+Elle ne contient pas les anciens scripts SQL : ne repars pas d’une base vide.
+Aucune modification n’a été effectuée sur ton site ou ta base en production.
+
+1 — SUPABASE, AVANT DE DÉPLOYER LE SITE
+Dans ton projet Supabase, ouvre SQL Editor puis une nouvelle requête.
+Ouvre chaque fichier ci-dessous avec un éditeur de texte, copie TOUT son contenu,
+colle-le dans SQL Editor et clique sur Run. Attends la réussite avant le suivant.
+Exécute dans cet ordre :
+  1. supabase/89a-catalogues.sql
+  2. supabase/89b-codes-liquides.sql
+  3. supabase/89c-ecran-atelier-dates.sql
+  4. supabase/89d-produits-hygiene.sql
+Le dernier fichier contient les photos : sa taille est normale.
+Si une étape échoue, conserve le message d’erreur et arrête avant la suivante.
+Les scripts sont prévus pour pouvoir être exécutés à nouveau.
+L’import initial ne réécrit pas les modifications ultérieures et ne recrée pas
+les articles retirés après son premier passage.
+Aucun nouveau secret ni redéploiement d’Edge Function n’est nécessaire pour la MAJ89.
+
+2 — GITHUB ET CLOUDFLARE
+Décompresse le ZIP. Remplace les fichiers correspondants de ton dépôt par :
+- les dossiers src, public et supabase ;
+- index.html ;
+- package.json, package-lock.json, postcss.config.js, tsconfig.json, vite.config.ts.
+Ces cinq derniers fichiers sont les fichiers de configuration du projet.
+Le guide MISE-A-JOUR-89.txt peut également être conservé dans le dépôt.
+Conserve tes variables de BUILD Cloudflare déjà configurées.
+N’ajoute aucun fichier _redirects, .env, node_modules ou dist.
+Enregistre les changements dans GitHub, attends la réussite du déploiement
+Cloudflare, puis ferme et rouvre l’application (ou actualise la page).
+
+3 — NOUVEAUTÉS
+CONSOMMABLES
+- Le message confirmant un ajout apparaît une seule fois, près de la commande
+  en cours, au lieu de répéter la désignation sous chaque section.
+- Nouvelle section « Hygiène, protection et nettoyage » : 49 articles issus
+  des trois PDF, avec désignations, codes produits et photos associées.
+- Modifier le catalogue : chaque article présente une photo et un seul bouton
+  « Modifier ». Le formulaire permet de modifier ensemble le nom, le code,
+  la photo et la disponibilité, puis d’enregistrer en une fois.
+- Le retrait d’un article et la suppression de sa photo restent disponibles.
+- L’éditeur du plan « Divers liquides » comporte un champ Code produit pour
+  chaque référence. Enregistre le plan pour conserver ces codes.
+- Les codes ne figurent pas dans le catalogue des collaborateurs. Ils sont
+  consultables par l’administration et la modération lors de la modification
+  d’une commande. L’édition des catalogues reste réservée à l’administrateur.
+- En cas de modification concurrente du catalogue, un message demande de le
+  rouvrir plutôt que d’écraser silencieusement une autre modification.
+
+ÉCRAN ATELIER
+- Boutons jour précédent, jour suivant, choix d’une date et retour à aujourd’hui.
+- Disponibles dans le mode écran connecté et dans l’écran en fenêtre des PC
+  autorisés avant connexion ; l’autorisation du PC reste obligatoire.
+- Les affectations publiées, horaires, objectifs, ventes et contrôles qualité
+  affichés correspondent à la date sélectionnée.
+- Hors de la date du jour, les couleurs ne prétendent pas indiquer une présence
+  actuelle et le nombre de techniciens actuellement en poste est neutralisé.
+- L’état des ponts et les informations importantes restent leurs valeurs
+  actuelles : ce changement ne crée pas d’archive historique de ces données.
+
+4 — VÉRIFICATIONS RÉALISÉES
+Compilation TypeScript et Vite réussie. Tests SQL sur une base locale de test,
+à partir des structures et fonctions fournies : droits d’accès, édition,
+conflits de versions, suppression ciblée, import des 49 produits, réexécution
+des migrations, codes des huiles et navigation par date de l’écran.
+Contrôle visuel du formulaire sur une largeur mobile.
+Ces vérifications ne remplacent pas la vérification après installation sur
+ton propre projet Supabase : teste un article et une date après déploiement.
