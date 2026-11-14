@@ -1,0 +1,87 @@
+ATELIER FAYET 33 — MISE À JOUR 90
+À installer après la MAJ89. Projet complet, sans les anciens scripts SQL.
+Cette archive ne constitue pas une installation pour une base Supabase vide.
+
+1 — SUPABASE : EXÉCUTER LES DEUX SCRIPTS
+Dans SQL Editor, ouvre une nouvelle requête. Copie le contenu COMPLET de :
+  supabase/90a-consommables.sql
+Clique sur Run et attends la réussite. Puis, dans une nouvelle requête :
+  supabase/90b-expiration-bt.sql
+Clique sur Run et attends la réussite.
+En cas d’erreur, arrête à cette étape et conserve le message complet.
+Ces scripts sont réexécutables. Les produits sont publics par défaut : aucun
+article n’est réservé automatiquement à l’installation.
+Le second script programme « atelier-expiration-bt90 » toutes les minutes.
+Une nouvelle exécution remplace ce programme sans créer de doublon.
+Aucun nouveau secret ni déploiement d’Edge Function n’est nécessaire.
+
+2 — GITHUB / CLOUDFLARE
+Décompresse le ZIP, puis remplace les fichiers correspondants du dépôt :
+  src, public, supabase, index.html,
+  package.json, package-lock.json, postcss.config.js, tsconfig.json, vite.config.ts.
+Conserve les variables de BUILD Cloudflare déjà configurées.
+N’ajoute pas de fichier _redirects, .env, node_modules ou dist.
+Enregistre les changements GitHub puis attends le déploiement Cloudflare réussi.
+Ferme et rouvre l’application sur les appareils (ou actualise la page).
+
+3 — BT À REPRENDRE
+La page présente les compteurs, trois filtres « À reprendre », « Pris en compte »
+et « Tous les BT », ainsi que des fiches plus lisibles avec auteur, destinataire,
+heure de transmission et opérations restantes.
+Le bouton « Transmettre un BT » ouvre le formulaire. Les droits de correction,
+suppression et prise en compte existants sont conservés.
+Le rappel « Véhicule à faire reprendre ? » est supprimé de Mes notifications
+une heure après sa création si aucune fiche n’a été envoyée par cette personne
+pour cette journée avant l’expiration. Le nettoyage passe chaque minute,
+puis l’application se synchronise toutes les 20 secondes.
+Les notifications de BT effectivement transmis ne sont pas concernées.
+Les envois push encore en attente liés au rappel expiré sont supprimés.
+IMPORTANT : une notification déjà affichée dans le volet du téléphone ne peut
+pas être retirée à distance de façon garantie quand l’application est fermée.
+L’expiration automatique concerne les notifications enregistrées dans l’application.
+
+4 — MES HORAIRES PRÉVUS
+Affichage du total d’heures et du nombre de jours prévus dans la semaine.
+Les pauses entre créneaux et les jours non prévus présents ne sont pas comptés.
+Les créneaux qui se chevauchent ne sont pas comptés deux fois.
+La mention S4J (Semaine à 4 jours) est affichée pour 1 à 4 jours travaillés,
+y compris pour une semaine de 3 jours, avec le nombre réel indiqué en dessous.
+Une semaine sans aucune journée travaillée n’affiche pas la mention S4J.
+
+5 — CONSOMMABLES
+La commande en cours est affichée directement, regroupée par section,
+sans bouton Développer. Les commandes validées restent repliables.
+À gauche des désignations : cuve pour les huiles en cuve, fût pour 60/200/210 L,
+bidon pour 20 L, photo pour les articles des catalogues et pictogramme Divers
+pour les articles non associés à un catalogue.
+Le rapprochement avec les anciens articles utilise leur identifiant ou, s’il
+n’existe pas, une désignation unique. Une ancienne ligne ambiguë reste dans Divers.
+Pour un produit retrouvé en rupture dans la commande validée de la semaine
+précédente et présent dans la nouvelle commande, la mention devient
+« En rupture la semaine précédente ». Cela ne remet pas automatiquement le
+produit en stock : les contrôles de rupture existants restent en place.
+
+6 — RÉSERVER UN CONSOMMABLE
+En administrateur : Consommables > Modifier le catalogue > Modifier le produit.
+Coche « Réservé à l’administrateur et aux modérateurs », puis enregistre.
+Pour les huiles : Modifier le plan et les boutons > choisir la référence,
+cocher la même option, puis Enregistrer le plan et les codes.
+Décoche cette option pour rendre le produit de nouveau disponible à tous.
+Un article réservé est masqué dans le catalogue et les listes de commande
+consultées par les collaborateurs. Administrateur et modérateurs peuvent
+continuer à le commander (s’il n’est pas en rupture).
+La restriction est contrôlée côté serveur, pas seulement par un bouton masqué.
+L’enregistrement d’une commande par un collaborateur conserve ses lignes
+réservées invisibles. Une saisie déjà ouverte avant changement de restriction
+peut être refusée : fermer puis rouvrir la commande dans ce cas.
+L’édition des catalogues et des restrictions reste réservée à l’administrateur.
+
+VÉRIFICATIONS
+Compilation TypeScript et Vite ; tests SQL locaux avec les structures connues
+et des fonctions de test pour les dépendances non disponibles ; contrôles des
+droits, conservation des lignes masquées, retour public, expiration du rappel,
+calculs d’heures/S4J et regroupement. Contrôle visuel des pages mobiles et PC,
+modification et prise en compte d’un BT sur des données de démonstration.
+Le planificateur pg_cron et le projet Supabase en production n’ont pas été
+exécutés depuis cet environnement. Vérifie leur fonctionnement après installation.
+Aucun changement n’a été appliqué à ton application en production.
