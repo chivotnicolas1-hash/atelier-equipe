@@ -1,0 +1,26 @@
+ATELIER FAYET 33 — CORRECTIF 92
+À installer après la MAJ91.
+
+1. Dans Supabase > SQL Editor, exécute le contenu COMPLET du fichier
+   supabase/92-visibilite-par-produit.sql.
+2. Remplace les fichiers correspondants du dépôt GitHub par ceux de ce ZIP
+   (src, public, supabase, index.html et fichiers de configuration).
+   Conserve les variables de BUILD Cloudflare. Aucun _redirects ni .env à ajouter.
+3. Attends la réussite du déploiement Cloudflare, puis ferme et rouvre l’application.
+
+Le contrôle de version de toute la section est retiré UNIQUEMENT pour
+l’action de réserver/rendre public un produit. Cette action contrôle désormais
+l’état de visibilité du produit concerné et conserve tous ses autres champs.
+Les versions des catalogues continuent à être mises à jour pour la synchronisation.
+La modification d’un article ne bloque donc plus la réservation du suivant.
+Le fonctionnement est identique pour les huiles et les autres catalogues.
+
+Si d’autres informations du catalogue ont été modifiées ailleurs, la sauvegarde
+du nom, du code ou du plan peut toujours demander de rouvrir l’éditeur : cette
+protection reste nécessaire pour éviter d’écraser les changements d’une autre session.
+La réservation seule reste utilisable sans sauvegarder ces autres champs.
+
+Tests locaux réussis : deux articles successifs dans une même section, deux huiles,
+retour à la visibilité publique, répétition d’une demande sans double incrément,
+droits administrateur et réexécution du SQL. Compilation TypeScript/Vite réussie.
+Aucun déploiement ni modification de ta base en production n’a été effectué ici.
