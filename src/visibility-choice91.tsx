@@ -1,0 +1,7 @@
+import {useState} from 'react';
+import {supabase} from './lib/supabase';
+export default function VisibilityChoice91({kind,id,version,checked,disabled,onBusy,onSaved}:{kind:'catalog'|'oil',id:string,version:number,checked:boolean,disabled:boolean,onBusy:(v:boolean)=>void,onSaved:(reserved:boolean,version:number)=>void}){
+ const [busy,setBusy]=useState(false),[message,setMessage]=useState(''),[failed,setFailed]=useState(false);
+ async function change(value:boolean){if(busy||disabled)return;setBusy(true);onBusy(true);setMessage('Enregistrement…');setFailed(false);try{const {data,error}=await supabase.rpc('workshop_visibility91',{p_kind:kind,p_id:id,p_version:version,p_reserved:value});if(error)throw error;onSaved(data.reserved,data.version);setMessage(data.reserved?'Enregistré : réservé à l’administrateur et aux modérateurs.':'Enregistré : disponible pour tous les collaborateurs.')}catch(e:any){setFailed(true);setMessage(e.code==='PGRST202'?'Applique le script 91-visibilite-consommables.sql dans Supabase.':e.message||'Enregistrement impossible. Réessaie.')}finally{setBusy(false);onBusy(false)}}
+ return <div className="visibility91"><label><input type="checkbox" checked={checked} disabled={busy||disabled} onChange={e=>void change(e.target.checked)}/><span>Réservé à l’administrateur et aux modérateurs<small>Enregistrement automatique de cette option.</small></span></label>{message&&<p role={failed?'alert':'status'} className={failed?'error-banner':''}>{message}</p>}</div>
+}

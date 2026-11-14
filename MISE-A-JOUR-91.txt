@@ -1,0 +1,45 @@
+ATELIER FAYET 33 — MISE À JOUR 91
+À installer après les scripts 90a et 90b de la MAJ90.
+
+1. SUPABASE
+Ouvre SQL Editor puis une nouvelle requête.
+Copie le contenu COMPLET du fichier supabase/91-visibilite-consommables.sql.
+Clique sur Run et attends la réussite avant de déployer le site.
+Ce script est réexécutable et conserve les produits ainsi que leur visibilité.
+Aucun nouveau secret, programme Cron ou déploiement d’Edge Function nécessaire.
+Si une erreur apparaît, conserve le message complet et arrête cette étape.
+
+2. GITHUB ET CLOUDFLARE
+Remplace les fichiers correspondants de ton dépôt par ceux du ZIP :
+les dossiers src, public, supabase, index.html et les fichiers de configuration
+package.json, package-lock.json, postcss.config.js, tsconfig.json, vite.config.ts.
+Conserve les variables de BUILD Cloudflare existantes.
+N’ajoute aucun fichier _redirects, .env, node_modules ou dist.
+Attends le déploiement réussi, puis ferme et rouvre l’application.
+
+3. MODIFICATIONS
+- Mes horaires prévus : total hebdomadaire, nombre de jours et mention S4J
+  dans un bloc nettement plus compact. Les calculs restent identiques.
+- Commande en cours : repliée par défaut. Cliquer sur Développer pour afficher
+  les lignes regroupées par section, puis Réduire pour les masquer.
+  Les boutons Modifier la liste et Valider restent directement accessibles.
+- Réservation des consommables : la case enregistre désormais immédiatement
+  le changement dans Supabase. Un message confirme la réservation ou le retour
+  à une disponibilité pour tous. Aucun clic supplémentaire sur Enregistrer
+  n’est nécessaire POUR CETTE OPTION.
+  Les modifications de nom, code, photo ou du plan continuent à nécessiter
+  le bouton Enregistrer habituel.
+  La visibilité s’enregistre séparément, sans enregistrer les autres champs
+  en cours de modification. Annuler le formulaire n’annule pas cette option
+  déjà enregistrée : il faut la décocher pour revenir en arrière.
+  Pour une nouvelle référence d’huile non encore enregistrée, enregistre
+  d’abord sa création puis règle sa visibilité.
+- En cas d’erreur réseau ou de version du catalogue modifiée ailleurs, la case
+  conserve son état enregistré et un message indique l’erreur.
+- L’édition de cette option reste réservée à l’administrateur ; les produits
+  réservés restent commandables par l’administrateur et les modérateurs.
+
+VÉRIFICATIONS
+Compilation TypeScript/Vite réussie. Tests SQL locaux : réserver/rendre public
+un produit du catalogue et une huile, conflits de versions, droits et
+réexécution du script. Aucun déploiement ni test sur ta base de production.

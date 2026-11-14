@@ -1,3 +1,4 @@
+import './maj91.css';
 import {weekSummary90} from './lib/week-summary90';
 import './maj90.css';
 import {useAutoRefresh} from './lib/sync';
