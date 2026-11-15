@@ -1,0 +1,60 @@
+ATELIER FAYET 33 — MISE À JOUR 94
+TÂCHES COMMUNES À PLUSIEURS PERSONNES ET RACK DE DÉCHETS
+
+INSTALLATION
+1. Si la MAJ93 est déjà installée, exécute uniquement le fichier complet
+   supabase/94-taches-rack.sql dans Supabase > SQL Editor.
+   Sinon, après la MAJ92, exécute d’abord supabase/93-delais-ramassage.sql,
+   puis supabase/94-taches-rack.sql. Les deux scripts sont réexécutables.
+2. Remplace les fichiers correspondants dans GitHub avec ceux de ce ZIP :
+   src, public, supabase, index.html, package.json, package-lock.json,
+   vite.config.ts, tsconfig.json et postcss.config.js.
+3. Conserve les variables de build Cloudflare. N’ajoute aucun _redirects.
+4. Attends le succès du déploiement puis ferme et rouvre l’application
+   sur les appareils. Aucune nouvelle clé ni fonction Edge à installer.
+
+TÂCHES COMMUNES
+Dans Tâches > Tâches communes, ouvre une tâche et clique sur
+« Choisir les destinataires ».
+Choisis « Toute l’équipe » ou « Choisir une ou plusieurs personnes »,
+puis coche les collaborateurs et enregistre l’attribution.
+Pour une nouvelle tâche, crée-la d’abord puis choisis ses destinataires.
+
+Les personnes désignées, les encadrants, l’administrateur et les modérateurs
+peuvent cocher les actions. Il s’agit d’une seule liste partagée : une action
+cochée par une personne est terminée pour tout le groupe, pas d’une validation
+individuelle obligatoire de chacun. La visibilité des tâches reste inchangée.
+Les comptes invités restent en lecture seule. Les invités et directeurs
+ne sont pas proposés comme destinataires. Les anciennes attributions sont
+conservées. Une sélection vide n’est pas interprétée silencieusement comme
+« Toute l’équipe » : choisis cette option explicitement.
+
+RACK PÔLE DÉCHETS
+Dans Déchets, développe « Rack pôle déchets ».
+Le plan reprend le PDF : 4 niveaux et 3 colonnes, niveau 1 en bas.
+Au niveau 2 : batteries à gauche, aluminium à droite ; au niveau 1 :
+ferraille, fonte et anciens filtres. Les cinq bacs sont initialisés à 600 L.
+Les 7 autres cases sont vides au départ. Toutes les cases sont déverrouillées.
+
+Clique sur une case, saisis son contenu (500 caractères maximum) et enregistre.
+Les collaborateurs peuvent modifier les cases non verrouillées.
+L’administrateur et les modérateurs disposent d’un bouton pour verrouiller
+ou déverrouiller chaque case indépendamment. Ils peuvent toujours en modifier
+le contenu, même verrouillé. Les invités et directeurs consultent seulement.
+Le nom et la date de la dernière modification et du dernier changement de
+verrouillage sont affichés. Ce n’est pas un historique complet des versions.
+
+Le verrouillage est contrôlé dans Supabase : une fiche restée ouverte sur
+un téléphone ne permet pas de contourner un verrou ajouté entre-temps.
+Une modification concurrente demande de rouvrir la case pour éviter un écrasement.
+Les données se synchronisent toutes les 20 secondes lorsque le rack est ouvert ;
+la saisie en cours n’est pas écrasée par la synchronisation.
+Le rack est informatif : il ne crée pas automatiquement une demande de ramassage.
+
+VÉRIFICATION
+Compilation TypeScript/Vite réussie. Tests SQL locaux : migration des anciennes
+attributions, plusieurs destinataires, suppression des doublons, accès ciblé,
+retour à toute l’équipe, protection des anciennes routes, invités, 12 cases,
+verrouillage indépendant, conflits, conservation lors de la réexécution SQL.
+Contrôle visuel du rack et enregistrement de deux destinataires avec données fictives.
+Ces tests utilisent des dépendances simulées ; la production n’a pas été modifiée.
