@@ -1,0 +1,37 @@
+ATELIER FAYET 33 — MISE À JOUR 96
+RACK INDUSTRIEL, CONTENANCES ET PALETTES
+
+INSTALLATION
+Si MAJ94 ou MAJ95 est installée : aucun nouveau SQL à exécuter.
+Remplace les fichiers correspondants du projet GitHub avec ceux du ZIP.
+Conserve les variables de build Cloudflare. Attends la réussite du déploiement,
+puis ferme et rouvre l’application. Aucun _redirects à ajouter.
+Si MAJ94 n’a pas encore été installée, suis d’abord MISE-A-JOUR-94.txt inclus.
+
+MODIFICATIONS
+- Repères N4-G, N4-C, etc. retirés du dessin. La position reste indiquée
+  dans le titre de la fenêtre lorsqu’on ouvre un emplacement.
+- Nom centré au-dessus de l’illustration.
+- Contenances au centre des pictogrammes : fût 220 L, bac 600 L, tonnelet 60 L.
+- « Palette » affiche une palette ; « palettes » affiche une pile de palettes.
+  La pile est une illustration du pluriel, pas un comptage du stock.
+- Côtés industriels en acier avec perforations, boulons et croisillons.
+- Étagères plus fines et absence de barre en bas conservées.
+- Cases sans contenu : « Vide ».
+
+Les mots sont reconnus au singulier et pluriel, sans distinction de majuscules.
+Fût est aussi reconnu sans accent. Les fûts multiples et leur nombre sont conservés.
+Quand plusieurs types sont cités dans un même contenu, l’ordre de priorité est :
+tonnelet, fût, bac, palette. Un seul type d’illustration représente l’emplacement.
+
+Les volumes saisis dans le texte ne sont pas effacés de la base : ils restent
+consultables dans le formulaire. Ils sont masqués dans le titre du dessin
+pour éviter un doublon avec la capacité standard affichée dans le pictogramme.
+Le dessin utilise les capacités fixes demandées, même si un ancien libellé
+contenait une autre valeur. Tu peux corriger ces libellés depuis le formulaire.
+Le verrouillage et les droits existants sont conservés.
+
+VÉRIFICATIONS
+Compilation TypeScript/Vite réussie. Contrôle visuel local : palette simple,
+palettes empilées, tonnelet, fût simple, fûts multiples et bacs avec capacités.
+Aucune donnée de production modifiée, aucun déploiement effectué ici.
