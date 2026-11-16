@@ -1,0 +1,54 @@
+ATELIER FAYET 33 — MISE À JOUR 97
+Photos des signalements : réduction de la consommation mémoire
+
+À INSTALLER
+1. Décompresse Atelier-Fayet-33-MAJ97.zip.
+2. Remplace les fichiers du projet GitHub par ceux de l’archive : src,
+   public, index.html, package.json, package-lock.json, tsconfig.json,
+   vite.config.ts et postcss.config.js. Conserve tes réglages Cloudflare
+   et tes variables de build existantes. N’ajoute pas de fichier _redirects.
+3. Attends la réussite du déploiement Cloudflare.
+4. Enregistre tout signalement en cours, puis ferme et rouvre l’application.
+   Si nécessaire, recharge la page pour récupérer le nouveau code.
+
+SUPABASE
+Aucune nouvelle migration SQL ni modification des fonctions n’est requise
+pour cette correction. Les scripts 93/94 déjà présents dans le projet sont
+conservés pour les installations qui ne les auraient pas encore appliqués.
+Ne les réexécute pas uniquement pour installer la mise à jour 97.
+
+CORRECTIONS
+- Lecture des dimensions avant décodage, puis décodage redimensionné pour
+  limiter la taille des images retenues en mémoire.
+- Compression JPEG asynchrone et libération explicite des images temporaires
+  et des surfaces de dessin, y compris si la compression échoue.
+- Aperçus légers, générés à la suite et nettoyés après retrait d’une photo.
+- L’outil « Entourer un élément » reste disponible sur demande ; il ne
+  s’ouvre plus automatiquement après chaque ajout.
+- Protection contre deux ajouts simultanés et indication de progression.
+- Si une photo échoue, les précédentes déjà préparées sont conservées.
+- Maximum inchangé : 5 photos JPEG/PNG/WebP, 10 Mo par fichier source.
+- Les informations et photos préparées sont sauvegardées temporairement
+  dans l’onglet, pour le compte connecté. Un brouillon de moins de 24 heures
+  peut être restauré après rechargement. Il est supprimé après enregistrement,
+  annulation ou déconnexion. La certification doit être cochée à nouveau.
+  Ce stockage local ne remplace pas l’enregistrement Supabase : une fermeture
+  complète de l’onglet, l’effacement du stockage ou une limitation du navigateur
+  peuvent empêcher sa récupération. Un avertissement apparaît si l’écriture
+  du brouillon échoue.
+
+VÉRIFICATIONS EFFECTUÉES
+- Compilation TypeScript et production Vite.
+- Tests des dimensions JPEG/PNG, du décodage redimensionné, du rejet d’un
+  fichier invalide et de la libération mémoire après échec de compression.
+- Test navigateur avec cinq photos de test de 4000 × 3000 pixels : ajout,
+  aperçus, ouverture/validation de l’éditeur, restauration après rechargement
+  et enregistrement avec une réponse serveur simulée ; nettoyage du brouillon.
+- Aucun changement effectué dans la base de production.
+
+À VÉRIFIER SUR TON TÉLÉPHONE
+Après installation, ajoute 3 puis 5 photos à un signalement de test.
+Vérifie la lisibilité et enregistre-le. Le test sur ordinateur ne reproduit
+pas la limite mémoire exacte de ton téléphone. Si un redémarrage persiste,
+précise le modèle du téléphone, le navigateur et si le problème survient
+à la prise de photo, à son ajout ou à l’enregistrement.
