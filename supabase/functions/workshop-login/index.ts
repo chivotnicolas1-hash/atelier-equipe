@@ -7,13 +7,13 @@ Deno.serve(async(req:Request)=>{
  const invalid=()=>reply({error:'Identifiant ou mot de passe incorrect.'},401);
  try{
   const raw=await req.text();if(raw.length>2048)return invalid();const body=JSON.parse(raw);
-  if(typeof body.matricule!=='string'||!/^[a-z0-9_-]{1,32}$/i.test(body.matricule.trim())||typeof body.password!=='string'||!body.password||body.password.length>128)return invalid();
+  if(typeof body.login!=='string'||!/^[a-z0-9_-]{3,32}$/i.test(body.login.trim())||typeof body.password!=='string'||!body.password||body.password.length>128)return invalid();
   const url=Deno.env.get('SUPABASE_URL')!,service=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,anon=Deno.env.get('SUPABASE_ANON_KEY')!;
-  if(!url||!service||!anon)return reply({error:'Connexion par matricule indisponible. Utilise ton e-mail.'},503);
+  if(!url||!service||!anon)return reply({error:'Connexion par ID indisponible. Contacte ton administrateur.'},503);
   const server=createClient(url,service,{auth:{persistSession:false,autoRefreshToken:false}});
-  const {data:lookup,error}=await server.rpc('workshop_login_lookup',{p_matricule:body.matricule});
-  if(error)return reply({error:'Connexion par matricule indisponible. Utilise ton e-mail.'},503);
-  if(lookup?.limited)return reply({error:'Trop de tentatives. Réessaie dans 15 minutes ou utilise ton e-mail.'},429);
+  const {data:lookup,error}=await server.rpc('workshop_login100',{p_login:body.login});
+  if(error)return reply({error:'Connexion par ID indisponible. Contacte ton administrateur.'},503);
+  if(lookup?.limited)return reply({error:'Trop de tentatives. Réessaie dans 15 minutes.'},429);
   const client=createClient(url,anon,{auth:{persistSession:false,autoRefreshToken:false}});
   const {data,error:authError}=await client.auth.signInWithPassword({email:lookup?.email||'unknown-login@invalid.example',password:body.password});
   if(!lookup?.email||authError||!data.session)return invalid();
