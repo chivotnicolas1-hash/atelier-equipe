@@ -1,0 +1,36 @@
+ATELIER FAYET 33 — MISE À JOUR 99
+Réutiliser une image existante sur un consommable sans photo
+
+UTILISATION
+Consommables > Modifier le catalogue > Modifier le produit sans photo >
+Choisir une image existante.
+Recherche par nom ou filtre par section, sélectionne une image et clique sur
+Utiliser cette image, puis Enregistrer les modifications sur le produit.
+L'image est copiée : le produit dont elle provient n'est pas modifié et son
+retrait ultérieur ne supprime pas la copie enregistrée sur l'autre produit.
+Si tu annules la fiche, la nouvelle photo n'est pas enregistrée.
+La galerie est également disponible pour les produits sans photo du plan huiles,
+pour les créations manuelles et pour les lignes sans photo d'un import PDF.
+Les autorisations de modification des catalogues restent celles déjà en place.
+Pour remplacer une photo déjà présente dans un catalogue, supprime d'abord
+la photo dans la fiche puis choisis une image existante avant d'enregistrer.
+La galerie charge les catalogues via les accès existants, séquentiellement.
+En cas d'erreur sur une section, un message indique le chargement incomplet.
+
+INSTALLATION DEPUIS LA MAJ98
+Aucun nouveau SQL à exécuter. Remplace les fichiers du projet sur GitHub,
+en particulier tout le dossier src, puis attends le déploiement Cloudflare.
+Conserve les variables de build, puis ferme et rouvre l'application.
+Ne crée pas de fichier _redirects.
+
+SI LA MAJ98 N'A PAS ENCORE ÉTÉ INSTALLÉE
+Applique d'abord supabase/98-nouvelles-sections-consommables.sql selon le guide
+MISE-A-JOUR-98.txt conservé dans cette archive. Ne réexécute pas ce SQL
+uniquement pour installer la MAJ99 si tu as déjà installé la MAJ98.
+
+VÉRIFICATIONS
+Compilation TypeScript et Vite. Test navigateur isolé avec données simulées :
+ouverture, chargement, regroupement des photos identiques, recherche vide,
+sélection et application sur un produit cible. Aucun accès ni changement à
+la base de production : confirmer l'enregistrement après déploiement en ouvrant
+à nouveau la fiche d'un produit de test.

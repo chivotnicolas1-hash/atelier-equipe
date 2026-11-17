@@ -10,3 +10,10 @@ export function useProductPhoto88(){useSyncExternalStore(subscribe,()=>revision)
  const matches=all.filter(p=>normalize(p.name+(p.pack?' ('+p.pack+')':''))===normalize(item.label)||(p.kind==='tank'&&normalize(item.label).startsWith(normalize(p.name)+' — livraison en cuve de ')));
  return matches.length===1?matches[0].photo||'':'';
 }}
+export function existingPhotos99(){
+ const seen=new Set<string>();return [...sections].flatMap(([section,items])=>items.flatMap(p=>{
+ if(!p.photo||seen.has(p.photo)||!/^data:image\/(jpeg|png|webp);base64,/i.test(p.photo))return [];
+ seen.add(p.photo);return [{id:section+':'+p.id,name:p.name,section:section==='oil'?'Divers liquides':section,photo:p.photo}];
+ }));
+}
+export function useExistingPhotos99(){useSyncExternalStore(subscribe,()=>revision);return existingPhotos99()}
