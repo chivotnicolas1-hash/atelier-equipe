@@ -1,0 +1,62 @@
+ATELIER FAYET 33 — MISE À JOUR 98
+Nouvelles sections consommables
+
+CONTENU
+- Vidange : 58 références du PDF Vidange.
+- Phare, ampoule, Pare brise, élec : 91 références des PDF Phares,
+  pare brise et ampoules elec.
+- Désignations de la colonne 2, codes de commande de la colonne 1 et photos
+  présentes dans la colonne 3. Les anciens codes remplacés et les codes de
+  facturation client ne remplacent pas le code de commande.
+- 138 illustrations reprises. 11 lignes n'ont pas de photo exploitable dans
+  leur case du PDF : elles restent commandables et une image peut être ajoutée.
+- Même composant que les catalogues existants : quantité, commande partagée,
+  contrôle des doublons, modification du nom/code/photo, retrait, rupture,
+  restriction administrateur/modérateurs, création manuelle et import PDF.
+- Titres et descriptions accessibles dans la personnalisation des sections.
+- Les nouvelles sections rejoignent aussi le regroupement des commandes.
+- La correction photo des signalements de la MAJ97 est conservée.
+
+1 — SUPABASE (AVANT LE DÉPLOIEMENT)
+Ouvre SQL Editor > New query.
+Copie TOUT le fichier supabase/98-nouvelles-sections-consommables.sql.
+Choisis No limit si une limite automatique perturbe le SQL, puis Run.
+Résultat attendu : deux lignes, 58 articles Vidange et 91 articles pour
+Phare, ampoule, Pare brise, élec (hors ajouts/retraits personnels ultérieurs).
+Le script utilise les tables des migrations de catalogues déjà installées.
+Il conserve les fonctions et droits existants et étend les listes littérales
+reconnues de sections. Les données sont ajoutées avec des identifiants stables :
+réexécuter le script ne crée pas de doublons et ne réinitialise pas les produits.
+Si une erreur SQL apparaît, arrête l'installation et communique son texte
+complet : la transaction annule les changements de ce script en cas d'échec.
+Ne lance pas de suppression ni de remise à zéro des catalogues.
+
+2 — GITHUB / CLOUDFLARE
+Remplace src, public, index.html, package.json, package-lock.json,
+tsconfig.json, vite.config.ts et postcss.config.js par ceux de l'archive.
+Ajoute le SQL98 et ce guide au dépôt si tu conserves les migrations sur GitHub.
+Conserve les variables de BUILD Cloudflare existantes.
+Ne crée aucun fichier _redirects.
+Attends la réussite du déploiement, puis ferme et rouvre l'application.
+Les SQL93/94 sont conservés pour les installations antérieures ; aucune
+réexécution n'est nécessaire pour cette mise à jour s'ils sont déjà appliqués.
+
+3 — CONTRÔLE DANS TON APPLICATION
+Ouvre Consommables et développe chaque nouvelle section.
+Teste un ajout, le code produit dans Modifier le catalogue, une modification
+puis son maintien après réouverture. Vérifie rupture et visibilité réservée
+avec un compte collaborateur puis retire ton article de test de la commande.
+Si le serveur affiche « Section invalide » ou refuse l'enregistrement du titre,
+transmets le message : une liste de sections de ta base peut avoir une forme
+non reconnue. Ne modifie pas les règles de sécurité pour contourner ce message.
+
+VÉRIFICATIONS EFFECTUÉES
+Compilation TypeScript et Vite réussie. Extraction des tables des 17 pages,
+contrôle des 149 identifiants/codes et revue visuelle des illustrations.
+Script exécuté dans PostgreSQL local (PGlite) avec les trois tables fournies :
+149 références créées, réexécution sans doublons, conservation d'un nom et
+d'une rupture modifiés. Test des extensions de listes IN et ARRAY et de la
+préservation d'une condition de rôle sans rapport avec les sections.
+Les autres migrations et les fonctions de ta base en production ne sont pas
+accessibles ici : leur fonctionnement complet devra être confirmé après
+installation. Aucun changement n'a été envoyé à Supabase ou Cloudflare.

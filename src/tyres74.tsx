@@ -1,7 +1,7 @@
 import VisibilityChoice91 from './visibility-choice91';
 import './maj91.css';
 import {useEffect,useRef,useState} from 'react';
-import {SprayCan,Pencil} from 'lucide-react';
+import {SprayCan,Pencil,Lightbulb,Droplets} from 'lucide-react';
 import {supabase} from './lib/supabase';import {useAutoRefresh} from './lib/sync';
 import {readConsumables88} from './lib/consumables-read88';import {publishPhotos88} from './lib/product-photos88';import {consumablesError88} from './lib/consumables-error88';import {photo78} from './lib/catalog-pdf78';
 import {SectionText81} from './operation-settings81';import {TyreIcon79,GasCloudIcon80,BrakeDiscIcon80} from './section-icons79';
@@ -14,8 +14,8 @@ export default function Tyres({section,admin,disabled,add}:{section:string,admin
  const [editing,setEditing]=useState(false),[product,setProduct]=useState<EditProduct|null>(null),[codes,setCodes]=useState<Record<string,string>>({}),[editRevision,setEditRevision]=useState(-1);
  const [pick,setPick]=useState<Product|null>(null),[qty,setQty]=useState('1'),[err,setErr]=useState(''),[busy,setBusy]=useState(false),[success,setSuccess]=useState('');
  const [importing,setImporting]=useState<{items:Item78[],token:string,manual:boolean}|null>(null);
- const textKey=section==='Pneus'?'catalog.pneus':section==='5gaz'?'catalog.gaz':section==='Hygiène, protection et nettoyage'?'catalog.hygiene':'catalog.freins';
- const SectionIcon=section==='Pneus'?TyreIcon79:section==='5gaz'?GasCloudIcon80:section==='Hygiène, protection et nettoyage'?SprayCan:BrakeDiscIcon80;
+ const textKey=section==='Vidange'?'catalog.vidange':section==='Phare, ampoule, Pare brise, élec'?'catalog.eclairage':section==='Pneus'?'catalog.pneus':section==='5gaz'?'catalog.gaz':section==='Hygiène, protection et nettoyage'?'catalog.hygiene':'catalog.freins';
+ const SectionIcon=section==='Vidange'?Droplets:section==='Phare, ampoule, Pare brise, élec'?Lightbulb:section==='Pneus'?TyreIcon79:section==='5gaz'?GasCloudIcon80:section==='Hygiène, protection et nettoyage'?SprayCan:BrakeDiscIcon80;
  function accept(data:any){if(Array.isArray(data?.items)){setItems(data.items);publishPhotos88(section,data.items);rev.current=data.rev}}
  async function load(force=false){const ticket=++sequence.current;try{const data=await readConsumables88('workshop_catalog89',{p_section:section,p_known:force?-1:rev.current});if(ticket===sequence.current){accept(data);setErr('')}}catch(e){if(ticket===sequence.current)setErr(consumablesError88(e))}}
  const blocked=useRef(false);blocked.current=editing||busy||!!importing||!!pick;
