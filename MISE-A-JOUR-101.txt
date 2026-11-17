@@ -1,0 +1,31 @@
+ATELIER FAYET 33 — MISE À JOUR 101
+Contenu illustré des bacs pleins du rack déchets
+
+Le dessin dépend du contenu saisi dans la case :
+- Batteries : batteries de voiture avec bornes et étiquette.
+- Fonte ou disques : disques de frein.
+- Aluminium, alu ou jantes : pièces de type jantes en aluminium.
+- Filtres : filtres usagés.
+- Ferraille et autres contenus : pièces métalliques.
+Le dessin apparaît si le bac est déclaré Plein. L'état Vide conserve le bac
+vide. Non précisé n'ajoute aucun contenu. Les fûts et palettes sont inchangés.
+La reconnaissance utilise le texte sans tenir compte des accents/majuscules.
+Si plusieurs catégories sont indiquées, la première catégorie reconnue dans
+l'ordre batteries, fonte/disques, aluminium/jantes, filtres est représentée.
+Le dessin reste une illustration ; il ne remplace pas la description de la case.
+
+INSTALLATION DEPUIS LA MAJ100
+Aucun nouveau SQL ni redéploiement de fonction Supabase.
+Mets les fichiers du projet à jour sur GitHub, attends le déploiement Cloudflare,
+puis ferme et rouvre l'application. Conserve les variables de build.
+N'ajoute aucun fichier _redirects.
+
+SI LA MAJ100 N'EST PAS ENCORE INSTALLÉE
+Commence par MISE-A-JOUR-100.txt fourni dans cette archive : les deux SQL100,
+les fonctions workshop-login et workshop-accounts, puis le nouveau code du site.
+Le changement d'ID de connexion de la MAJ100 est conservé dans cette version.
+
+VÉRIFICATIONS
+Compilation TypeScript/Vite, rendu SVG des cinq types de contenus et du bac
+vide, vérification des mots-clés et de l'absence de chargement dans le bac vide.
+Aucune modification envoyée à ta base ni à ton site en ligne.

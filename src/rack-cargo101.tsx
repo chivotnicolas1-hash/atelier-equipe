@@ -1,0 +1,15 @@
+export function rackCargo101(text:string){
+ const t=text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+ if(/\bbatteries?\b/.test(t))return 'battery';
+ if(/\b(fonte?|disques?)\b/.test(t))return 'disc';
+ if(/\b(alu|minium|aluminium|jantes?)\b/.test(t))return 'aluminium';
+ if(/\bfiltres?\b/.test(t))return 'filter';
+ return 'metal';
+}
+function Battery({x,y,angle=0}:{x:number,y:number,angle?:number}){return <g transform={`translate(${x} ${y}) rotate(${angle} 14 12)`}><rect x="1" y="5" width="28" height="19" rx="2" fill="#293a44" stroke="#14262f" strokeWidth="1.5"/><path d="M2 6H28V10H2Z" fill="#4b5c65"/><rect x="5" y="2" width="5" height="4" rx="1" fill="#d34540"/><rect x="21" y="2" width="5" height="4" rx="1" fill="#adb5b8"/><path d="M10 4V0H20V4" fill="none" stroke="#263943" strokeWidth="2"/><rect x="8" y="12" width="14" height="8" rx="1" fill="#e7c342"/><path d="M16 12L12 17H16L14 20L19 15H15Z" fill="#293843"/></g>}
+function Disc({x,y,r=12}:{x:number,y:number,r?:number}){return <g transform={`translate(${x} ${y})`}><circle r={r} fill="#aab7bd" stroke="#526874" strokeWidth="1.5"/><circle r={r-2.8} fill="none" stroke="#e3e8ea"/><circle r="5" fill="#607783" stroke="#d9e2e7"/><circle r="2.5" fill="#213c49"/>{[0,90,180,270].map(a=><circle key={a} cx={7*Math.cos(a*Math.PI/180)} cy={7*Math.sin(a*Math.PI/180)} r="1.2" fill="#405865"/>)}</g>}
+function Filter({x,y,color,angle=0}:{x:number,y:number,color:string,angle?:number}){return <g transform={`translate(${x} ${y}) rotate(${angle} 7 10)`}><rect x="0" y="2" width="16" height="23" rx="3" fill={color} stroke="#394b52"/><ellipse cx="8" cy="2" rx="8" ry="3" fill="#d1d9dc" stroke="#52656d"/><ellipse cx="8" cy="2" rx="2.5" ry="1.5" fill="#344953"/><path d="M4 8V21" stroke="white" opacity=".5"/><rect x="6" y="10" width="8" height="6" fill="#f4f4eb"/></g>}
+export default function RackCargo101({text}:{text:string}){
+ const kind=rackCargo101(text);
+ return <g data-cargo={kind}><path d="M22 22H105L100 28H18Z" fill="#354e5c"/>{kind==='battery'?<><Battery x={22} y={3} angle={-8}/><Battery x={49} y={0}/><Battery x={77} y={5} angle={8}/></>:kind==='disc'?<><Disc x={35} y={15}/><Disc x={60} y={12} r={13}/><Disc x={86} y={16}/></>:kind==='aluminium'?<>{[33,59,85].map((x,i)=><g key={x} transform={`translate(${x} ${13+i%2*3})`}><circle r="12" fill="#dbe8ef" stroke="#6c8a99" strokeWidth="1.5"/><circle r="9" fill="#7e9aa8"/>{[0,72,144,216,288].map(a=><path key={a} d="M0 0L-2 -8H2Z" fill="#edf6fb" transform={`rotate(${a})`}/>)}<circle r="3" fill="#eaf4f9"/></g>)}</>:kind==='filter'?<><Filter x={24} y={2} color="#c7692a" angle={-15}/><Filter x={45} y={0} color="#445b4c"/><Filter x={65} y={5} color="#aa5128" angle={12}/><Filter x={85} y={0} color="#596d7b"/></>:<g stroke="#4e626d" strokeWidth="1.5"><path d="M24 18L34 2L41 5L35 21Z" fill="#9aafb9"/><path d="M37 17L63 3L66 9L44 24Z" fill="#6b808b"/><path d="M62 21L68 4H76L79 23Z" fill="#b8c7cf"/><path d="M77 14L99 7L103 14L84 25Z" fill="#849ba7"/><circle cx="52" cy="18" r="8" fill="#acbcc5"/><circle cx="52" cy="18" r="4" fill="#344e5c"/></g>}<path d="M16 26H103" stroke="#b9cbd5" strokeWidth="3"/></g>;
+}
