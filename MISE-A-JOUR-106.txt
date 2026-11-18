@@ -1,0 +1,50 @@
+ATELIER FAYET 33 — CORRECTIF 106
+
+INSTALLATION DEPUIS LA VERSION 104 OU 105
+1. Dans Supabase > SQL Editor, exécute entièrement :
+   supabase/106-concurrence-catalogue.sql
+   Attends le message de réussite.
+2. Remplace les fichiers du projet GitHub par ceux de cette archive.
+   Conserve les variables de build de Cloudflare et attends le déploiement.
+3. Ferme et rouvre l’application avant de rouvrir une fiche produit.
+Aucune Edge Function supplémentaire à déployer. Ne pas ajouter _redirects.
+Le SQL et le nouveau code sont tous les deux nécessaires.
+Cette archive met à jour une application existante, pas une base vide.
+
+CORRECTION
+Le message « Le catalogue a changé » provenait du contrôle de la révision
+commune à toute une section. Un article pouvait donc être bloqué même si
+lui-même n’avait pas changé depuis l’ouverture de sa fiche.
+Le contrôle porte désormais sur les informations de l’article et son code :
+nom, photo, stock et restriction administrateur/modérateurs. Une modification
+sur un autre produit ou une simple hausse de révision de section ne bloque
+plus l’enregistrement de la fiche intacte.
+Si le même article a vraiment changé, la sauvegarde est refusée et demande
+de rouvrir sa fiche. Les changements de l’autre personne ne sont pas écrasés.
+La position dans le catalogue n’est pas écrasée par l’éditeur de fiche.
+Les verrous transactionnels et les droits administrateur sont conservés.
+Les imports PDF gardent leur contrôle global existant, adapté à une
+modification de plusieurs articles. Le plan des huiles garde son contrôle
+spécifique : ce correctif vise les fiches produits des sections de catalogue.
+
+UTILISATION
+Modifier le catalogue > Modifier un produit > préparer les modifications,
+puis cliquer sur Enregistrer les modifications. La case « Réservé à
+l’administrateur et aux modérateurs » n’est plus enregistrée séparément.
+Le nom, le code, la photo, la rupture et cette case sont enregistrés ensemble.
+
+VÉRIFICATIONS
+Compilation TypeScript/Vite réussie. Tests SQL locaux : changement de la
+révision de section, modification d’un autre produit, copie d’une photo,
+enregistrement de la restriction, refus d’un ancien état du même produit,
+détection d’un code changé ailleurs, refus d’un article supprimé et refus
+des accès non administrateurs. Migration exécutée deux fois sans erreur.
+Le chargement de base du catalogue et l’identité sont simulés dans ces tests ;
+aucun test ni déploiement n’a été effectué sur ta production.
+Le message permet d’identifier le contrôle qui bloquait, sans établir quel
+processus avait fait évoluer la révision dans ta base réelle.
+
+CONTENU
+Un seul guide et le seul nouveau SQL nécessaire sont inclus, avec les sources,
+ressources et fonctions utilisées par l’application. Les anciens guides,
+anciens scripts, tests, dépendances et fichiers compilés ne sont pas inclus.
