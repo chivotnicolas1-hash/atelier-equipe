@@ -2,6 +2,7 @@ import './waste100.css';
 import {RackSide96,rackTitle96,RackContents95,rackKind95,drumCount95,setDrumCount95} from './rack-visual95';
 import './rack95.css';
 import './rack96.css';
+import './maj103.css';
 import {useState,useEffect} from 'react';
 import {LockKeyhole,LockKeyholeOpen,LayoutGrid,Pencil} from 'lucide-react';
 import {supabase} from './lib/supabase';

@@ -13,7 +13,7 @@ export function useProductPhoto88(){useSyncExternalStore(subscribe,()=>revision)
 export function existingPhotos99(){
  const seen=new Set<string>();return [...sections].flatMap(([section,items])=>items.flatMap(p=>{
  if(!p.photo||seen.has(p.photo)||!/^data:image\/(jpeg|png|webp);base64,/i.test(p.photo))return [];
- seen.add(p.photo);return [{id:section+':'+p.id,name:p.name,section:section==='oil'?'Divers liquides':section,photo:p.photo}];
+ seen.add(p.photo);return [{sourceId:p.id,sourceKind:section==='oil'?'oil' as const:'catalog' as const,sourceSection:section,id:section+':'+p.id,name:p.name,section:section==='oil'?'Divers liquides':section,photo:p.photo}];
  }));
 }
 export function useExistingPhotos99(){useSyncExternalStore(subscribe,()=>revision);return existingPhotos99()}
