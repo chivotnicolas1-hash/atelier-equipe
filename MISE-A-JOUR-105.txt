@@ -1,0 +1,55 @@
+ATELIER FAYET 33 — CORRECTIF 105
+
+INSTALLATION DEPUIS LA VERSION 104
+Cette archive est une mise à jour du projet existant, pas une installation
+sur une base Supabase vide. Le SQL de la version 104 doit déjà être installé.
+Aucun nouveau SQL et aucune Edge Function à déployer pour cette version.
+
+1. Remplace les fichiers du projet GitHub par ceux de cette archive.
+   Conserve tes variables de build Cloudflare.
+2. Supprime src/visibility-choice91.tsx s’il reste dans ton dépôt : ce
+   composant de sauvegarde automatique n’est plus utilisé.
+3. Attends la réussite du déploiement, puis ferme et rouvre l’application.
+Aucun fichier _redirects ne doit être ajouté.
+
+CORRECTIF
+L’option « Réservé à l’administrateur et aux modérateurs » utilisait une
+écriture automatique indépendante de l’enregistrement des autres champs.
+Elle est maintenant préparée dans la fiche puis enregistrée avec son bouton
+principal, dans la même opération que le nom, le code, la photo et le stock.
+Dans le plan des huiles, cette option est enregistrée avec le plan et les codes.
+Cocher ou décocher la case ne lance donc plus de sauvegarde séparée.
+Annuler ou fermer sans enregistrer ne change pas cette option en base.
+
+Les anciennes réponses de synchronisation ne peuvent plus remplacer les
+données d’une fiche en cours d’édition. Le plan des huiles possède aussi un
+contrôle de l’ordre des réponses : une lecture partie avant l’édition ou la
+sauvegarde est ignorée lorsqu’elle arrive en retard. Une erreur issue de cette
+ancienne lecture n’efface pas le résultat de l’enregistrement.
+L’actualisation du reste de l’application toutes les 20 secondes est conservée.
+Les contrôles de version et les droits côté Supabase sont conservés.
+Les messages de sauvegarde et la limite d’attente de 30 secondes de la
+version 104 restent actifs pour l’enregistrement principal.
+
+ESSAI
+Modifier le catalogue > ouvrir un produit > cocher la restriction >
+Enregistrer les modifications. Refaire l’essai sur un deuxième produit,
+puis décocher la restriction sur le premier et enregistrer à nouveau.
+Rouvrir les fiches pour vérifier. Tu peux laisser la page ouverte pendant
+plus de 20 secondes entre ces étapes pour inclure la synchronisation.
+
+NETTOYAGE
+Les anciens guides et scripts SQL historiques ne sont plus inclus dans ce
+ZIP. Ils n’ont pas besoin d’être réexécutés pour la version 105. Les fichiers
+source, ressources et fonctions nécessaires au projet sont conservés.
+Les fichiers de test, dépendances node_modules et sorties de compilation
+ne sont pas inclus. Le seul guide de cette archive est celui-ci.
+
+VÉRIFICATIONS
+Compilation TypeScript/Vite. Essai d’interface locale avec serveur simulé :
+trois sauvegardes successives, ajout/retrait de restrictions, modification du
+nom, retour d’une lecture lente pendant le parcours d’édition, absence
+confirmée d’appel à l’ancien circuit automatique. Test du contrôle d’ordre
+des réponses pour le plan des huiles.
+La panne exacte sur ton appareil et ta base réelle n’a pas été reproduite.
+Aucun changement ni déploiement n’a été effectué sur ta production.
