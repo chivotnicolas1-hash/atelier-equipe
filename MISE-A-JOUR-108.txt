@@ -1,0 +1,65 @@
+ATELIER FAYET 33 — MISE À JOUR 108
+
+INSTALLATION DEPUIS LA VERSION 107
+1. Supabase > SQL Editor : exécute entièrement
+   supabase/108-rack-signalements-absences.sql
+   Attends la réussite avant de mettre le code en ligne.
+2. Remplace les fichiers du projet GitHub par ceux de cette archive.
+   Conserve les variables de build Cloudflare. Aucun _redirects à ajouter.
+3. Attends la réussite du déploiement, puis ferme et rouvre l’application.
+Aucune Edge Function supplémentaire à déployer.
+Cette archive met à jour le projet existant et sa base déjà à jour jusqu’à 107.
+
+ANNIVERSAIRES
+Le message individuel tutoie le collaborateur. Sur le mode écran également,
+le texte dit « te souhaite » lorsqu’une seule personne fête son anniversaire.
+Pour plusieurs anniversaires, le texte souhaite une belle journée à chacun.
+
+SIGNALEMENTS DE MON ÉQUIPE
+Ce dossier exclut désormais les signalements du compte connecté, côté serveur,
+avant le calcul du nombre total, la recherche et la pagination. Les propres
+fiches restent dans « Mes signalements ». Les droits de consultation et les
+fiches de démonstration sont conservés.
+
+ABSENCES EXCEPTIONNELLES
+Les prochaines notifications de demande portent le libellé
+« Demande d’absence exceptionnelle ». Le texte est également adapté lors
+d’une décision ou d’une modification nécessitant une nouvelle signature.
+Les congés ordinaires gardent leur libellé habituel.
+Les destinataires et les règles d’envoi existants sont conservés.
+Les notifications déjà reçues ne sont pas réécrites.
+
+RACK DÉCHETS
+Chaque fût possède maintenant son propre état : Plein, Vide ou Non précisé.
+Ouvre la case puis utilise « Fût 1 », « Fût 2 », etc., avant d’enregistrer.
+La case affiche un bilan, par exemple « 2 pleins · 2 vides », et chaque
+pictogramme reprend son état. Les deux premiers fûts sont en façade ; les
+suivants sont décalés derrière. Jusqu’à 6 sont dessinés ; au-delà, le nombre
+total est indiqué et tous les fûts restent réglables dans la fiche.
+Les numéros en façade correspondent aux numéros du formulaire.
+Les sélections des fûts conservés restent en place lors d’un changement
+de nombre. Les nouveaux fûts sont initialement non précisés. En cas de
+diminution du nombre, les états des fûts retirés disparaissent à l’enregistrement.
+La présentation des cases est resserrée. Les bacs de 600 L sont élargis.
+Le dessin des bacs pleins reste adapté à leur contenu.
+
+À l’installation, les fûts existants reprennent chacun l’état commun déjà
+renseigné. Un état inconnu reste inconnu. La migration peut être réexécutée
+sans remettre à zéro les états individuels déjà enregistrés.
+Les verrouillages de cases, les droits et le contrôle de version sont conservés.
+Les anciennes réponses de lecture arrivées après une sauvegarde sont ignorées.
+
+VÉRIFICATIONS
+Compilation TypeScript/Vite. Tests SQL locaux : reprise des anciens états,
+écriture des états individuels, versions concurrentes, données invalides,
+verrouillage et compte invité. Filtrage des signalements de l’équipe, recherche,
+comptage et pagination. Adaptation des trois libellés de notifications et
+exécution d’une demande normale puis exceptionnelle avec contrôle du texte.
+Contrôle visuel du rack et essai d’enregistrement d’un fût indépendamment
+des autres avec serveur simulé. Les tests réutilisent les définitions du
+diagnostic fourni ; identité et ancien adaptateur rack100 sont simulés.
+Aucun changement ni déploiement n’a été effectué sur ta production.
+
+ARCHIVE NETTOYÉE
+Un seul guide et le seul nouveau SQL nécessaire. Aucun fichier de test,
+PDF source, ancienne migration, dépendance ou sortie de compilation inclus.
