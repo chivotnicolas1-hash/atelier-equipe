@@ -5,14 +5,14 @@ import {Images,Check,Search} from 'lucide-react';
 import {publishPhotos88,useExistingPhotos99} from './lib/product-photos88';
 import {readConsumables88} from './lib/consumables-read88';
 import './existing-photo99.css';
-const catalogs=['Pneus','5gaz','Freins, transmissions, roulements','Hygiène, protection et nettoyage','Vidange','Phare, ampoule, Pare brise, élec'];
+const catalogs=['Climatisation','Divers','Pneus','5gaz','Freins, transmissions, roulements','Hygiène, protection et nettoyage','Vidange','Phare, ampoule, Pare brise, élec'];
 const norm=(s:string)=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('fr');
 export default function ExistingPhoto99({onSelect,disabled=false}:{onSelect:(photo:string,source?:ExistingPhotoSource103)=>void|Promise<void>,disabled?:boolean}){
  const [open,O]=useState(false),[query,Q]=useState(''),[section,S]=useState(''),[loading,L]=useState(false),[error,E]=useState(''),[selected,T]=useState<string|null>(null),[saving,B]=useState(false);
  const photos=useExistingPhotos99();
  useEffect(()=>{if(!open)return;let active=true;L(true);E('');void(async()=>{
  const failed:string[]=[];
- for(const name of ['oil',...catalogs]){if(!active)break;try{const r=await readConsumables88(name==='oil'?'workshop_oils72':'workshop_catalog89',name==='oil'?undefined:{p_section:name,p_known:-1});if(active&&Array.isArray(r?.items))publishPhotos88(name,r.items);else if(active)failed.push(name)}catch{failed.push(name==='oil'?'Divers liquides':name)}}
+ for(const name of ['oil',...catalogs]){if(!active)break;try{const r=await readConsumables88(name==='oil'?'workshop_oils72':['Climatisation','Divers'].includes(name)?'workshop_catalog_read107':'workshop_catalog89',name==='oil'?undefined:{p_section:name,p_known:-1});if(active&&Array.isArray(r?.items))publishPhotos88(name,r.items);else if(active)failed.push(name)}catch{failed.push(name==='oil'?'Divers liquides':name)}}
  if(active){L(false);if(failed.length)E('Certaines sections n’ont pas pu être chargées : '+failed.join(', ')+'. Les images disponibles restent utilisables. Ferme puis rouvre la galerie pour réessayer.')}
  })();return()=>{active=false}},[open]);
  const visible=photos.filter(p=>(!section||p.section===section)&&norm(p.name).includes(norm(query))),choice=visible.find(p=>p.id===selected);
