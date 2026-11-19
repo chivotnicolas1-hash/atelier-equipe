@@ -1,0 +1,70 @@
+ATELIER FAYET 33 — MISE À JOUR 112
+
+INSTALLATION DEPUIS LA VERSION 111
+1. Dans Supabase > SQL Editor, ouvre une nouvelle requête.
+   Copie tout le contenu de supabase/112-types-dechets.sql puis clique Run.
+   Attends la réussite avant de déployer les fichiers du site.
+   Le script peut être réexécuté sans effacer tes modifications.
+2. Remplace les fichiers du projet GitHub par ceux de cette archive :
+   src, public, supabase, index.html, package.json, package-lock.json,
+   tsconfig.json, vite.config.ts et postcss.config.js.
+   Supprime aussi l’ancien fichier src/quality-controls.tsx s’il est encore
+   présent dans GitHub : il n’est plus utilisé ni inclus dans l’archive.
+3. Conserve les variables de build Cloudflare déjà en place et attends
+   la réussite du déploiement. Ferme puis rouvre l’application.
+   Aucun fichier _redirects à ajouter. Aucune Edge Function à redéployer.
+
+GESTION DES TYPES DE DÉCHETS — ADMINISTRATEUR UNIQUEMENT
+Dans Déchets, ouvre « Types de déchets à enlever ».
+Chaque prestataire propose « Ajouter un type » : indique le nom du déchet
+et son unité (bacs, litres, fûts, bidons ou pièces).
+« Modifier » permet de renommer le type. Son prestataire et son unité sont
+également modifiables tant qu’il n’a pas servi dans une demande.
+Après utilisation, ces deux champs sont verrouillés pour protéger les
+quantités et le suivi existants ; crée un nouveau type si nécessaire.
+Le fonctionnement spécifique de la benne à pneus est conservé.
+
+« Supprimer » retire le type des nouvelles demandes. Son historique reste
+lisible et une demande existante peut encore conserver ce type.
+La rubrique « Types supprimés » permet de le restaurer.
+Les noms et descriptions des catégories restent modifiables séparément.
+Les rappels et délais de ramassage par prestataire sont conservés.
+
+MODIFICATION DES DEMANDES AVANT VALIDATION
+Les collaborateurs peuvent modifier les demandes en attente, y compris
+celles créées par un autre collaborateur : ajouter ou retirer un déchet,
+modifier ses quantités et les précisions. Ouvre « Demandes en cours »,
+puis la demande et clique « Modifier la demande ».
+Une demande doit contenir au moins un déchet et rester chez le même
+prestataire. Les demandes des différents prestataires restent séparées.
+L’auteur initial est conservé ; le nom de la dernière personne ayant
+modifié la demande est enregistré dans le suivi.
+Après validation ou ramassage, les collaborateurs ne peuvent plus la
+modifier. La validation, la suppression et le suivi de ramassage restent
+réservés à l’administrateur et aux modérateurs selon les droits existants.
+Les comptes Invité et Directeur restent en lecture seule.
+
+FORMULAIRES SIMPLIFIÉS
+Les pictogrammes sont retirés de « Déchets et quantités à enlever ».
+Les cases de sélection et les champs de quantité restent disponibles.
+Les pictogrammes des catégories et les dessins du rack sont conservés.
+
+SUPPRESSION DE LA PAGE F9900
+La page « F9900 contrôles qualité » et son entrée dans les menus sont
+retirées. Un ancien lien mémorisé ne permet plus d’ouvrir cette page.
+Le compteur « Contrôles qualité » dans les cibles du jour est conservé,
+ainsi que les résultats déjà enregistrés : il s’agit d’une autre fonction.
+
+VÉRIFICATIONS EFFECTUÉES LOCALEMENT
+Compilation TypeScript/Vite, tests SQL sur une base locale avec les
+anciennes fonctions fournies et vérification des formulaires dans le
+navigateur avec des données de test : ajout de type, litres décimaux,
+modification partagée avant validation, verrouillage après validation,
+suppression avec conservation de l’historique, séparation des prestataires et contrôle des rôles. Script SQL exécuté deux fois.
+Ces vérifications ne constituent pas un essai sur ta base Supabase réelle.
+Aucun déploiement ni changement n’a été effectué sur ta production.
+
+ARCHIVE NETTOYÉE
+Projet complet, un seul guide et uniquement le nouveau script SQL.
+Aucun ancien guide, ancien SQL, fichier de test, dépendance node_modules,
+sortie dist ou fichier d’environnement n’est inclus.

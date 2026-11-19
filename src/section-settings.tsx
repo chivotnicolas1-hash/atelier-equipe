@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {LockKeyhole,Unlock} from 'lucide-react';
 import {supabase} from './lib/supabase';
-export const sectionLabels:Record<string,string>={journee:'Ma journée',plan:'Plan de l’atelier',tasks:'Tâches',reports:'Signalements',team:'Équipes',lunch:'BT à reprendre',leave:'Demande de congé',orders:'Consommables',waste:'Déchets',recap:'Récapitulatif',quality:'F9900 contrôles qualité',disputes:'Litiges en cours',polls:'Sondages',inbox:'Mes notifications'};
+export const sectionLabels:Record<string,string>={journee:'Ma journée',plan:'Plan de l’atelier',tasks:'Tâches',reports:'Signalements',team:'Équipes',lunch:'BT à reprendre',leave:'Demande de congé',orders:'Consommables',waste:'Déchets',recap:'Récapitulatif',disputes:'Litiges en cours',polls:'Sondages',inbox:'Mes notifications'};
 export default function SectionSettings({values,onSaved}:{values:Record<string,boolean>,onSaved:()=>Promise<unknown>}){
  const [busy,setBusy]=useState<string|null>(null),[error,setError]=useState('');
  async function change(key:string){if(busy)return;setBusy(key);setError('');try{const {error}=await supabase.rpc('workshop_section_set',{p_section:key,p_disabled:!values[key]});if(error)throw error;await onSaved()}catch(e:any){setError(e.message)}finally{setBusy(null)}}

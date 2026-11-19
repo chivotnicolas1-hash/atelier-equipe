@@ -1,3 +1,4 @@
+import{useWasteTypes112}from'./waste-catalog112';
 import {useEffect,useState} from 'react';
 import {CalendarClock,PhoneCall,CheckCircle2,Clock3} from 'lucide-react';
 import {supabase} from './lib/supabase';
@@ -5,7 +6,6 @@ import {useAutoRefresh} from './lib/sync';
 import './waste-followup93.css';
 const date=(s:string)=>new Date(s).toLocaleDateString('fr-FR',{timeZone:'Europe/Paris'});
 const when=(s:string)=>new Date(s).toLocaleString('fr-FR',{timeZone:'Europe/Paris',dateStyle:'short',timeStyle:'short'});
-const labels:Record<string,string>={batteries:'Batteries',ferraille:'Ferraille',fonte:'Fonte',aluminium:'Aluminium',filtres:'Filtres usagés',huiles:'Huiles usagées',bidons:'Bidons vides',futs:'Fûts vides',souilles:'Matériaux souillés',refroidissement:'Liquide de refroidissement',aerosols:'Aérosols',pneus:'Anciens pneus'};
 async function call(name:string,args:Record<string,unknown>={}){const r=await supabase.rpc(name,args);if(r.error)throw Error(r.error.code==='PGRST202'?'Installe le script SQL de la mise à jour 93.':r.error.message);return r.data}
 type Setting={provider:string,days:number|null,version:number};
 export function WasteDelaySettings93(){
@@ -22,6 +22,7 @@ export type WasteTracking93={id:string,delay_days?:number|null,provider?:string,
 export function WasteDeadline93({value}:{value?:WasteTracking93}){if(!value?.due_at||value.collection_expected)return null;return <div className={'waste-deadline93 '+(value.overdue?'late':'')}><CalendarClock size={18}/><div><strong>{value.overdue?'Délai dépassé':'Ramassage attendu'} · {date(value.due_at)}</strong><small>Délai communiqué par {value.provider||'le prestataire'}{value.delay_days!=null?' : '+value.delay_days+' jour'+(value.delay_days>1?'s':'')+' ouvré'+(value.delay_days>1?'s':''):''} à partir de la validation de la demande · hors samedis, dimanches et jours fériés.</small>{value.done_at?<small>Prestataire relancé par {value.done_name} · {when(value.done_at)}</small>:value.followup_created?<small>Tâche commune créée pour les encadrants.</small>:value.overdue?<small>Rappel au prochain passage ouvré à partir de 8 h.</small>:<small>Rappel automatique à l’administrateur et aux modérateurs en cas de dépassement.</small>}</div></div>}
 type Followup={id:string,provider:string,categories:string[],bin_counts:Record<string,number>,requested_at:string,author_name:string,due_at:string,done_at:string|null,done_name:string|null,version:number};
 export function WasteTasks93({readonly=false}:{readonly?:boolean}){
+ const labels=useWasteTypes112().labels;
  const [rows,R]=useState<Followup[]>([]),[error,E]=useState(''),[busy,B]=useState(false);
  async function load(){if(readonly)return;try{R(await call('workshop_waste_tasks93'));E('')}catch(e:any){E(e.message)}}
  useEffect(()=>{void load()},[readonly]);useAutoRefresh(load,!readonly&&!busy);
