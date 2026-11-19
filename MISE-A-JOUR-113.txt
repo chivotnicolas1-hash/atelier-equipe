@@ -1,0 +1,132 @@
+ATELIER FAYET 33 — MISE À JOUR 113
+DEMANDES D’OUTILLAGE
+
+INSTALLATION DEPUIS LA VERSION 112
+La mise à jour 112 et les mises à jour SQL précédentes doivent déjà être
+installées. Cette archive contient le projet complet et uniquement le
+nouveau SQL 113 ; elle ne sert pas à créer une base Supabase vide.
+
+1. SUPABASE
+Dans SQL Editor, crée une nouvelle requête et colle tout le contenu de :
+  supabase/113-demandes-outillage.sql
+Clique Run et attends la réussite. Le script est transactionnel et peut
+être réexécuté sans effacer les demandes ni réinitialiser les pôles.
+Il crée quatre tables avec RLS, les fonctions contrôlées et la rubrique.
+Aucune clé ni nouvelle variable d’environnement n’est nécessaire.
+Aucune Edge Function n’est à redéployer pour cette mise à jour.
+
+2. GITHUB / CLOUDFLARE
+Remplace les fichiers du projet par ceux du ZIP :
+- src et public ;
+- supabase (avec ses fonctions existantes et le nouveau SQL) ;
+- index.html, package.json, package-lock.json, tsconfig.json,
+  vite.config.ts et postcss.config.js.
+Conserve tes variables de build Cloudflare et les secrets Supabase.
+Aucun fichier _redirects ne doit être ajouté.
+Attends la réussite du déploiement, puis ferme et rouvre l’application
+pour charger aussi le service worker actualisé.
+
+3. PREMIÈRE UTILISATION
+Une entrée « Demandes d’outillage » apparaît dans le menu.
+Les pôles sont initialisés depuis les postes actifs de ton atelier.
+L’administrateur peut ensuite les gérer depuis cette nouvelle page.
+Ces pôles sont indépendants : les renommer ne change pas le plan d’atelier.
+Un pôle supprimé disparaît des nouvelles demandes ; les anciennes
+restent lisibles. Il peut être restauré depuis « Pôles supprimés ».
+
+ESPACE COLLABORATEUR
+Titre, pôle et quantité entière sont obligatoires.
+Prix unitaire estimé, lien, commentaire, photo et priorité sont facultatifs
+(la priorité est Normale par défaut).
+Le total estimé est calculé automatiquement : quantité × prix unitaire.
+Le nom et l’horodatage de création sont enregistrés par le serveur.
+Chaque personne ne voit que ses propres demandes et leur historique.
+Modification et suppression sont possibles uniquement tant que le statut
+est « En attente ». Après décision, seul l’administrateur peut les gérer.
+Un retour au statut « En attente » rend à nouveau possible la modification.
+Les modérateurs ont le même usage personnel que les collaborateurs pour
+ce module ; la gestion globale est réservée à l’administrateur.
+Les invités disposent d’un exemple fictif en lecture seule. Les directeurs
+restent en lecture seule et ne peuvent pas créer ni modifier de demande.
+
+ESPACE ADMINISTRATEUR
+L’espace Administration permet de consulter toute l’équipe ou ses demandes
+personnelles. Dans l’espace Collaborateur de l’administrateur, seules ses
+demandes sont affichées et les commandes de gestion globale sont masquées.
+Le nombre de demandes en attente apparaît dans le menu d’administration
+et dans la nouvelle page.
+Ouvre une demande puis « Modifier / changer le statut » pour corriger les
+informations, accepter, refuser, commander ou confirmer la réception.
+Le refus exige un motif. Tous les changements sont tracés avec le nom et
+l’heure de la personne qui les a effectués.
+Les filtres portent sur collaborateur, pôle, statut, priorité et dates de
+création inclusives. Les dates et heures sont affichées à l’heure de Paris.
+Les listes sont paginées par 30 demandes.
+La rubrique peut être désactivée temporairement depuis les paramètres
+existants « Disponibilité des rubriques ».
+
+PRIX RÉEL ET DÉPENSES
+Le prix réel à renseigner est le prix UNITAIRE d’achat.
+Le total réel correspond à ce prix multiplié par la quantité demandée.
+La date d’achat est modifiable ; si elle manque lors d’une commande ou
+réception avec prix réel, le jour courant est enregistré automatiquement.
+« Dépenses d’outillage » affiche les totaux annuels, mensuels et par pôle.
+Seules les demandes Commandées ou Réceptionnées avec un prix réel sont
+incluses, selon leur date d’achat. Les demandes supprimées sont exclues.
+Un compteur signale les achats sans prix réel, toutes années confondues.
+Il ne s’agit pas d’un suivi comptable ni d’un calcul de TVA.
+
+DOUBLONS, PHOTOS ET SUPPRESSION
+Une alerte non bloquante recherche les titres similaires dans le même
+pôle parmi les demandes en attente, acceptées ou commandées des 90 derniers
+jours. Un collaborateur compare ses demandes ; l’administrateur compare
+les demandes de toute l’équipe. Aucune donnée d’un collègue n’est révélée
+par la recherche de doublons côté collaborateur.
+Une photo JPEG/PNG/WebP de moins de 10 Mo peut être choisie. Elle est
+redimensionnée et compressée sur l’appareil avant envoi (une seule photo).
+Les photos sont chargées uniquement dans le détail, jamais dans la liste.
+La suppression d’une demande la retire des listes actives et supprime
+sa photo. Une trace est conservée pour l’administrateur via le filtre
+« Demandes supprimées ». L’historique des décisions reste consultable.
+
+NOTIFICATIONS ET SYNCHRONISATION
+Chaque changement de statut envoie une notification à l’auteur de la
+demande dans « Mes notifications » et utilise l’envoi mobile existant.
+L’auteur est notifié même s’il s’agit de l’administrateur.
+Le bouton « Voir ma demande d’outillage » ouvre la rubrique des demandes.
+Les notifications mobiles utilisent la configuration déjà en place
+(VAPID, Edge Function workshop-push et programme d’envoi automatique).
+Leur réception dépend des autorisations du téléphone et de ce programme.
+Les listes et compteurs suivent l’horloge commune toutes les 20 secondes,
+ainsi qu’au retour dans l’application et après reconnexion réseau.
+Un formulaire ouvert conserve les saisies. Si quelqu’un a modifié la même
+demande entre-temps, le serveur refuse l’écrasement ; ferme puis rouvre la
+fiche pour comparer. Aucun réessai automatique d’écriture n’est effectué.
+
+SÉCURITÉ ET INFRASTRUCTURE
+Les données, photos et historiques sont protégés par RLS et par les
+contrôles de rôle et de propriétaire dans les fonctions Supabase.
+Les écritures directes dans les tables sont interdites aux utilisateurs.
+Les comptes anonymes, invités ou suspendus ne peuvent pas accéder aux
+vraies demandes. La maintenance et la disponibilité de la rubrique
+utilisent les contrôles d’accès existants.
+Aucun nouveau service payant ni API externe n’a été ajouté. Le module
+utilise les quotas de stockage et de requêtes de ton Supabase existant.
+
+VÉRIFICATIONS ET LIMITES
+Le fichier VERIFICATIONS-113.txt détaille les contrôles locaux.
+Compilation TypeScript/Vite, RLS et rôles, isolation entre collaborateurs,
+statuts, notifications, filtres, calculs, historique et concurrence testés.
+Vérification visuelle du parcours collaborateur et administrateur, puis
+formulaire dans une vue de 390 px. Horloge commune testée à 20 secondes.
+Tests de non-régression ciblés sur horaires, pauses, compétences et rack.
+Les fonctions des autres rubriques n’ont pas été remplacées par le SQL.
+Les essais n’ont pas été réalisés sur ta base réelle ni sur tes téléphones.
+Après installation, effectue un essai avec un compte collaborateur :
+création, validation administrateur, contrôle du statut et notification.
+Aucun changement ni déploiement n’a été effectué sur ta production.
+
+ARCHIVE NETTOYÉE
+Projet complet, SQL 113, ce guide et le compte rendu de vérifications.
+Aucun ancien SQL, ancien guide, fichier de test, dépendance node_modules,
+fichier d’environnement ou dossier de compilation dist inclus.
