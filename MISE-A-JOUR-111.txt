@@ -1,0 +1,35 @@
+ATELIER FAYET 33 — CORRECTIF 111
+
+INSTALLATION DEPUIS LA VERSION 110
+Aucun nouveau SQL à exécuter. Le SQL de la version 110 doit déjà être installé.
+Remplace les fichiers du projet GitHub par ceux de cette archive, conserve
+les variables de build Cloudflare, puis attends la réussite du déploiement.
+Ferme puis rouvre l’application. Aucun _redirects à ajouter.
+Aucune Edge Function à redéployer pour ce correctif.
+
+AFFICHAGE DU RACK
+La largeur des groupes dépend désormais des contenants réellement présents
+et de leurs dimensions, en tenant compte de leur position devant/derrière.
+Une case avec un bac à chiffons et un seul fût n’utilise plus une disposition
+prévue pour quatre objets. Le groupe est centré ; l’objet derrière reste en
+retrait et légèrement décalé. Le bac à chiffons reste plus étroit qu’un fût.
+Les dessins s’adaptent à la largeur disponible sur mobile et dans l’aperçu.
+Le nombre de pictogrammes reste celui des quantités renseignées.
+
+Tous les petits numéros sous les dessins sont supprimés : bacs, fûts,
+tonnelets et palettes en bois ou plastique. Les indications de capacité
+sur les récipients (220 L, 600 L...) sont conservées.
+La liste d’édition conserve ses repères de contenants pour choisir leur état
+et leur position sans ambiguïté.
+Les données, états, quantités, positions, droits et verrouillages ne changent pas.
+
+VÉRIFICATIONS
+Compilation TypeScript/Vite et vérification visuelle locale : bac derrière
+un fût, bac devant un fût, deux objets côte à côte, groupe de quatre,
+palettes et bac de 600 L. Le DOM confirme le bon nombre de pictogrammes
+et l’absence de numérotation sous chacun.
+Aucun changement ni déploiement n’a été effectué sur ta production.
+
+ARCHIVE NETTOYÉE
+Un seul guide d’installation. Aucun ancien SQL, fichier de test, dépendance
+ou sortie de compilation inclus.
