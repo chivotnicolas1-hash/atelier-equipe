@@ -291,3 +291,40 @@ html[data-theme-scope=screen][data-season=halloween] .workshop-display{backgroun
 .active-orders79{margin-bottom:1.2rem}.active-orders79>h3{margin:.4rem 0 .8rem}.popular79{margin:1rem 0}.popular79 ol{list-style:none;padding:0;margin:0}.popular79-row{display:flex;align-items:center;gap:.75rem;padding:.8rem 0;border-bottom:1px solid #8aa1b633}.popular79-row img{width:48px;height:48px;object-fit:contain;border-radius:8px}.popular79-row span{flex:1;min-width:0}.popular79-row small{display:block;opacity:.7}.popular79-row>b{font-size:.8rem;white-space:nowrap}.waste-pending-summary>strong{display:flex;align-items:center;gap:.5rem}
 .photo-editor81{position:relative;touch-action:none;user-select:none;line-height:0;max-width:100%;margin:auto}.photo-editor81 img{display:block;width:100%;max-height:60vh;object-fit:contain}.photo-editor81 svg{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}.operations-settings81{margin:1rem}.operations-settings81 fieldset{border:0;padding:0;display:grid;gap:1rem;min-width:0}.operations-settings81 details{padding:.75rem;border:1px solid #8aa1b655;border-radius:12px;margin:.5rem 0}.operations-settings81 summary{cursor:pointer;font-weight:600}.operations-settings81 input[type=checkbox]{width:20px;height:20px}.waste-category>svg{flex-shrink:0;color:#1674b9}
 .photo-editor81{width:fit-content}.photo-editor81 img{width:auto;height:auto;max-width:100%;max-height:60vh}
+
+/* MAJ116 · essai de l’accueil collaborateur : priorité au poste et aux tâches. */
+.day-view .day-workorder-actions{width:100%;gap:10px}
+.day-view .day-task-shortcut{display:flex;align-items:center;gap:12px;width:min(100%,440px);min-height:58px;padding:11px 14px;border:1px solid var(--ui-line);border-radius:10px;background:var(--ui-soft);color:var(--ui-text);text-align:left}
+.day-view .day-task-shortcut:hover:not(:disabled){border-color:var(--ui-blue)}
+.day-view .day-task-shortcut:focus-visible{outline:3px solid var(--ui-blue);outline-offset:3px}
+.day-view .day-task-shortcut .day-task-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:var(--ui-surface);color:var(--ui-blue);flex-shrink:0}
+.day-view .day-task-copy{display:grid;gap:1px;flex:1;min-width:0}
+.day-view .day-task-copy strong{font-size:14px;line-height:1.3}
+.day-view .day-task-copy small{font-size:13px;line-height:1.4;color:var(--ui-muted)}
+.day-view .day-task-status{padding:4px 8px;border-radius:6px;font-size:12px;font-weight:700;white-space:nowrap;background:#fbdade;color:#922432}
+.day-view .day-task-alert{background:#fff0f1;border-color:#a13d4b;color:#752231}
+.day-view .day-task-alert .day-task-icon{color:#922432;background:#fbdade}
+.day-view .day-task-alert .day-task-copy small{color:#85404b}
+.dark .day-view .my-station-link{color:#8bcaff}
+.dark .day-view .daily-cibles .cible-number .cible-goal-value{color:#8bcaff}
+.dark .day-view .daily-cibles .cibles-progress:not(.reached)>strong{color:#8bcaff}
+.dark .day-view .daily-cibles .cible-exceeded .cible-goal-value{color:#174f28}
+.dark .day-view .day-task-icon{color:#8bcaff}
+.dark .day-view .day-task-alert{background:#482d37;border-color:#c77987;color:#ffe5e9}
+.dark .day-view .day-task-alert .day-task-icon{background:#623542;color:#ffd6df}
+.dark .day-view .day-task-alert .day-task-copy small{color:#f5c6cf}
+.dark .day-view .day-task-status{background:#703746;color:#ffe5e9}
+@media(max-width:700px){
+ .day-view>main{padding-top:16px}
+ .day-view .page-heading{margin-bottom:12px;row-gap:8px}
+ .day-view .page-heading h1{font-size:25px;margin-top:5px;margin-bottom:4px;letter-spacing:-.6px;overflow-wrap:anywhere}
+ .day-view .workspace-toolbar{gap:8px;margin-bottom:12px}
+ .day-view .navigation-launch{padding:9px 12px;min-height:56px}
+ .day-view .navigation-menu-icon{width:34px;height:34px}
+ .day-view .custom-shortcuts{margin-bottom:12px;gap:6px}
+ .day-view .day-overview{padding:14px;gap:10px;margin-bottom:12px}
+ .day-view .day-overview .day-station-info h2{margin:4px 0 8px}
+ .day-view .day-overview .my-hours{padding:9px 12px}
+ .day-view .day-workorder-actions{gap:9px}
+ .day-view .day-task-shortcut{width:100%;min-height:56px;padding:10px 12px}
+}

@@ -1,0 +1,48 @@
+ATELIER FAYET 33 — MISE À JOUR 116 · ESSAI ACCUEIL COLLABORATEUR
+Base : MAJ115 (MAJ113 + pictogramme voiture pour BT à reprendre).
+Atelier Toolbox 33 absent.
+
+CHANGEMENTS
+- « Bonjour » suivi du prénom dans Ma journée. La fiche et les historiques
+  conservent le nom complet. Le comportement d’identification des prénoms
+  réutilise celui déjà employé pour les anniversaires.
+- Ligne cliquable « Mes tâches » sous WorkOrder avec nombre restant,
+  indication des priorités (urgent ou en retard, sans double comptage),
+  état « Tout est à jour » si aucune tâche personnelle ouverte.
+  Ce raccourci ouvre la liste personnelle des tâches à faire.
+  Les icônes existantes de la barre du haut sont conservées.
+- Espacements de l’accueil mobile resserrés : titre, menu, date et poste.
+- Bleu éclairci pour l’affectation et les chiffres des cibles en mode sombre
+  sur Ma journée. Le vert des cibles atteintes est conservé.
+- Menu, annonces, raccourcis personnalisés, horaires, pause, WorkOrder,
+  reprises de BT, objectifs et cibles restent disponibles.
+
+INSTALLATION FACULTATIVE POUR ESSAI
+Aucun SQL à exécuter, aucune nouvelle variable, aucun secret à modifier,
+aucune Edge Function à redéployer. Base Supabase déjà au niveau 113 requise.
+Remplace les fichiers du projet GitHub par ceux de cette archive puis
+attends la réussite du déploiement Cloudflare. Ferme et rouvre l’application.
+Conserve les variables Cloudflare et Supabase existantes.
+Ne pas ajouter de fichier _redirects.
+
+RETOUR À LA PRÉSENTATION PRÉCÉDENTE
+Remets les fichiers de la MAJ115 et redéploie. Aucun retour arrière SQL
+nécessaire : cette version d’essai ne modifie pas la base de données.
+
+VÉRIFICATIONS LOCALES
+- Compilation TypeScript et production Vite réussies.
+- Affichage mobile 390 px en clair et sombre, et tablette 768 px.
+- Raccourci tâches : ouverture de la page personnelle, état urgent/retard,
+  état vide, rubrique désactivée (bouton inutilisable).
+- Nom complet du collaborateur conservé dans la page des tâches.
+- Comparaison de tous les fichiers src/public/Edge Functions avec la MAJ115 :
+  seules les intégrations visuelles dans workshop.tsx et professional.css changent.
+- Aucun changement de dépendance ni de code serveur.
+Ces contrôles utilisent des données locales de démonstration et ne remplacent
+pas un essai sur les téléphones et sur le Supabase de production.
+Aucun déploiement de production effectué.
+
+ARCHIVE NETTOYÉE
+Projet complet ; ancien guide retiré. Aucun SQL, fichier de démonstration,
+fichier d’environnement, node_modules ou dist inclus.
+Les Edge Functions existantes sont conservées.
