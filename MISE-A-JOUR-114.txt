@@ -1,0 +1,130 @@
+ATELIER FAYET 33 — MISE À JOUR 114
+ATELIER TOOLBOX 33
+
+INSTALLATION DEPUIS LA VERSION 113
+Les SQL des versions précédentes doivent déjà être installés, notamment
+la version 113 pour les demandes d’outillage. Ce ZIP est le projet complet,
+mais le SQL fourni ajoute uniquement Toolbox à ta base existante.
+
+1. SUPABASE
+Dans SQL Editor, crée une nouvelle requête.
+Copie tout le contenu de supabase/114-atelier-toolbox.sql puis clique Run.
+Attends la réussite avant de déployer. Le script est transactionnel et
+réexécutable ; une réexécution n’efface ni fiches ni réglages existants.
+Aucune nouvelle clé, variable, API payante ou tâche planifiée n’est requise.
+Aucune Edge Function à redéployer pour cette mise à jour.
+
+2. GITHUB ET CLOUDFLARE
+Remplace le projet par les fichiers de l’archive, y compris :
+- src, public et supabase ;
+- index.html ET LE NOUVEAU FICHIER toolbox.html à la racine ;
+- vite.config.ts, package.json, package-lock.json, tsconfig.json,
+  postcss.config.js.
+Conserve les variables de build Cloudflare et les secrets Supabase.
+Le fichier vite.config.ts est indispensable : il construit les deux pages
+et génère le manifeste de téléchargement hors connexion.
+N’ajoute aucun _redirects. Attends la réussite du déploiement.
+Ferme et rouvre ensuite l’application pour charger le service worker.
+
+3. UTILISATION
+Ouvre « Atelier Toolbox 33 » dans le menu de navigation.
+Les tuiles donnent accès aux calculateurs et bibliothèques techniques.
+La recherche d’accueil filtre les outils. Dans une bibliothèque, la
+recherche filtre les fiches. Les étoiles et outils récents sont mémorisés
+sur cet appareil ; ils ne génèrent aucune requête Supabase.
+Les calculs sont effectués sur l’appareil, sans appel à une IA.
+
+4. PRÉPARER LE MODE HORS CONNEXION
+Avec Internet, ouvre Toolbox et clique « Préparer hors connexion ».
+Attends la confirmation complète. Dans l’application, « Accès local » ouvre
+/toolbox.html : ajoute cette page aux favoris de ton navigateur.
+Elle permet de consulter les calculateurs, les références intégrées et
+les corrections techniques déjà synchronisées sans te connecter à Auth.
+Ce n’est pas un accès hors connexion aux données de gestion de l’atelier.
+Les propositions, photos collaboratives et données personnelles ne sont
+pas mises dans le cache de cette page.
+Les réglages et corrections disponibles hors connexion sont ceux connus
+sur l’appareil lors de la dernière synchronisation. Une désactivation ne
+peut pas être transmise à un appareil totalement déconnecté.
+Après une nouvelle mise à jour, relance la préparation hors connexion.
+Le navigateur peut supprimer son stockage local : il faudra alors refaire
+la préparation. Aucun téléchargement incomplet ne remplace un cache complet.
+
+5. ADMINISTRATION TOOLBOX
+Dans l’espace Administration, ouvre Toolbox puis « Réglages Toolbox ».
+Tu peux activer / désactiver chaque outil, ajouter, renommer ou retirer
+les catégories des fiches. Retirer une catégorie ne supprime pas ses fiches.
+La rubrique complète peut aussi être suspendue depuis la fonction existante
+« Disponibilité des rubriques ».
+
+Ouvre une fiche puis « Modifier cette fiche » pour corriger titre, contenu,
+caractéristiques, sources et date de vérification. « Ajouter une fiche »
+permet d’enrichir la bibliothèque, notamment l’OBD, sans changer le code.
+Les caractéristiques sont des champs de formulaire, pas du code à exécuter.
+Les photos sont facultatives, compressées, limitées à une par fiche.
+Les sources publiées nécessitent un nom, un lien http(s), une indication de
+droits et une date de vérification. Confirme les droits de partage avant
+de publier. Un code dans une plage constructeur nécessite une marque.
+La table P/T possède également un bouton pour modifier ses valeurs et ses
+sources ; chaque ligne représente température en °C, puis R134a ; R1234yf
+en bar absolus. Les limites et la progression sont contrôlées.
+Les modifications sont protégées contre les écrasements simultanés :
+si la fiche a changé ailleurs, ferme et rouvre-la pour comparer.
+
+6. CONTRIBUTIONS DE L’ÉQUIPE
+Un collaborateur ou modérateur peut proposer une fiche : astuce, procédure,
+retour d’expérience, fiche technique ou lien, avec photo facultative.
+Il ne doit y inclure aucune donnée de client ni document sans droit de partage.
+La proposition reste visible seulement par lui et l’administrateur.
+L’administrateur dispose du bouton « Propositions à valider » puis
+« Examiner / décider » ; il peut compléter les sources, publier ou refuser
+avec un motif. Une fiche refusée peut être corrigée et renvoyée par l’auteur.
+Après publication, seul l’administrateur peut la corriger ou la retirer.
+Les comptes Invité ont accès aux outils locaux, sans lecture des vraies
+contributions de l’équipe. Le Directeur consulte les données autorisées
+mais ne peut pas proposer ou modifier de fiche.
+Les réglages et fiches se synchronisent toutes les 20 secondes lorsque
+Toolbox est ouvert ; une réponse légère est utilisée si rien n’a changé.
+
+7. LIMITES TECHNIQUES IMPORTANTES
+L’OBD embarqué contient 16 108 définitions issues d’un référentiel ouvert
+communautaire MIT, figé à une révision indiquée dans le rapport.
+44 libellés courants sont disponibles en français. Les autres restent dans
+leur langue source, l’anglais. Ce n’est pas une base officielle SAE ou OEM.
+Les plages génériques et constructeur sont distinguées. La marque et le
+calculateur doivent être vérifiés pour les codes constructeur.
+Les causes, symptômes et procédures non documentés restent indiqués comme
+tels : aucune donnée de remplissage n’a été inventée. L’administrateur
+peut enrichir ces champs avec une source vérifiée.
+Les codes à cinq caractères sont recherchés ; les suffixes de panne UDS,
+les variantes de calculateur et les applications par VIN ne sont pas couverts.
+
+Le comparateur de pneus ne délivre pas d’homologation ou d’avis de conformité.
+Les modèles électriques et d’autonomie sont théoriques et précisent leurs
+hypothèses. Les conversions ne prouvent pas l’interchangeabilité des pièces.
+Aucune huile n’est recommandée par véhicule. La table de climatisation est
+une table de saturation, pas une plage universelle de pression HP/BP.
+Le modèle de couple de serrage est pédagogique : les prescriptions
+constructeur restent prioritaires, particulièrement sur les organes de sécurité.
+
+8. TESTS, SOURCES ET QUOTAS
+Lis LIVRAISON-TOOLBOX-114.md pour le compte rendu détaillé, la liste des
+sources, les licences et le bilan des quotas.
+Aucun service payant ni abonnement supplémentaire n’a été ajouté.
+Le stockage et les échanges collaboratifs utilisent les quotas de ton
+Supabase existant : le solde disponible de ta production n’est pas connu ici.
+Des limites internes protègent le module : 500 fiches administrées, 20 Mio
+maximum de photos encodées au total et une photo compressée par fiche.
+Les données techniques statiques sont servies par Cloudflare, pas Supabase.
+
+Aucun déploiement ni changement n’a été effectué sur ta production.
+Après installation : vérifie la nouvelle rubrique avec un collaborateur,
+propose une fiche, publie-la avec ton compte administrateur et contrôle sa
+visibilité sur un autre appareil. Prépare ensuite l’accès local et teste-le
+sur un vrai téléphone sans réseau.
+
+ARCHIVE NETTOYÉE
+Projet complet, SQL 114, ce guide et un rapport unique de livraison.
+Les licences et données techniques nécessaires sont conservées.
+Aucun ancien SQL, ancien guide, fichier de test, dépendance node_modules,
+fichier d’environnement, source PDF téléchargée ou dossier dist inclus.
