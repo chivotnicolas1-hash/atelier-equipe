@@ -4,7 +4,10 @@ type Dependencies={createClient:(url:string,key:string,options:any)=>any,env:(na
 const cors={'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'authorization,x-client-info,apikey,content-type','Access-Control-Allow-Methods':'POST,OPTIONS'};
 const reply=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{...cors,'Content-Type':'application/json','Cache-Control':'no-store','Referrer-Policy':'no-referrer'}});
 const hash=async(value:string)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value)))).map(x=>x.toString(16).padStart(2,'0')).join('');
-const codeHash=(code:string)=>hash('atelier-recovery-117:'+code.replace(/[\s-]/g,'').toUpperCase());
+// Codes courts : empreinte liée à une clé serveur, absente de la base.
+// Les anciens codes longs gardent leur empreinte pour rester utilisables.
+const alphabet118='0123456789ABCDEFGHJKMNPQRSTVWXYZ';
+async function codeHash(code:string,secret:string){const normalized=code.replace(/[\s-]/g,'').toUpperCase();if(normalized.length!==8)return hash('atelier-recovery-117:'+normalized);const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(secret),{name:'HMAC',hash:'SHA-256'},false,['sign']);return Array.from(new Uint8Array(await crypto.subtle.sign('HMAC',key,new TextEncoder().encode('atelier-recovery-118:'+normalized)))).map(x=>x.toString(16).padStart(2,'0')).join('');}
 async function body117(req:Request){const reader=req.body?.getReader();if(!reader)throw Error();let bytes=0;const chunks:Uint8Array[]=[];try{for(;;){const r=await reader.read();if(r.done)break;bytes+=r.value.length;if(bytes>4096){await reader.cancel();throw Error()}chunks.push(r.value)}}finally{reader.releaseLock()}const raw=new Uint8Array(bytes);let offset=0;for(const c of chunks){raw.set(c,offset);offset+=c.length}return JSON.parse(new TextDecoder().decode(raw));}
 export function createRecoveryHandler117({createClient,env}:Dependencies){return async(req:Request)=>{
  if(req.method==='OPTIONS')return new Response(null,{status:204,headers:cors});
@@ -32,13 +35,13 @@ export function createRecoveryHandler117({createClient,env}:Dependencies){return
    if(profile.error||!profile.data?.self||profile.data?.guest||profile.data?.role==='guest')return reply({error:'Compte indisponible.'},403);
    const target=await server.rpc('workshop_account_target100',{p_staff:profile.data.self});
    if(target.error||target.data?.user_id!==user.id)return reply({error:'Association du compte à vérifier avec ton administrateur.'},403);
-   const bytes=crypto.getRandomValues(new Uint8Array(16)),code=Array.from(bytes).map(x=>x.toString(16).padStart(2,'0')).join('').toUpperCase();
-   const saved=await server.rpc('workshop_recovery_save117',{p_user:user.id,p_staff:profile.data.self,p_hash:await codeHash(code),p_expected:b.expected_version});
+   const bytes=crypto.getRandomValues(new Uint8Array(8)),code=Array.from(bytes,x=>alphabet118[x&31]).join('');
+   const saved=await server.rpc('workshop_recovery_save117',{p_user:user.id,p_staff:profile.data.self,p_hash:await codeHash(code,env('RECOVERY_CODE_SECRET')||service),p_expected:b.expected_version});
    if(saved.error)return reply({error:'Le code n’a pas pu être créé. Ferme puis rouvre Mon profil et réessaie.'},409);
-   return reply({code:code.match(/.{8}/g)!.join('-'),login:profile.data.login_id,expires_in_days:365});
+   return reply({code,login:profile.data.login_id,expires_in_days:365});
   }
-  if(b.action!=='reset'||typeof b.login!=='string'||!/^[a-z0-9_-]{3,32}$/i.test(b.login.trim())||typeof b.code!=='string'||b.code.length>80||!/^[0-9A-F]{32}$/.test(b.code.replace(/[\s-]/g,'').toUpperCase())||typeof b.password!=='string'||b.password.length<12||b.password.length>128)return reply({error:'Renseigne ton ID, ton code de récupération et un mot de passe de 12 à 128 caractères.'},400);
-  const attempt=crypto.randomUUID(),claimed=await server.rpc('workshop_recovery_claim117',{p_login:b.login.trim(),p_hash:await codeHash(b.code),p_network:network,p_attempt:attempt});
+  if(b.action!=='reset'||typeof b.login!=='string'||!/^[a-z0-9_-]{3,32}$/i.test(b.login.trim())||typeof b.code!=='string'||b.code.length>80||!/^(?:[0-9A-HJKMNP-TV-Z]{8}|[0-9A-F]{32})$/.test(b.code.replace(/[\s-]/g,'').toUpperCase())||typeof b.password!=='string'||b.password.length<12||b.password.length>128)return reply({error:'Renseigne ton ID, ton code de récupération et un mot de passe de 12 à 128 caractères.'},400);
+  const attempt=crypto.randomUUID(),claimed=await server.rpc('workshop_recovery_claim117',{p_login:b.login.trim(),p_hash:await codeHash(b.code,env('RECOVERY_CODE_SECRET')||service),p_network:network,p_attempt:attempt});
   if(claimed.error)return reply({error:'Récupération indisponible. Contacte ton administrateur.'},503);
   if(claimed.data?.limited)return reply({error:'Trop de tentatives. Réessaie dans 15 minutes.'},429);
   const target=claimed.data;if(!target?.user_id||!target?.staff_id)return invalid();
