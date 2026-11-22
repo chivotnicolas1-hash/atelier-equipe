@@ -1,3 +1,43 @@
+# Correctif MAJ118 — doublons de navigation
+
+22 novembre 2026. Erreur reproduite sur l’application React complète avec des
+réponses Supabase de test : après un changement de date, six blocs de cibles
+étaient présents dans le DOM. La console signalait deux composants avec la
+même clé, la date sélectionnée.
+
+La correction distingue les identifiants des cibles et de la préparation
+quotidienne. Seul `src/workshop.tsx` change dans le code fonctionnel : deux
+attributs `key`. Il n’y a pas de suppression visuelle par CSS ni de changement
+des objectifs, des calculs ou de la synchronisation.
+
+Vérifications effectuées sur la version corrigée :
+
+- Administrateur : changements de date répétés, synchronisation simulée,
+  passage dans l’espace Collaborateur puis retour ; un seul objectif et un
+  seul bloc de cibles sur l’accueil.
+- Navigation vers Signalements, Équipes, Tâches et Mes notifications : aucun
+  objectif ni bloc de cibles résiduel ; retour à l’accueil avec un seul exemplaire.
+- Modérateur : changement de date, espace Modération puis espace Collaborateur ;
+  un seul objectif et un seul bloc de cibles.
+- Compte Collaborateur seul : absence d’onglet Administration confirmée,
+  changement de date et synchronisation, Signalements puis retour à Ma journée ;
+  un seul exemplaire sur l’accueil et aucun bloc résiduel dans Signalements.
+- Contrôle de l’application complète en vue ordinateur et mobile de 390 px.
+- Compilation TypeScript et build Vite réussis. Avertissement non bloquant
+  sur la taille de certains bundles.
+- Comparaison automatique des sources : tous les autres fichiers de src,
+  public et supabase, les dépendances et la configuration sont identiques.
+  Les scripts SQL, fonctions Edge, droits et données ne sont pas modifiés.
+
+Limites : tests de navigation locaux avec services simulés. Aucun déploiement
+réel et aucune modification de compte ou de données de l’équipe.
+Les tests précédents de la MAJ118 restent documentés ci-dessous ; les fonctions
+serveur étant inchangées, ils n’ont pas été réexécutés pour cette correction
+d’affichage. Après déploiement, fermer/rouvrir l’application pour repartir d’un
+arbre d’affichage propre.
+
+---
+
 # Atelier Fayet 33 — vérifications de la MAJ118
 
 22 novembre2026. Base : application complète117, sans Toolbox114.

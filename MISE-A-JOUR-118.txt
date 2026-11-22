@@ -1,3 +1,36 @@
+CORRECTIF MAJ118 — DOUBLONS À L’AFFICHAGE
+22 novembre 2026
+
+Le problème venait de deux composants de la page principale ayant le même
+identifiant React : les cibles du jour et la préparation automatique du plan.
+Au changement de date ou de rubrique, des anciens blocs pouvaient rester
+à l’écran ou apparaître plusieurs fois, y compris dans l’espace Collaborateur.
+Les deux composants ont maintenant des identifiants distincts.
+
+SI LA MAJ118 EST DÉJÀ INSTALLÉE :
+1. Décompresse cette archive.
+2. Dans GitHub, remplace le dossier src par celui de cette archive.
+   Le seul fichier fonctionnel modifié pour ce correctif est src/workshop.tsx.
+   Tu peux donc aussi remplacer uniquement ce fichier.
+3. Valide le changement et attends le succès du déploiement Cloudflare.
+4. Sur PC : recharge complètement la page (Ctrl + F5).
+   Sur mobile : ferme complètement l’application, puis rouvre-la.
+   Cela retire les anciens éléments déjà restés à l’écran avant le correctif.
+5. Vérifie un changement de date et un aller-retour entre plusieurs rubriques.
+
+AUCUN nouveau SQL à exécuter. AUCUNE Edge Function à redéployer pour ce correctif.
+Les données, objectifs, ventes, horaires et réglages ne sont pas supprimés.
+Aucune fonctionnalité de la MAJ118 n’a été retirée.
+
+L’archive contient l’application complète. Les SQL118 et les fonctions serveur
+sont strictement identiques à ceux du ZIP118 précédent. Les instructions qui
+suivent restent utiles uniquement si tu n’avais pas encore installé la MAJ118.
+Ne les refais pas si cette installation est déjà terminée.
+
+-----------------------------------------------------------------------
+INSTALLATION INITIALE DE LA MAJ118 (SI PAS ENCORE EFFECTUÉE)
+-----------------------------------------------------------------------
+
 ATELIER FAYET 33 — MISE À JOUR 118
 SIGNALEMENTS, CODE COURT, RÉCAPITULATIF ET BROUILLON QUOTIDIEN
 
