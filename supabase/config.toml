@@ -9,3 +9,8 @@ verify_jwt = false
 [functions.workshop-login]
 verify_jwt = false
 # Fonction de connexion publique : le mot de passe est vérifié par Supabase Auth.
+
+[functions.workshop-recovery]
+verify_jwt = false
+# Réinitialisation publique par code à usage unique ; génération authentifiée,
+# mot de passe actuel revérifié et limitations contrôlées côté serveur.

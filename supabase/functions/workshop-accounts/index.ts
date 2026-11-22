@@ -48,6 +48,7 @@ Deno.serve(async(req:Request)=>{
  if(lookupError)return reply({error:'Installe le script 100a-identifiants.sql avant de créer les accès.'},503);
  const userId=target.user_id||lookupId;
  if(userId){
+ const revoked=await server.rpc('workshop_recovery_invalidate117',{p_user:userId});if(revoked.error)return reply({error:'Impossible de sécuriser la réinitialisation. Installe le SQL 117b avant de redéployer workshop-accounts.'},503);
  const {error}=await server.auth.admin.updateUserById(userId,{password:body.password,email_confirm:true});
  if(error)return reply({error:'Le mot de passe n’a pas pu être remplacé : '+error.message},400);
  if(!target.user_id){const {error:linked}=await server.rpc('workshop_account_link100',{p_staff:body.staffId,p_user:userId});if(linked)return reply({error:'Association du compte à reprendre.'},500);const {error:finished}=await server.rpc('workshop_account_finalize100',{p_staff:body.staffId});if(finished)return reply({error:'Synchronisation de la fiche à reprendre.'},500);}
