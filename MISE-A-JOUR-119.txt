@@ -1,0 +1,93 @@
+ATELIER FAYET 33 — MISE À JOUR 119
+DÉPLACER UN COLLABORATEUR PAR GLISSER-DÉPOSER
+23 novembre 2026
+
+Application complète basée sur la MAJ118 CORRIGÉE : le correctif contre les
+doublons d’objectifs et de cibles est conservé. Toolbox 33 reste supprimé.
+La base Supabase doit déjà être au niveau 118, dont les scripts 118a,118b,118c.
+Aucun déploiement réel n’a été effectué pour toi.
+
+1 — SUPABASE
+Ouvre SQL Editor > New query.
+Ouvre le fichier de l’archive avec le Bloc-notes :
+  supabase/119-glisser-deposer.sql
+Copie TOUT le contenu dans la nouvelle requête, puis clique Run.
+Attends la réussite avant de mettre le site à jour.
+Le script est transactionnel et réexécutable. Il ne supprime pas les plans,
+comptes ou données existants. Il conserve une copie du garde d’affectation
+existant avant de lui ajouter l’exception contrôlée du transfert.
+Ne réexécute pas les anciens scripts. Aucune Edge Function à redéployer.
+Aucun nouveau secret ni variable VITE à créer. Aucun programme Cron à modifier.
+
+Pourquoi un SQL : l’application impose habituellement de retirer un poste
+avant d’en affecter un autre. Le glisser-déposer doit réaliser un transfert
+atomique, sans effacer la présence confirmée et sans laisser la personne
+sans poste si la destination est refusée.
+Le nouveau transfert et la publication d’un brouillon restent réservés
+à l’administrateur et aux modérateurs. Les contrôles existants sont réutilisés.
+
+2 — GITHUB / CLOUDFLARE
+Décompresse l’archive et remplace le dossier src par celui de cette version.
+L’archive contient aussi public et les fichiers de configuration complets,
+qui n’ont pas changé pour cette mise à jour. Conserve tes variables de build.
+Valide les changements GitHub et attends le succès du déploiement Cloudflare.
+Sur PC : recharge complètement avec Ctrl + F5.
+Sur mobile : ferme complètement l’application et rouvre-la.
+N’ajoute aucun fichier _redirects.
+
+3 — UTILISATION
+Dans Plan de l’atelier, espace Administration ou Modération :
+- Clique « Déplacer par glisser-déposer » pour activer le mode.
+- Attrape le nom d’une personne sur son poste PRINCIPAL et glisse-le vers
+  le nouveau poste. Sur écran tactile, garde le doigt sur son encadré et déplace-le.
+- Le poste est mis en évidence : vert si la destination est compatible,
+  rouge si elle est interdite. Le motif est indiqué si le dépôt est refusé.
+- Relâche, vérifie le poste de départ et celui d’arrivée dans la fenêtre,
+  puis clique « Confirmer le déplacement » ou « Annuler ».
+- Tu peux désactiver le mode en cliquant à nouveau sur « Glisser-déposer activé ».
+
+Le mode est désactivé au départ et quand la date ou le droit d’édition change.
+Pour faire défiler le plan avec le doigt, utilise une zone libre du plan,
+à l’écart des noms ; tu peux aussi désactiver le mode avant de défiler.
+Les postes et menus d’affectation habituels restent utilisables. Il n’est pas
+nécessaire de se servir du glisser-déposer. Les personnes non affectées restent
+à placer avec les menus existants.
+
+COMPÉTENCES ET HORAIRES
+Une compétence Autonome et des horaires positifs sont nécessaires pour un
+transfert ; la personne doit être prévue présente, active, non suspendue,
+et ne pas être en congé/absence accepté pour cette date.
+Les encadrants restent réservés aux postes de gestion/bureau.
+Un pont en panne refuse le dépôt. Un pont bloqué conserve la possibilité
+d’affectation manuelle, avec un avertissement avant confirmation.
+Plusieurs collaborateurs peuvent partager un poste, comme auparavant.
+
+GÉOMÉTRIE
+L’exception de cumul existante est conservée : déposer vers la géométrie
+l’ajoute au poste principal. Déplacer quelqu’un dont le poste principal est
+la géométrie vers un autre poste conserve la géométrie en complément.
+S’il est déjà sur deux pôles, glisse-le depuis sa carte du poste PRINCIPAL.
+La carte de sa géométrie complémentaire ne sert pas de poignée de transfert.
+Tu peux retirer cette affectation complémentaire dans le menu habituel.
+
+BROUILLONS ET PLAN PUBLIÉ
+Si un brouillon est ouvert, le déplacement modifie uniquement ce brouillon.
+L’administrateur ou le modérateur doit toujours cliquer « Publier le plan ».
+Pour une date future sans brouillon, utilise d’abord « Préparer ce plan ».
+Sur le plan publié modifiable, le transfert confirmé est appliqué directement.
+Les autres personnes le voient à la prochaine synchronisation habituelle.
+Si le brouillon, les horaires ou l’affectation ont changé entre-temps,
+l’opération est refusée sans modifier le poste de départ : actualise et réessaie.
+La présence déjà confirmée et les horaires sont conservés.
+
+4 — CONTRÔLE APRÈS INSTALLATION
+Teste d’abord sur un brouillon non publié :
+- déplacement vers un poste où la compétence est Autonome ;
+- annulation de la fenêtre de confirmation ;
+- destination incompatible ou pont en panne : refus et poste initial conservé ;
+- vérifie que le collaborateur voit encore l’ancien plan avant publication ;
+- vérifie la présence confirmée après un transfert du jour.
+Sur téléphone, vérifie le geste avec ton navigateur et ton appareil habituels.
+Les tests locaux ont exécuté des gestes de souris, pas un vrai écran tactile.
+
+Le rapport VERIFICATIONS-119.md détaille les contrôles et leurs limites.
