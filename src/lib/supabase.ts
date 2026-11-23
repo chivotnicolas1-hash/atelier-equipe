@@ -1,3 +1,4 @@
+import {createSessionStorage121} from './session-vault121';
 import { createClient } from '@supabase/supabase-js';
 const url=import.meta.env.VITE_SUPABASE_URL;
 const key=import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -5,7 +6,11 @@ if(!url||!key)throw new Error('Configuration Supabase manquante : renseigne le f
 // La détection dépend du type d’appareil, pas de la largeur de la fenêtre.
 export const desktopSession=!(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1));
 if(desktopSession){const legacy='sb-'+new URL(url).hostname.split('.')[0]+'-auth-token';try{localStorage.removeItem(legacy);localStorage.removeItem(legacy+'-code-verifier');localStorage.removeItem(legacy+'-user')}catch{}}
-export const supabase=createClient(url,key,{auth:{flowType:'pkce',persistSession:!desktopSession,autoRefreshToken:true,detectSessionInUrl:!desktopSession}});
+let legacyStorage:Storage|undefined;try{legacyStorage=window.localStorage}catch{}
+const mobileStorage=!desktopSession?createSessionStorage121({project:new URL(url).origin,legacy:legacyStorage,onFallback:()=>window.dispatchEvent(new Event('workshop-session-temporary121'))}):undefined;
+if(mobileStorage){const name='sb-'+new URL(url).hostname.split('.')[0]+'-auth-token';for(const suffix of ['', '-code-verifier','-user'])void mobileStorage.getItem(name+suffix).catch(()=>{});}
+export const isSessionTemporary121=()=>mobileStorage?.isTemporary()??false;
+export const supabase=createClient(url,key,{auth:{flowType:'pkce',persistSession:!desktopSession,autoRefreshToken:true,detectSessionInUrl:!desktopSession,...(mobileStorage?{storage:mobileStorage}:{})}});
 let desktopEndpoint:string|null=null;
 export function trackDesktopPush(endpoint:string|null){if(desktopSession)desktopEndpoint=endpoint}
 if(desktopSession){

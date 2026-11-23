@@ -5,6 +5,7 @@ function tick(){for(const fn of listeners.values()){try{const r=fn();if(r instan
 window.setInterval(tick,20000);
 window.addEventListener('focus',tick);
 window.addEventListener('online',tick);
+window.addEventListener('pageshow',event=>{if(event.persisted)tick()});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick()});
 export function setSyncInterval(fn:()=>unknown,ms=20000):number{if(ms<=1000)return window.setInterval(fn,ms);const id=next--;listeners.set(id,fn);return id}
 export function clearSyncInterval(id:number){if(id<0)listeners.delete(id);else window.clearInterval(id)}
