@@ -5,7 +5,10 @@ import {useAutoRefresh} from './lib/sync';
 import LoadingScreen from './loading-screen';
 export default function AccessGate({children}:{children:ReactNode}){
  const [status,setStatus]=useState<any>(null),[error,setError]=useState('');
- async function load(){const {data,error}=await supabase.rpc('workshop_access_status');if(error)setError(error.message);else{if(desktopSession&&data?.allowed){const pc=await supabase.rpc('workshop_pc_access');if(pc.error){setStatus(null);setError(pc.error.message);return}setStatus({...data,allowed:pc.data===true,pcDenied:pc.data!==true})}else setStatus(data);setError('')}}
+ async function load(){try{const {data,error}=await supabase.rpc('workshop_access_status');if(error||!data){setStatus(null);setError('Impossible de vérifier ton autorisation. Réessaie avec une connexion disponible.');return}
+ if(desktopSession&&data.allowed){const pc=await supabase.rpc('workshop_pc_access');if(pc.error){setStatus(null);setError('Impossible de vérifier les droits de ce compte sur ordinateur.');return}setStatus({...data,allowed:pc.data===true,pcDenied:pc.data!==true})}else setStatus(data);setError('')
+ }catch{setStatus(null);setError('Impossible de vérifier ton autorisation. Nouvelle tentative automatique dans 20 secondes.')}}
+
  useEffect(()=>{void load()},[]);useAutoRefresh(load);
  if(status?.allowed)return <>{children}</>;
  if(!status&&!error)return <LoadingScreen/>;

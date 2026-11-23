@@ -1,6 +1,10 @@
 /*
   X-Content-Type-Options: nosniff
-  Referrer-Policy: strict-origin-when-cross-origin
+  Referrer-Policy: no-referrer
+  X-Frame-Options: DENY
+  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'
+  Permissions-Policy: camera=(self), microphone=(), geolocation=(self), payment=(), usb=()
+  X-Robots-Tag: noindex, nofollow
 /sw.js
   Cache-Control: no-cache
 /index.html

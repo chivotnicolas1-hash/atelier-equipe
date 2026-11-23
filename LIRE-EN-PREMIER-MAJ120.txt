@@ -1,0 +1,136 @@
+ATELIER FAYET 33 — MAJ120 — PRÊTE POUR REVUE, NON DÉPLOYÉE
+23 novembre 2026 — Base stable MAJ119, sans Atelier Live.
+Le plan classique et le glisser-déposer sont conservés.
+Aucun compte réel ni aucune donnée de production n'ont été modifiés ici.
+
+1. POURQUOI LE BROUILLON N'EST PAS APPARU
+Les journaux fournis montrent un Cron actif et des passages réussis dès 5 h.
+Le moteur s'arrêtait dès qu'une préparation avait été clôturée pour la journée.
+Le marqueur du 23 novembre a été créé à 01 h 04, avant le réveil du matin ; sa
+présence suffit à expliquer le blocage. Ton essai annulé est compatible avec ce
+constat, mais les anciens journaux ne distinguaient pas annulation et publication.
+La dernière clôture est à 08 h 47. Dix affectations existent : elles sont conservées.
+Aucune remise à zéro de la journée du 23 novembre n'est prévue.
+
+2. RÈGLE PRÉPARÉE
+- À partir de 5 h, heure de Paris : proposition automatique en BROUILLON seulement.
+- Si les horaires arrivent plus tard : nouvel essai toutes les 10 minutes.
+- Une annulation faite AVANT 5 h permet une nouvelle proposition le matin, si aucun
+  brouillon ni aucune affectation ne sont déjà présents pour cette journée.
+- Une annulation à 5 h ou après reste respectée : pas de recréation automatique.
+- Une publication tracée par cette mise à jour est toujours protégée, même vide.
+- Un brouillon existant ou un plan déjà affecté ne sont jamais écrasés par ce moteur.
+- La publication reste une action volontaire de l'administrateur ou du modérateur.
+- À l'ouverture du plan du jour par un gestionnaire : un essai de secours unique.
+  Le contrôle périodique toutes les 20 secondes reste en lecture seule.
+- Un motif explique l'attente, la clôture, le programme arrêté ou l'échec éventuel.
+
+Limite de l'historique ancien : une clôture sans motif, antérieure à cette mise à
+jour, n'indique pas si le plan vide avait été publié ou annulé. La reprise de cet
+ancien cas exige que la clôture ait eu lieu avant 5 h, sans brouillon ni affectation.
+Elle produit uniquement un brouillon ; rien n'est publié. Les nouvelles clôtures
+sont tracées avec leur motif, l'heure et l'auteur connecté.
+
+3. CE QUE LE SQL CHANGE — À VALIDER AVANT EXÉCUTION
+Un seul fichier : supabase/120-installation.sql.
+Il s'exécute dans une transaction : une erreur d'installation annule l'ensemble.
+Il ajoute trois petites tables PRIVÉES, sans accès client direct :
+- plan_checks120 : dernier contrôle par jour, suivi technique limité à 90 jours ;
+- plan_events120 : publications/annulations et ancien état lors d'une relance ;
+- plan_code_backup120 : copie initiale des trois définitions de fonctions touchées.
+Il adapte le moteur et la clôture, et délègue les actions du plan à la fonction
+existante, avec ses règles de compétences, de permissions et de glisser-déposer.
+Il ajoute deux RPC réservées aux administrateurs/modérateurs pour le suivi/secours.
+Il retire uniquement l'exécution anonyme de deux fonctions déjà réservées à l'admin :
+workshop_catalog_code88 et workshop_monthly82, sans modifier leurs contrôles internes.
+Les droits connectés/serveur qui existaient restent conservés.
+Il met à jour/réactive le programme existant atelier-plan-brouillon-118, toutes les
+10 minutes ; il n'ajoute pas de deuxième programme.
+Son passage initial peut créer un vrai brouillon du jour si les conditions le
+permettent. Il ne publie rien et ne modifie aucune affectation publiée.
+Ne pas réinstaller l'ancien 118b : il est déjà présent et remplacerait le correctif.
+
+4. INSTALLATION APRÈS VALIDATION — ORDRE À SUIVRE
+Conserver une copie du projet actuel et de sa configuration avant intervention.
+
+A — SUPABASE / SQL EDITOR
+Ouvrir supabase/120-installation.sql, lire puis exécuter le fichier EN ENTIER dans
+le projet habituel. Ne pas sélectionner seulement une partie des instructions.
+Aucune exécution n'a été réalisée pendant la préparation de cette archive.
+
+B — VÉRIFICATION EN LECTURE SEULE
+Exécuter supabase/120f-verification-lecture-seule.sql.
+Résultats attendus :
+- regle_annulation_installee : true ; sauvegardes_definitions : 3 ;
+- ancien_acces_client_verrouille : true ;
+- appel_anonyme : false pour les deux fonctions, appel_connecte conservé ;
+- un seul programme, active=true, schedule=*/10 * * * *, commande_attendue=true ;
+- dernier_controle.state : pas failed. Si failed, conserver le code d'erreur.
+relance_possible_aujourdhui=false n'est PAS une erreur : c'est normal si la journée
+est déjà affectée, clôturée après 5 h, publiée, ou si un brouillon existe.
+brouillon_actuel=false peut également être normal après une publication.
+
+C — SUPABASE / EDGE FUNCTIONS / SECRETS
+AVANT de déployer les fonctions suivantes, ajouter ce secret :
+Nom : WORKSHOP_ALLOWED_ORIGINS
+Valeur exacte : https://atelier-equipe.chivotnicolas1.workers.dev
+Sans slash final, sans chemin, sans joker *. Ce n'est pas une variable VITE.
+Si tu utilises un autre domaine pour l'application, ajouter aussi son origine HTTPS,
+séparée par une virgule. Une adresse oubliée bloquera la connexion depuis ce domaine.
+Conserver TOUS les autres secrets, notamment RECOVERY_CODE_SECRET et les clés VAPID.
+Ne pas les changer arbitrairement : les récupérations existantes en dépendent.
+Ne communiquer aucune clé privée ni mot de passe.
+
+D — DÉPLOYER LES TROIS FONCTIONS EDGE
+Remplacer/déployer le fichier index.ts complet de :
+- workshop-login
+- workshop-recovery
+- workshop-accounts
+Chaque fichier est autonome, sans nouvel import partagé.
+Conserver verify_jwt=false dans supabase/config.toml : les contrôles de jeton,
+d'identité et de permission sont faits explicitement dans ces chemins existants.
+Ne pas redéployer workshop-push pour cette mise à jour.
+Les nouvelles fonctions refusent les requêtes web d'une origine non autorisée,
+les formats/méthodes non prévus et les corps excessifs. Les réponses sont sans cache.
+La liste d'origines complète l'authentification ; elle ne la remplace pas.
+
+E — GITHUB / CLOUDFLARE
+Après accord de déploiement, remplacer les sources et configurations du projet par
+celles du ZIP : src, public, supabase, index.html, package.json, package-lock.json,
+ainsi que les fichiers de configuration présents à la racine.
+Les trois documents MAJ120 sont destinés à ta lecture, pas au dossier public.
+Conserver les variables Cloudflare actuelles. Aucun secret privé dans VITE.
+Aucun fichier _redirects à ajouter. Ne pas uploader node_modules ni dist.
+Le build reste npm ci puis npm run build ; Node 24 a été utilisé avec succès.
+Vite et son verrou ont été mis à jour pour corriger l'alerte npm identifiée.
+
+F — CONTRÔLE APRÈS DÉPLOIEMENT
+Tester ta connexion et l'ouverture du plan du jour. Vérifier le statut de préparation,
+le brouillon et le glisser-déposer avant de publier un plan. Les collaborateurs ne
+voient toujours que le plan publié. Vérifier les autres origines si tu en utilises.
+Vérifier au prochain matin le résultat du passage, sans annuler une préparation
+après 5 h pour essayer de forcer sa recréation. Aucun faux compte de test n'est ajouté.
+
+5. SÉCURITÉ : PORTÉE ET LIMITES
+Renforcement ciblé : accès fermé en cas d'échec du contrôle d'autorisation, droits
+anonymes réduits sur deux RPC, origines et tailles contrôlées pour les fonctions
+sensibles, en-têtes Cloudflare et dépendance de compilation corrigée.
+Les définitions d'identité et politiques RLS fournies ont été rejouées localement
+avec des comptes fictifs ; aucun accès direct à ta base n'a été utilisé.
+Ce n'est pas une certification générale : réglages Auth, MFA, sessions et secrets
+réels restent à examiner séparément. Aucune double authentification n'est activée.
+Aucun nouveau service payant, abonnement ou API ; quotas globaux non mesurés ici.
+
+6. RETOUR EN CAS DE PROBLÈME
+Une origine incorrecte : corriger WORKSHOP_ALLOWED_ORIGINS ; pas de SQL nécessaire.
+Conserver l'archive stable MAJ119. Restaurer les sources précédentes ne rétablit pas
+à lui seul l'ancien comportement du moteur serveur.
+Pour arrêter l'automatisation, il faut désactiver le Cron ET le secours de l'interface.
+Les trois définitions antérieures sont sauvegardées en privé pour préparer un retour
+SQL ciblé après revue. Ne pas supprimer les tables ni restaurer un ancien script
+au hasard ; aucune suppression de données métier n'est nécessaire.
+
+CONTENU DU ZIP
+Application complète, deux SQL utiles, ce guide, audit et rapport des tests.
+Sans anciens diagnostics, anciens SQL, ZIP imbriqués, builds, node_modules, tests
+fictifs, clés privées, ni Atelier Live. Aucun déploiement effectué par cette livraison.

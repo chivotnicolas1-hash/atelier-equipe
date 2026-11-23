@@ -1,12 +1,45 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-const cors={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"authorization,x-client-info,apikey,content-type","Access-Control-Allow-Methods":"POST,OPTIONS"};
+// SECURITY120_BEGIN — identique dans les trois fonctions publiques
+// CORS complète les vérifications d'identité ; ce n'est jamais une autorisation.
+export type Environment120=(name:string)=>string|undefined;
+export async function readJson120(req:Request,limit:number):Promise<any>{
+ const declared=req.headers.get('content-length');
+ if(declared&&(!/^\d+$/.test(declared)||Number(declared)>limit))throw new Error('Requête trop volumineuse.');
+ const reader=req.body?.getReader();if(!reader)throw new Error('Requête vide.');
+ const chunks:Uint8Array[]=[];let total=0;
+ try{for(;;){const r=await reader.read();if(r.done)break;total+=r.value.byteLength;if(total>limit){await reader.cancel();throw new Error('Requête trop volumineuse.')}chunks.push(r.value)}}finally{reader.releaseLock()}
+ const bytes=new Uint8Array(total);let offset=0;for(const c of chunks){bytes.set(c,offset);offset+=c.length}
+ const value=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
+ if(!value||typeof value!=='object'||Array.isArray(value))throw new Error('Requête invalide.');
+ return value;
+}
+export function secureHandler120(env:Environment120,handler:(req:Request)=>Promise<Response>){return async(req:Request)=>{
+ const origins=(env('WORKSHOP_ALLOWED_ORIGINS')||'').split(',').map(x=>x.trim()).filter(Boolean);
+ const valid=origins.length>0&&origins.every(x=>{try{const u=new URL(x);return u.origin===x&&(u.protocol==='https:'||u.protocol==='http:'&&['localhost','127.0.0.1'].includes(u.hostname))}catch{return false}});
+ const origin=req.headers.get('origin');const headers=new Headers({'Cache-Control':'no-store','Pragma':'no-cache','Content-Type':'application/json; charset=utf-8','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Vary':'Origin'});
+ if(valid&&origin&&origins.includes(origin))headers.set('Access-Control-Allow-Origin',origin);
+ headers.set('Access-Control-Allow-Headers','authorization,x-client-info,apikey,content-type');headers.set('Access-Control-Allow-Methods','POST,OPTIONS');
+ const fail=(error:string,status:number)=>new Response(JSON.stringify({error}),{status,headers});
+ if(!valid)return fail('Service temporairement indisponible. Contacte ton administrateur.',503);
+ if(origin&&!origins.includes(origin))return fail('Origine non autorisée.',403);
+ if(req.method==='OPTIONS')return new Response(null,{status:204,headers});
+ if(req.method!=='POST')return fail('Méthode non autorisée.',405);
+ if(req.headers.get('content-type')?.split(';')[0].trim().toLowerCase()!=='application/json')return fail('Une requête JSON est requise.',415);
+ try{const response=await handler(req);const final=new Headers(response.headers);
+  final.delete('Access-Control-Allow-Origin');for(const [k,v]of headers)final.set(k,v);
+  return new Response(response.body,{status:response.status,headers:final});
+ }catch{return fail('Opération non confirmée. Réessaie ou contacte ton administrateur.',503)}
+};}
+// SECURITY120_END
+type Dependencies120={createClient:typeof createClient,env:(name:string)=>string|undefined};
+const cors={"Access-Control-Allow-Headers":"authorization,x-client-info,apikey,content-type","Access-Control-Allow-Methods":"POST,OPTIONS"};
 const reply=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{...cors,"Content-Type":"application/json","Cache-Control":"no-store"}});
-Deno.serve(async(req:Request)=>{
+export function createAccountsHandler120({createClient,env}:Dependencies120){return secureHandler120(env,async(req:Request)=>{
  if(req.method==='OPTIONS')return new Response(null,{status:204,headers:cors});
  if(req.method!=='POST')return reply({error:'Méthode non autorisée.'},405);
  try{
- const url=Deno.env.get('SUPABASE_URL')!;
- const key=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+ const url=env('SUPABASE_URL')!;
+ const key=env('SUPABASE_SERVICE_ROLE_KEY')!;
  if(!url||!key)return reply({error:'Configuration serveur manquante.'},503);
  const server=createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false}});
  const token=req.headers.get('Authorization')?.match(/^Bearer (.+)$/i)?.[1];
@@ -15,8 +48,8 @@ Deno.serve(async(req:Request)=>{
  if(authError||!identity.user)return reply({error:'Session expirée. Reconnecte-toi.'},401);
  // Le serveur vérifie le compte et ses droits à chaque requête.
  const caller=createClient(url,key,{global:{headers:{Authorization:`Bearer ${token}`}},auth:{persistSession:false,autoRefreshToken:false}});
- const body=await req.json();
- const {data:workshop,error:roleError}=await caller.rpc('workshop_load',{p_date:new Date().toISOString().slice(0,10)});
+ let body:any;try{body=await readJson120(req,4096)}catch{return reply({error:'Requête invalide ou trop volumineuse.'},400)}
+ const {data:workshop,error:roleError}=await caller.rpc('workshop_load',{p_date:new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())});
  if(roleError)return reply({error:'Accès refusé.'},403);
  let requestPerson:any=null;
  if(body.requestId){const {data,error}=await caller.rpc('workshop_password_authorize',{p_id:body.requestId});if(error)return reply({error:'Demande inaccessible.'},403);requestPerson=data;body.staffId=data.staffId;}
@@ -62,4 +95,5 @@ Deno.serve(async(req:Request)=>{
  const {error:finalError}=await server.rpc('workshop_account_finalize100',{p_staff:body.staffId});if(finalError)return reply({error:'Compte créé, fiche à synchroniser : '+finalError.message},500);
  return reply({ok:true,created:true});
  }catch{return reply({error:'Création impossible. Réessaie.'},500);}
-});
+});}
+Deno.serve(createAccountsHandler120({createClient,env:name=>Deno.env.get(name)}));

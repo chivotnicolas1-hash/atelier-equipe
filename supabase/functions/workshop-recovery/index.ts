@@ -1,7 +1,39 @@
 import {createClient} from 'npm:@supabase/supabase-js@2';
+// SECURITY120_BEGIN — identique dans les trois fonctions publiques
+// CORS complète les vérifications d'identité ; ce n'est jamais une autorisation.
+export type Environment120=(name:string)=>string|undefined;
+export async function readJson120(req:Request,limit:number):Promise<any>{
+ const declared=req.headers.get('content-length');
+ if(declared&&(!/^\d+$/.test(declared)||Number(declared)>limit))throw new Error('Requête trop volumineuse.');
+ const reader=req.body?.getReader();if(!reader)throw new Error('Requête vide.');
+ const chunks:Uint8Array[]=[];let total=0;
+ try{for(;;){const r=await reader.read();if(r.done)break;total+=r.value.byteLength;if(total>limit){await reader.cancel();throw new Error('Requête trop volumineuse.')}chunks.push(r.value)}}finally{reader.releaseLock()}
+ const bytes=new Uint8Array(total);let offset=0;for(const c of chunks){bytes.set(c,offset);offset+=c.length}
+ const value=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
+ if(!value||typeof value!=='object'||Array.isArray(value))throw new Error('Requête invalide.');
+ return value;
+}
+export function secureHandler120(env:Environment120,handler:(req:Request)=>Promise<Response>){return async(req:Request)=>{
+ const origins=(env('WORKSHOP_ALLOWED_ORIGINS')||'').split(',').map(x=>x.trim()).filter(Boolean);
+ const valid=origins.length>0&&origins.every(x=>{try{const u=new URL(x);return u.origin===x&&(u.protocol==='https:'||u.protocol==='http:'&&['localhost','127.0.0.1'].includes(u.hostname))}catch{return false}});
+ const origin=req.headers.get('origin');const headers=new Headers({'Cache-Control':'no-store','Pragma':'no-cache','Content-Type':'application/json; charset=utf-8','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Vary':'Origin'});
+ if(valid&&origin&&origins.includes(origin))headers.set('Access-Control-Allow-Origin',origin);
+ headers.set('Access-Control-Allow-Headers','authorization,x-client-info,apikey,content-type');headers.set('Access-Control-Allow-Methods','POST,OPTIONS');
+ const fail=(error:string,status:number)=>new Response(JSON.stringify({error}),{status,headers});
+ if(!valid)return fail('Service temporairement indisponible. Contacte ton administrateur.',503);
+ if(origin&&!origins.includes(origin))return fail('Origine non autorisée.',403);
+ if(req.method==='OPTIONS')return new Response(null,{status:204,headers});
+ if(req.method!=='POST')return fail('Méthode non autorisée.',405);
+ if(req.headers.get('content-type')?.split(';')[0].trim().toLowerCase()!=='application/json')return fail('Une requête JSON est requise.',415);
+ try{const response=await handler(req);const final=new Headers(response.headers);
+  final.delete('Access-Control-Allow-Origin');for(const [k,v]of headers)final.set(k,v);
+  return new Response(response.body,{status:response.status,headers:final});
+ }catch{return fail('Opération non confirmée. Réessaie ou contacte ton administrateur.',503)}
+};}
+// SECURITY120_END
 // Aucun accès aux mots de passe ou aux codes dans les journaux.
 type Dependencies={createClient:(url:string,key:string,options:any)=>any,env:(name:string)=>string|undefined};
-const cors={'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'authorization,x-client-info,apikey,content-type','Access-Control-Allow-Methods':'POST,OPTIONS'};
+const cors={'Access-Control-Allow-Headers':'authorization,x-client-info,apikey,content-type','Access-Control-Allow-Methods':'POST,OPTIONS'};
 const reply=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{...cors,'Content-Type':'application/json','Cache-Control':'no-store','Referrer-Policy':'no-referrer'}});
 const hash=async(value:string)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value)))).map(x=>x.toString(16).padStart(2,'0')).join('');
 // Codes courts : empreinte liée à une clé serveur, absente de la base.
@@ -9,7 +41,7 @@ const hash=async(value:string)=>Array.from(new Uint8Array(await crypto.subtle.di
 const alphabet118='0123456789ABCDEFGHJKMNPQRSTVWXYZ';
 async function codeHash(code:string,secret:string){const normalized=code.replace(/[\s-]/g,'').toUpperCase();if(normalized.length!==8)return hash('atelier-recovery-117:'+normalized);const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(secret),{name:'HMAC',hash:'SHA-256'},false,['sign']);return Array.from(new Uint8Array(await crypto.subtle.sign('HMAC',key,new TextEncoder().encode('atelier-recovery-118:'+normalized)))).map(x=>x.toString(16).padStart(2,'0')).join('');}
 async function body117(req:Request){const reader=req.body?.getReader();if(!reader)throw Error();let bytes=0;const chunks:Uint8Array[]=[];try{for(;;){const r=await reader.read();if(r.done)break;bytes+=r.value.length;if(bytes>4096){await reader.cancel();throw Error()}chunks.push(r.value)}}finally{reader.releaseLock()}const raw=new Uint8Array(bytes);let offset=0;for(const c of chunks){raw.set(c,offset);offset+=c.length}return JSON.parse(new TextDecoder().decode(raw));}
-export function createRecoveryHandler117({createClient,env}:Dependencies){return async(req:Request)=>{
+export function createRecoveryHandler117({createClient,env}:Dependencies){return secureHandler120(env,async(req:Request)=>{
  if(req.method==='OPTIONS')return new Response(null,{status:204,headers:cors});
  if(req.method!=='POST')return reply({error:'Méthode non autorisée.'},405);
  const invalid=()=>reply({error:'ID ou code de récupération incorrect, expiré ou déjà utilisé.'},401);
@@ -54,6 +86,6 @@ export function createRecoveryHandler117({createClient,env}:Dependencies){return
   await server.rpc('workshop_recovery_notice117',{p_user:target.user_id,p_attempt:attempt});
   return reply({ok:true,message:'Mot de passe modifié. Connecte-toi avec ton ID et ton nouveau mot de passe, puis génère un nouveau code dans Mon profil. Le précédent est désormais inutilisable.'});
  }catch{return reply({error:'Opération non confirmée. Réessaie de te connecter ; si nécessaire, contacte ton administrateur.'},503)}
-};}
+});}
 
 Deno.serve(createRecoveryHandler117({createClient,env:name=>Deno.env.get(name)}));
