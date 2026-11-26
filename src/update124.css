@@ -1,0 +1,11 @@
+.staff-aircon124{margin:14px 0;padding:14px;border:1px solid var(--ui-line,#c5d3e0);border-radius:12px;min-width:0}
+.staff-aircon124 legend{display:flex;align-items:center;gap:7px;font-weight:700;color:var(--ui-text)}
+.staff-aircon124 legend svg{color:var(--ui-blue,#1872b7)}
+.staff-aircon124 .import-checkbox{display:flex;align-items:center;gap:10px;margin:4px 0}
+.staff-aircon124 input[type=checkbox]{width:20px;height:20px;flex:0 0 20px;accent-color:var(--ui-blue,#1872b7)}
+.staff-aircon124 p{font-size:12px;line-height:1.5;margin:8px 0 0}
+.aircon-saved124{color:var(--ui-text);font-weight:600}
+.workshop-display .display-person-copy124{flex:1 1 auto;min-width:0;overflow-wrap:anywhere}
+.workshop-display .aircon-badge124{display:inline-flex;align-items:center;justify-content:center;flex:0 0 31px;width:31px;height:31px;margin-left:auto;align-self:center;border-radius:9px;color:var(--ui-blue,#1872b7);background:var(--ui-surface,#fff);border:1px solid var(--ui-line,#c5d3e0)}
+.workshop-display .aircon-status124{font-size:11px;line-height:1.4}
+.top-actions .account-name124{max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

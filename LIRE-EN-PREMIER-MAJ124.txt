@@ -1,0 +1,103 @@
+ATELIER FAYET 33 — MAJ124
+Habilitation clim et nom du compte sur PC
+Préparée le 26 novembre 2026, sur les sources complètes de MAJ123.
+Aucun déploiement ni changement de base de production effectué ici.
+
+1 — COCHER L'HABILITATION CLIM
+Administration > Équipe > Gérer le profil > Modifier la fiche.
+Une case « Habilité clim » est disponible dans « Habilitation climatisation ».
+Elle est réservée à l'administrateur, avec contrôle côté serveur.
+La case s'enregistre immédiatement, indépendamment des autres champs de la fiche.
+Le message de confirmation apparaît après succès. « Annuler » ou fermer la fiche
+ne revient pas sur une habilitation déjà enregistrée.
+Pour un nouveau collaborateur, créer d'abord sa fiche, puis la rouvrir pour cocher.
+Les fiches invité/directeur ne proposent pas cette option.
+
+Rien n'est coché automatiquement : l'habilitation n'est pas déduite de l'équipe,
+de la matrice des compétences ou des anciennes ventes de clim.
+Cette case est une déclaration de l'administrateur. Aucun certificat, numéro ou
+date d'expiration ne sont générés. La matrice de compétences reste inchangée.
+Une version empêche d'écraser silencieusement la modification d'un autre appareil.
+En cas de conflit, la dernière valeur est relue et un message invite à la vérifier.
+
+2 — FLOCON À DROITE DES HORAIRES
+Sur l'écran atelier, un flocon apparaît tout à droite de la ligne du collaborateur
+habilité. C'est le même pictogramme Snowflake que la cible du jour « Clim ».
+Le libellé accessible et le survol précisent « Habilité climatisation ».
+Le nom, les horaires, les affectations, le tri et les couleurs de présence restent
+affichés comme auparavant.
+Cela fonctionne dans le mode écran connecté et sur le PC autorisé sans connexion.
+La modification ou le retrait est reçu au prochain rafraîchissement de 20 secondes.
+Le flocon concerne l'habilitation actuelle, y compris si un ancien jour est affiché ;
+ce n'est pas un historique des habilitations à une date passée.
+Sans SQL124 ou en cas d'erreur de lecture, l'écran garde le plan et les horaires,
+et indique que les habilitations sont indisponibles. Aucun faux flocon n'est ajouté.
+Le PC sans connexion conserve ses contrôles de jeton, expiration et révocation.
+
+3 — NOM DU COMPTE DANS LA BARRE PC
+Le texte près de la cloche utilise le nom de la fiche équipe, au lieu de l'adresse
+technique « ...@atelier.invalid ».
+Lorsque le nom de famille est déjà distingué en majuscules, l'affichage est
+« NOM Prénom » : « Nicolas CHIVOT » devient « CHIVOT Nicolas ».
+Les noms composés sont conservés. Si cette distinction n'est pas disponible,
+l'orthographe et l'ordre de la fiche sont conservés, sans inventer nom/prénom.
+Si la fiche n'est pas encore disponible, le texte est « Mon compte ».
+L'adresse technique n'est jamais utilisée en repli dans cet emplacement.
+La connexion par ID personnalisé et mot de passe n'est pas modifiée.
+
+4 — CHANGEMENTS SQL À EXAMINER
+Le SQL124 ajoute seulement :
+- une table privée staff_aircon124 (RLS activée, aucun accès client direct) ;
+- une RPC de lecture/sauvegarde de la case, administrateur actif uniquement ;
+- une agrégation privée des habilitations affichables ;
+- une lecture des flocons pour les comptes autorisés au mode PC ;
+- une nouvelle façade de lecture pour les PC autorisés sans connexion.
+Cette façade appelle d'abord workshop_screen_read123 : elle garde donc les
+protections antérieures et les détails des ventes ajoutés dans MAJ123.
+Elle ne joint que des indicateurs des personnes déjà visibles dans le plan.
+Les comptes suspendus ou bannis sont refusés par les nouveaux accès authentifiés.
+Les fonctions existantes et les données métier ne sont ni supprimées ni réécrites.
+
+5 — INSTALLATION
+A. Conserver le ZIP MAJ123 pour un retour éventuel.
+   Les anciennes migrations restent nécessaires ; MAJ124 ne les remplace pas.
+   Si MAJ123 n'est pas encore installée, exécuter d'abord les deux SQL123 inclus
+   (contacts-et-ventes-ecran, puis verification-lecture-seule).
+   S'ils sont déjà installés, passer directement à B.
+B. Dans Supabase > SQL Editor, examiner puis exécuter EN ENTIER :
+   supabase/124-habilitation-clim.sql
+C. Dans une nouvelle requête, exécuter :
+   supabase/124-verification-lecture-seule.sql
+   Attendu : tous les indicateurs booléens à true.
+   habilitations_actives=0 est normal tant qu'aucune case n'a été cochée.
+   Cette requête ne montre aucun nom, aucune coordonnée et ne crée aucune donnée.
+D. Remplacer les fichiers du projet GitHub par ceux de cette application complète.
+   Conserver les variables de build Cloudflare et secrets Supabase existants.
+   Attendre la réussite du déploiement, puis fermer et rouvrir l'application.
+   Aucun nouveau secret, aucune Edge Function à redéployer.
+   Ne pas ajouter _redirects, node_modules ou dist.
+E. Vérifier avec une habilitation réelle :
+   - Équipe > Modifier la fiche > Habilité clim : cocher et attendre confirmation ;
+   - rouvrir la fiche : la case doit être conservée ;
+   - écran connecté et PC autorisé : flocon reçu sous environ 20 secondes ;
+   - décocher : retrait au prochain rafraîchissement ;
+   - barre PC : nom de la fiche à côté des notifications.
+
+6 — TESTS, COÛT ET RETOUR
+Tests SQL isolés, permissions, sauvegardes répétées, synchronisation simulée,
+composants et navigation testés ; compilation TypeScript/Vite vérifiée.
+Voir RAPPORT-TESTS-MAJ124.md pour la portée et les limites.
+Aucun essai sur la production ou un téléphone physique n'a été effectué ici.
+Pas de nouvelle API, abonnement ou dépendance payante.
+La table stocke un petit indicateur par fiche. Sur un écran connecté, une lecture
+s'ajoute au cycle de 20 secondes ; sur le PC autorisé, le snapshot contient ce détail
+sans requête supplémentaire par personne. La consommation globale du projet n'a
+pas été mesurée et le respect des quotas gratuits dépend de son usage total.
+
+Pour revenir à l'ancienne interface, restaurer les sources MAJ123.
+La nouvelle table et les fonctions124 peuvent rester en place sans effet sur
+l'ancienne interface ; les habilitations saisies sont conservées.
+
+ZIP : application complète, quatre scripts utiles (123 en prérequis, 124), guide
+actuel et rapport actuel. Sans anciens guides, builds, dépendances installées,
+tests/fixtures ni secrets privés. Atelier Live et Atelier Toolbox restent absents.
