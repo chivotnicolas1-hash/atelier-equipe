@@ -1,0 +1,20 @@
+.atelier-plan126 .atelier-map-scroll{padding:18px;background:var(--ui-soft);background-image:linear-gradient(90deg,#7995aa0c 1px,transparent 1px),linear-gradient(#7995aa0c 1px,transparent 1px);background-size:20px 20px}
+.atelier-plan126 .atelier-grid{gap:18px 22px;padding:5px}
+.atelier-plan126 .bay{padding:11px;border:1px solid var(--ui-line,#c5d3e0);border-radius:13px;background:var(--ui-surface);color:var(--ui-text);box-shadow:0 5px 0 #55748b18;text-align:center}
+.atelier-plan126 button.bay:hover,.atelier-plan126 button.bay:focus-visible{outline:2px solid var(--ui-blue);outline-offset:3px}
+.atelier-plan126 .bay-caption{align-items:center;gap:8px;min-height:30px;text-align:left;justify-content:flex-start;flex-wrap:nowrap}
+.atelier-plan126 .bay-caption>span{display:flex;align-items:center;justify-content:center;min-width:25px;height:25px;padding:3px;border-radius:7px;background:#e9f2fa;color:#245d89;font-size:11px;letter-spacing:0}
+.atelier-plan126 .bay-caption strong{font-size:12px;line-height:1.35;color:var(--ui-text)}
+.atelier-plan126 .bay-drawing{display:flex!important;align-items:center;justify-content:center;height:125px!important;margin:2px 0;flex-shrink:0}
+.atelier-plan126 .bay-drawing>.lift-model125{display:block;width:100%!important;height:100%!important;max-width:185px;overflow:visible}
+.atelier-plan126 .bay-drawing>svg:not(.lift-model125){width:44px;height:44px;color:var(--ui-blue)}
+.atelier-plan126 .lift-kind126{display:block;font-size:10px;font-weight:600;color:var(--ui-muted);margin:1px 0 5px}
+.atelier-plan126 .bay-members{gap:5px;margin-top:6px}.atelier-plan126 .bay-member{font-size:11px;line-height:1.4;text-align:center;align-items:center}
+.atelier-plan126 .bridge-state{position:static;display:block;margin:5px 0;padding:5px;font-size:10px;line-height:1.35;text-align:center;border-radius:7px}
+.atelier-plan126 .bridge-broken{border-color:#ab343f;background:#fff0f0;color:#752b35}.atelier-plan126 .bridge-broken .bay-caption strong{color:#752b35}
+.atelier-plan126 .circulation{color:var(--ui-muted);border-color:var(--ui-line);padding:18px;font-size:11px}
+.atelier-plan126.plan-compact126 .atelier-grid{gap:13px}.atelier-plan126.plan-compact126 .bay{padding:8px}.atelier-plan126.plan-compact126 .bay-drawing{height:100px!important}.atelier-plan126.plan-compact126 .bay-caption strong{font-size:11px}
+.workshop-display .atelier-plan126 .bay-drawing{height:85px!important}.workshop-display .atelier-plan126 .bay{padding:8px}.workshop-display .atelier-plan126 .bay-caption strong{font-size:11px}.workshop-display .atelier-plan126 .lift-kind126{font-size:9px}
+@media(max-width:900px){.atelier-plan126 .atelier-map-scroll{padding:12px}.atelier-plan126 .bay-member{font-size:10px}.atelier-plan126 .circulation{padding:12px}.atelier-plan126 .circulation>span{font-size:10px;letter-spacing:1px}}
+
+.plan-detail126{max-width:460px!important}.plan-detail126 .bay-drawing{height:170px!important}.plan-detail126 .bay-members{margin-top:14px}.atelier-plan126 article.bay[role=button]{cursor:pointer}.atelier-plan126 article.bay[role=button]:focus-visible{outline:2px solid var(--ui-blue);outline-offset:3px}
