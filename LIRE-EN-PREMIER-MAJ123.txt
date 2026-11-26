@@ -1,0 +1,137 @@
+ATELIER FAYET 33 — MAJ123
+Écran atelier, ventes et contacts prestataires — 26 novembre 2026
+Base : application complète MAJ122. Aucun déploiement ni modification de production effectué ici.
+
+1 — CONNEXION DEPUIS L'ÉCRAN ATELIER
+Après avoir choisi « Se connecter » depuis l'écran atelier, une connexion valide
+ramène sur Administration ou Modération selon les droits réels du compte.
+L'ancien verrou local d'affichage et l'ancien retour de page sont effacés pour ce
+parcours afin de ne pas reboucler immédiatement sur le mode écran.
+Le changement de compte depuis un écran connecté bénéficie du même retour.
+Les contrôles de mot de passe et d'accès PC restent obligatoires.
+« Quitter le mode écran » conserve son fonctionnement antérieur avec vérification
+par mot de passe et retour à la page précédente.
+L'autorisation de lecture du PC n'est PAS supprimée : son prochain démarrage peut
+toujours ouvrir l'écran atelier comme avant. La connexion ne crée pas un nouveau
+rôle et ne donne aucun droit d'administration à un collaborateur ou un directeur.
+
+2 — CONFETTIS À L'AJOUT D'UNE VENTE
+Après une vente enregistrée avec succès, une courte animation apparaît sur
+l'appareil de la personne qui vient de l'ajouter. Elle n'intercepte aucun clic.
+Un double clic ne lance pas deux requêtes ni deux animations.
+Une saisie refusée, une erreur ou un simple rafraîchissement ne déclenche rien.
+
+Sur l'écran atelier, connecté ou ouvert par un PC autorisé, une nouvelle vente
+reçue au prochain rafraîchissement déclenche aussi une courte animation.
+Pas de confettis au chargement initial, à l'ouverture d'un ancien jour, ni pour
+une simple correction de quantité ou un changement d'auteur.
+Le cycle reste celui de 20 secondes ; plusieurs ventes entre deux passages
+peuvent donc produire une seule animation collective.
+L'option du système « Réduire les animations » est respectée.
+Les contrôles qualité restent distincts des ventes et ne déclenchent pas ces confettis.
+Le délai de cinq minutes par cible et toutes les permissions existantes sont conservés.
+
+3 — TEXTE « HORS VENTES »
+Le cadre des contrôles qualité affiche désormais « Hors ventes », dans l'application
+et sur l'écran atelier. Le calcul des objectifs n'est pas modifié.
+
+4 — FICHES CONTACT DES PRESTATAIRES DÉCHETS
+Dans Déchets, ouvrir une catégorie/prestataire, puis « Fiche contact ».
+Disponible pour l'administrateur et les modérateurs, en consultation et modification.
+Chacun des trois prestataires possède sa propre fiche :
+- Grandidier ;
+- Chimirec ;
+- Gurdebeke.
+Champs : nom du contact, numéro de téléphone, adresse e-mail et adresse postale.
+Tous sont facultatifs. Aucune coordonnée fictive ou trouvée au hasard n'est ajoutée.
+Les numéros et e-mails renseignés disposent de liens pour téléphoner ou ouvrir
+la messagerie à l'initiative de l'utilisateur. L'application ne contacte personne
+automatiquement. La date et le nom du dernier éditeur sont affichés.
+Une protection de version empêche d'écraser silencieusement une modification concurrente.
+Les collaborateurs, invités et directeurs n'obtiennent pas l'accès à ces fiches.
+Les contacts ne figurent jamais dans les données de l'écran sans connexion.
+La lecture commence seulement à l'ouverture de la fiche ; pas de requête contact
+en arrière-plan quand elle est fermée. Le formulaire n'impose pas d'autofocus.
+
+5 — DÉTAIL DES VENTES AU SURVOL SUR L'ÉCRAN ATELIER
+Survoler une cible de vente affiche les noms des personnes et la quantité cumulée
+réalisée par chacune pour cette cible et pour la date affichée.
+Cela fonctionne sur l'écran connecté et sur l'écran sans connexion d'un PC autorisé.
+Le détail est aussi accessible au clavier, et au toucher quand une souris n'est
+pas disponible. Échap ferme l'infobulle.
+Les cibles personnalisées sont incluses. Les ventes supprimées sont exclues.
+Deux comptes homonymes restent séparés. Les anciens enregistrements sans identifiant
+ne sont pas fusionnés arbitrairement. Les contrôles qualité restent « Hors ventes ».
+
+Les données suivent le rafraîchissement de 20 secondes ; aucun appel supplémentaire
+n'est effectué à chaque passage de souris.
+Le nouveau détail des ventes se limite aux noms et quantités, avec un marqueur de
+nouvelle vente. Les autres informations déjà présentes sur le plan sont conservées.
+Ce nouveau détail n'ajoute aucun identifiant Auth, mot de passe, e-mail ou historique de saisie.
+Le mode sans connexion exige TOUJOURS le jeton du PC déjà autorisé et respecte son
+expiration, sa révocation, la maintenance et la fermeture de la rubrique.
+Ce n'est pas une nouvelle page publique librement accessible sur Internet.
+
+6 — MODIFICATIONS SUPABASE À EXAMINER
+Le SQL 123-contacts-et-ventes-ecran.sql ajoute :
+- une table PRIVÉE waste_contacts123, avec RLS et sans accès direct client ;
+- deux RPC de contact réservées côté serveur aux administrateurs/modérateurs ;
+- une agrégation privée des ventes ;
+- une RPC de détail pour les comptes ayant les droits PC, avec contrôle de rubrique ;
+- une nouvelle façade de lecture pour le PC autorisé, qui délègue la validation
+  du jeton et les protections à la fonction existante workshop_screen_read89.
+Les anciennes fonctions, ventes, demandes, contacts existants et affectations
+ne sont pas réécrits. L'installation est transactionnelle et réexécutable.
+La lecture anonyme de la façade est volontaire : elle exige le jeton secret du PC.
+Elle n'accorde aucun droit d'écriture. Les contrôles sont faits dans les fonctions,
+pas seulement en masquant les boutons de l'interface.
+Les nouveaux accès authentifiés refusent aussi un compte suspendu ou banni,
+même si une ancienne session est encore présente.
+Ce script n'a PAS été appliqué à ton projet pendant la préparation.
+
+7 — INSTALLATION
+A. Conserver l'archive MAJ122.
+   Si les SQL de MAJ122 n'ont pas encore été exécutés, les installer d'abord depuis
+   cette archive pour conserver aussi le nouveau ciblage des récapitulatifs.
+   La MAJ123 ne réinstalle pas automatiquement les migrations précédentes.
+B. Après examen, dans Supabase > SQL Editor, exécuter EN ENTIER :
+   supabase/123-contacts-et-ventes-ecran.sql
+C. Dans une nouvelle requête, exécuter :
+   supabase/123-verification-lecture-seule.sql
+   Attendu : table_contacts_presente=true, rls_contacts_active=true,
+   contacts_interdits_anonymes=true, detail_ecran_interdit_anonyme_sans_jeton=true,
+   lecture_ecran_par_jeton_active=true, agregation_privee_verrouillee=true.
+   fiches_contact_enregistrees=0 est normal tant qu'aucune fiche n'a été complétée.
+   routage_recap122_present doit être true si MAJ122 a été installée ; sinon son
+   SQL reste à appliquer. Les compteurs du jour peuvent être à zéro.
+   Cette requête ne crée aucune vente, aucun contact ni aucune présence.
+D. Remplacer les fichiers du projet GitHub par ceux du ZIP complet. Conserver les
+   variables de build Cloudflare et les secrets Supabase déjà en place.
+   Attendre la réussite du déploiement, puis fermer et rouvrir l'application.
+   Aucun nouveau secret, service payant ou déploiement Edge Function.
+   Ne pas ajouter de _redirects. Ne pas uploader node_modules ou dist.
+E. Vérifier les parcours réels :
+   - PC autorisé > Se connecter > Administration ou Modération ;
+   - survol d'une cible contenant déjà des ventes pour voir les quantités par personne ;
+   - compléter les coordonnées RÉELLES des prestataires ;
+   - lors de la prochaine vente réelle, constater les confettis après validation,
+     puis sur l'écran atelier après son prochain rafraîchissement.
+   Aucun faux compte ni aucune fausse vente n'ont été ajoutés à la production.
+
+Si le nouveau SQL manque, l'ancien affichage atelier continue à être utilisé pour
+le plan et les compteurs ; les nouveaux détails et contacts attendent l'installation.
+Ce repli n'est jamais utilisé pour contourner un refus d'accès ou un jeton révoqué.
+
+8 — RETOUR ET LIMITES
+Restaurer les sources MAJ122 restaure l'interface précédente. Les nouvelles fonctions
+et la table de contacts peuvent rester en place sans modifier le fonctionnement ancien.
+Ne pas supprimer les données saisies pour effectuer un retour d'interface.
+Les sessions chiffrées, le moteur du plan et le ciblage des notifications restent
+ceux des versions précédentes. Aucune garantie d'accès « inviolable » n'est ajoutée.
+Les tests locaux réussissent ; aucun test sur compte réel ni sur téléphone physique
+n'a été effectué ici. Voir le rapport de tests pour le périmètre exact.
+
+CONTENU
+Application complète, deux SQL utiles, ce guide et le rapport de tests.
+Sans anciens guides/SQL, archives imbriquées, tests fictifs, dépendances installées,
+builds ou secrets privés. Atelier Live et Atelier Toolbox restent absents.
