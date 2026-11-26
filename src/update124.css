@@ -8,4 +8,3 @@
 .workshop-display .display-person-copy124{flex:1 1 auto;min-width:0;overflow-wrap:anywhere}
 .workshop-display .aircon-badge124{display:inline-flex;align-items:center;justify-content:center;flex:0 0 31px;width:31px;height:31px;margin-left:auto;align-self:center;border-radius:9px;color:var(--ui-blue,#1872b7);background:var(--ui-surface,#fff);border:1px solid var(--ui-line,#c5d3e0)}
 .workshop-display .aircon-status124{font-size:11px;line-height:1.4}
-.top-actions .account-name124{max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

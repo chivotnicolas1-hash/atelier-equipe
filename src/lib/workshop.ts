@@ -85,5 +85,5 @@ export const stations = [
  }
 ];
 export const parisToday=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
-export const presenceLabels:Record<string,string>={unknown:"À renseigner",rest:"Non travaillé",present:"Présent",absent:"Absent",leave:"En congé"};
+export const presenceLabels:Record<string,string>={unknown:"À renseigner",rest:"Non travaillé",present:"Présent",absent:"Absent",leave:"En congé",training:"En formation"};
 export const priorityLabels:Record<string,string>={normal:"Normale",high:"Prioritaire",urgent:"Urgente"};
