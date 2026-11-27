@@ -1,0 +1,108 @@
+ATELIER FAYET 33 — MAJ127
+Non affectés dans le brouillon et symbole interdit sur les ponts
+Préparée le 27 novembre 2026 sur MAJ126.
+Aucun déploiement ni modification de production effectué ici.
+
+1 — ZONE « NON AFFECTÉS »
+Dans Administration ou Modération > Plan de l'atelier, ouvrir une préparation
+ou générer une proposition. Les personnes restant sans poste apparaissent dans
+un cadre « Non affectés », à droite des espaces de gestion.
+
+La liste utilise les données de la journée choisie et du brouillon :
+- statut Présent et au moins un créneau horaire valide ;
+- aucune affectation principale et aucune affectation géométrie ;
+- compte actif, hors invités, directeurs et comptes suspendus.
+Elle comprend aussi les encadrants concernés, qui restent limités à leurs postes
+autorisés. Elle ne dépend pas du filtre d'équipe choisi dans la liste latérale.
+Les personnes sont triées par nom et ne sont pas dupliquées.
+
+Le cadre prend la première colonne libre à droite des espaces de gestion, sans
+recouvrir un poste. Si aucun espace de gestion n'existe, il apparaît à droite du
+plan. Ce cadre n'est PAS un nouveau poste enregistré en base.
+Il disparaît immédiatement de la vue après rechargement du brouillon lorsque
+toutes les personnes concernées sont affectées. Aucune colonne supplémentaire
+n'est réservée à ce cadre lorsqu'il est vide.
+Il n'apparaît ni dans le plan publié des collaborateurs ni dans le mode écran.
+
+2 — GLISSER DEPUIS « NON AFFECTÉS »
+Activer « Déplacer par glisser-déposer » au-dessus du plan.
+Glisser un nom depuis le cadre vers un poste, puis confirmer le déplacement.
+La zone est un point de départ, pas une destination de retrait d'affectation.
+Les menus habituels de poste restent utilisables pour affecter ou retirer quelqu'un.
+
+Le serveur vérifie encore : droits de gestion, compte actif, version du brouillon,
+horaires inchangés, présence, congés acceptés, compétence Autonome, équipe et état
+du pont. Une personne déjà affectée entre-temps ne peut pas être écrasée.
+Une personne affectée uniquement à la géométrie est déjà considérée comme affectée.
+Depuis Non affectés vers Géométrie, le poste principal devient Géométrie, selon
+la règle habituelle de première affectation.
+
+L'enregistrement modifie UNIQUEMENT le brouillon. Le plan publié, les horaires et
+la présence confirmée restent inchangés. La publication demeure une action manuelle.
+Les déplacements existants entre deux postes conservent leur moteur119.
+
+Sur mobile, les noms sont compacts ; photos et horaires restent masqués dans ce
+cadre comme sur les cases mobiles du plan. Le glissement se fait après activation
+du mode dédié ; utiliser une zone libre pour faire défiler le plan.
+
+3 — SYMBOLE « INTERDIT » SUR LES PONTS
+Un grand symbole interdit sur fond rouge clair est superposé au dessin du pont
+si son état est « bloqué » ou « en panne ». Le texte précis de l'état est conservé.
+Le symbole apparaît dans le plan normal, en consultation, dans la fiche du poste,
+et sur l'écran atelier connecté ou ouvert sur un PC autorisé sans connexion.
+Il n'apparaît pas sur un pont disponible ou un espace de gestion sans pont.
+
+Cette amélioration est visuelle : les règles métier ne changent pas.
+Un pont en panne refuse une nouvelle affectation ; un pont bloqué reste soumis
+à la règle existante autorisant l'affectation manuelle par les gestionnaires.
+Les ponts deux colonnes conservent le dessin corrigé de MAJ126, sans longues barres
+bleues sous la voiture ou au sol.
+
+4 — INSTALLATION
+A. Conserver le ZIP MAJ126. Les migrations précédentes doivent déjà être installées.
+   Ce ZIP complet contient uniquement les SQL utiles à MAJ127.
+B. Supabase > SQL Editor : examiner puis exécuter EN ENTIER :
+   supabase/127-non-affectes.sql
+   Ce script ajoute une nouvelle RPC. Il ne crée pas de table, ne change pas les
+   règles existantes d'affectation et ne modifie aucune journée à l'installation.
+C. Dans une nouvelle requête, exécuter :
+   supabase/127-verification-lecture-seule.sql
+   Tous les indicateurs booléens doivent être true.
+   Cette vérification ne crée ni affectation ni faux collaborateur.
+D. Remplacer les fichiers du projet GitHub par ceux du ZIP.
+   Conserver les variables de build Cloudflare et secrets Supabase existants.
+   Aucun nouveau secret, abonnement, API ou déploiement Edge Function.
+   Ne pas ajouter de _redirects, node_modules ou dist.
+E. Après réussite du déploiement, fermer et rouvrir l'application.
+   Vérifier dans un vrai brouillon avec une personne restant à affecter :
+   - présence du cadre à droite des espaces de gestion ;
+   - glissement vers un poste autorisé, confirmation puis retrait du nom du cadre ;
+   - disparition du cadre s'il est devenu vide ;
+   - plan publié inchangé tant que « Publier le plan » n'a pas été utilisé ;
+   - symbole rouge sur les ponts déjà bloqués/en panne.
+   Aucun faux compte, faux horaire ou changement d'état de pont n'a été ajouté
+   à la production pendant la préparation.
+
+Si SQL127 manque, les anciens déplacements entre postes gardent un repli119,
+mais la première affectation depuis Non affectés demande d'installer SQL127.
+Aucun repli n'est utilisé pour contourner un refus de droits.
+
+5 — TESTS, RESSOURCES ET RETOUR
+Compilation et tests locaux réussis. Droits, brouillon, concurrence, congés,
+formation, horaires, géométrie, panne, pont bloqué et publication explicite testés.
+La disposition du cadre, son masquage, les sources de glissement et les symboles
+ont été vérifiés dans les composants réels avec un environnement contrôlé.
+Pas de test complet sur téléphone physique ni navigateur réel ici.
+Voir le rapport inclus pour le périmètre exact.
+
+Pas de nouvelle dépendance ou API payante. La liste est calculée localement sur
+les données déjà chargées ; aucune requête périodique supplémentaire.
+La nouvelle RPC remplace un appel lors de la confirmation d'un déplacement.
+L'usage global des quotas Supabase/Cloudflare n'a pas été mesuré.
+
+Pour revenir à l'interface précédente, restaurer MAJ126. La RPC127 peut rester
+installée sans effet sur l'ancienne interface ; aucune donnée à supprimer.
+
+ZIP : application complète, deux SQL127, ce guide et le rapport actuel.
+Sans anciens guides/migrations, builds, dépendances installées, tests/fixtures,
+archives imbriquées ni secrets privés.

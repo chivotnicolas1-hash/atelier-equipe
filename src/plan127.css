@@ -1,0 +1,14 @@
+.atelier-plan126 .bay-drawing{position:relative}
+.atelier-plan126 .bay-drawing>.bridge-prohibited127{position:absolute;display:flex;align-items:center;justify-content:center;width:80px;height:80px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;color:#c33e4f;background:#ffe3e7e8;border:1px solid #b53546;box-shadow:0 2px 10px #782c3220;pointer-events:none}
+.atelier-plan126 .bridge-prohibited127>svg{width:70px;height:70px}
+.atelier-plan126 .unassigned127{align-self:start;min-width:0;z-index:1;padding:12px;border:1px dashed var(--ui-blue,#176db1);border-radius:13px;background:var(--ui-surface);box-shadow:0 4px 0 #55748b14}
+.unassigned127 h3{display:flex;align-items:center;justify-content:space-between;gap:7px;margin:0;color:var(--ui-text);font-size:13px}
+.unassigned127 h3>span{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;border-radius:7px;background:#e7f1fb;color:#1a5f96;font-size:11px}
+.unassigned127>p{font-size:10px;line-height:1.5;color:var(--ui-muted);margin:8px 0 12px}
+.unassigned127 ul{display:grid;gap:8px;padding:0;margin:0;list-style:none}
+.unassigned-person127{display:flex;align-items:center;gap:7px;padding:8px 6px;border:1px solid var(--ui-line);border-radius:8px;background:var(--ui-soft);color:var(--ui-text);min-width:0}
+.unassigned-photo127{display:block;width:26px;height:26px;flex:0 0 26px;border-radius:50%;overflow:hidden}
+.unassigned-person127>div{min-width:0;flex:1}.unassigned-person127 strong{display:block;font-size:11px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.unassigned-hours127{display:block;font-size:9px;line-height:1.4;color:var(--ui-muted);margin-top:3px}.unassigned-person127>svg{flex-shrink:0;color:var(--ui-muted)}
+.drag-mode119 .unassigned-person127{touch-action:none;cursor:grab;user-select:none;border-style:dashed}.drag-mode119 .unassigned-person127:active{cursor:grabbing}
+@media(max-width:900px){.atelier-plan126 .bay-drawing>.bridge-prohibited127{width:68px;height:68px}.atelier-plan126 .bridge-prohibited127>svg{width:60px;height:60px}.unassigned127{padding:9px!important}.unassigned127 h3{font-size:12px}.unassigned-photo127,.unassigned-hours127{display:none}.unassigned-person127{padding:9px 6px}}
