@@ -1,0 +1,139 @@
+ATELIER FAYET 33 — MAJ128
+Scanner guidé, notifications des signalements et fond Mon poste
+Préparée le 28 novembre 2026 sur l'application complète MAJ127.
+Aucun déploiement ni changement de production effectué ici.
+
+1 — SCANNER DE PLAQUE AMÉLIORÉ
+Signalements > Nouveau signalement > Scanner la plaque.
+La caméra arrière s'ouvre dans l'application avec un gabarit de cadrage.
+Placer toute la plaque dans le cadre, de face et sans reflet. Les bandes bleues
+restent dans le gabarit. Ajuster sa largeur et sa position avec les curseurs.
+Cliquer « Lire la zone cadrée » : seul ce rectangle est envoyé au lecteur local.
+
+Le lecteur retire les bordures, renforce le contraste, essaie un seuillage puis
+une correction légère d'inclinaison si nécessaire. Le traitement reste sur l'appareil.
+Aucun service d'IA externe, envoi de photo à une API ou abonnement n'est utilisé.
+Le décodage des photos importées est borné avant le travail d'OCR pour limiter
+la mémoire, et les images de travail/flux caméra sont libérés après utilisation.
+
+Une petite image permet de vérifier la zone lue. Toucher la bonne proposition
+remplit l'immatriculation. Les substitutions incertaines de chiffres sont signalées.
+Le lecteur ne complète pas une plaque incomplète et n'enregistre pas automatiquement
+un signalement. La saisie manuelle et les corrections restent disponibles.
+Si la caméra n'est pas disponible ou autorisée, utiliser une photo JPEG/PNG/WebP
+puis ajuster le gabarit. Les photos HEIC doivent d'abord être converties en JPEG.
+La photo du scanner n'est pas ajoutée aux pièces jointes du signalement.
+
+Les quatre essais d'OCR réel sur plaques synthétiques cadrées ont réussi, avec
+contraste réduit et inclinaisons ±2°. Ce n'est pas une mesure de précision sur
+de vraies photos d'atelier : reflet, flou, angle prononcé ou caractères masqués
+peuvent toujours empêcher une lecture correcte. La vérification reste nécessaire.
+
+2 — NOTIFICATION D'UN NOUVEAU SIGNALEMENT
+Une nouvelle fiche déclenche un message dans Mes notifications et une mise en
+file pour les notifications mobiles existantes.
+Destinataires : membres ACTIFS de l'équipe « Encadrants », prévus Présents avec
+des horaires valides le jour de la création, selon la date de Paris.
+Les congés acceptés, formations, absences, comptes suspendus/bannis, invités et
+directeurs sont exclus. Un rôle Collaborateur dans l'équipe Encadrants reste
+destinataire s'il remplit ces conditions.
+Le critère porte sur les horaires prévus ce jour-là, pas uniquement sur le créneau
+en cours à la seconde de création.
+
+Un seul message par fiche et par personne ; chacun de ses appareils inscrits est
+pris en charge. Une reprise réseau identique ou une correction ne renvoie pas
+une deuxième notification. Une création annulée en transaction n'envoie rien.
+Aucun signalement historique n'est notifié lors de l'installation.
+Le texte ne contient pas l'immatriculation du client. Le lien ouvre Signalements ;
+administrateurs/modérateurs arrivent dans le dossier de leur équipe. Les autres
+destinataires conservent leurs droits de consultation actuels, sans privilège ajouté.
+
+L'envoi utilise la fonction Edge et le programme de notifications déjà installés,
+donc il attend leur prochain passage habituel. La réception dépend aussi du réseau,
+des services de notifications et des réglages du téléphone ; elle n'est pas garantie.
+
+3 — NOTIFICATIONS OBLIGATOIRES POUR L'ESPACE CONNECTÉ
+Sur mobile et PC, les comptes réels doivent activer les notifications sur L'APPAREIL
+UTILISÉ. Une autorisation sur un autre téléphone ne suffit pas.
+La vérification contrôle :
+- l'autorisation Notification.permission du navigateur ;
+- l'abonnement Push local ;
+- son inscription en base pour le compte actuellement connecté.
+
+Sinon, une fenêtre obligatoire permet de les activer et masque l'espace de travail,
+y compris ses autres fenêtres. Elle ne se ferme pas par la croix, Échap ou l'extérieur.
+La déconnexion reste disponible pour changer de compte.
+Après activation validée, l'espace s'ouvre. La vérification revient au rythme
+habituel d'environ 20 secondes, au retour dans l'application et après activation.
+Une révocation ou un abonnement retiré rebloque l'interface. Une erreur réseau
+affiche une erreur de vérification sans débloquer l'accès.
+Les données de formulaire déjà en mémoire sont conservées derrière le blocage ;
+la caméra et une lecture OCR en cours sont arrêtées.
+
+Les comptes Invité de démonstration restent exemptés, car ils ne disposent pas
+du droit d'inscrire un appareil. L'écran atelier autorisé SANS connexion reste
+également un affichage, sans obligation de notifications personnelles. Les écrans
+de connexion, suspension et maintenance antérieurs conservent leur fonctionnement.
+
+La demande d'autorisation se fait après un clic sur Activer les notifications.
+L'application ne peut pas forcer l'accord du navigateur ou du système. Si le
+navigateur ne prend pas en charge les notifications, il faut en utiliser un
+compatible ; sur iPhone, ouvrir l'application installée depuis l'écran d'accueil.
+Les modes silencieux, concentration, économie d'énergie et certains blocages
+globaux du système ne sont pas vérifiables par ce contrôle. Il vérifie l'API web
+et l'inscription, pas la livraison effective de chaque notification.
+Ce blocage est une règle d'usage de l'interface, pas un remplacement des droits
+SQL/RLS ou une garantie contre un client modifié.
+
+4 — FOND DISCRET DANS MON POSTE
+Le bloc Mon poste affiche un pictogramme très clair en arrière-plan : type de pont
+connu, bureau pour un espace de gestion, ou voiture générique si le type est inconnu.
+La double affectation peut afficher deux pictogrammes. Sans poste, aucun faux
+pictogramme d'affectation n'est ajouté. L'image ne capte aucun clic et le texte
+reste au premier plan. Cela concerne aussi les encadrants et les profils de gestion
+lorsqu'ils consultent leur espace Collaborateur.
+
+5 — INSTALLATION
+A. Conserver le ZIP MAJ127. Les migrations précédentes doivent déjà être installées.
+B. Dans Supabase > SQL Editor, examiner puis exécuter EN ENTIER :
+   supabase/128-notifications-signalements.sql
+   Ce script ajoute un contrôle de notifications du compte et un déclencheur sur
+   les futurs INSERT de signalements. Il ne modifie aucune ancienne fiche et ne
+   déclenche aucun envoi rétroactif.
+C. Exécuter ensuite :
+   supabase/128-verification-lecture-seule.sql
+   Attendu : tous les indicateurs booléens à true.
+   messages_signalement_enregistres=0 est normal avant la prochaine vraie création.
+D. Remplacer les fichiers du projet GitHub par ceux du ZIP complet, public compris
+   (le service worker doit aussi être mis à jour).
+   Retirer src/lib/plate-reader.ts s'il reste dans GitHub : remplacé par le nouveau
+   lecteur et devenu inutile.
+   Conserver VITE_VAPID_PUBLIC_KEY et les autres variables Cloudflare existantes,
+   ainsi que les secrets Supabase. Aucune nouvelle clé, variable ou fonction Edge.
+   Ne pas ajouter de _redirects, node_modules ou dist.
+E. Attendre le succès du déploiement et fermer/rouvrir l'application sur les appareils.
+   Prévoir d'activer les notifications sur chacun des appareils utilisés avant
+   d'accéder à l'espace connecté. Vérifier ensuite le scanner sur de vraies plaques.
+   Lors du prochain signalement réel, vérifier la notification des encadrants
+   concernés et le lien vers l'historique. Aucun faux enregistrement n'a été ajouté.
+
+6 — TESTS, RESSOURCES ET RETOUR
+Compilation, OCR réel sur quatre images synthétiques, géométrie de cadrage,
+permissions SQL, ciblage, absence de doublons, annulation et blocage d'interface
+testés localement. Rapport inclus. Aucun test avec téléphone physique, caméra
+réelle ou livraison push à un compte de production n'a été effectué ici.
+
+Aucun abonnement, service payant ou dépendance de production ajouté. Les ressources
+OCR existantes sont réutilisées localement. Le contrôle de notifications ajoute
+une petite lecture du compte au cycle de 20 secondes ; les messages utilisent
+la file existante. Les quotas globaux du projet n'ont pas été mesurés.
+
+Pour un retour d'interface, restaurer les sources MAJ127. Cela retire la nouvelle
+obligation de l'interface mais ne supprime pas les messages enregistrés. Pour arrêter
+uniquement les nouvelles alertes de création en base, un administrateur peut
+désactiver le déclencheur workshop_report_created128 sur public.workshop_reports.
+Ne pas supprimer les signalements ou les abonnements pour tester un retour.
+
+ZIP : application complète, deux SQL128, ce guide et rapport actuel.
+Sans anciens guides/migrations, builds, dépendances installées, tests/fixtures,
+archives imbriquées ni secrets privés.

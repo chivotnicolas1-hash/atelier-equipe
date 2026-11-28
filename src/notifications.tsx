@@ -14,7 +14,7 @@ export function NotificationSettings({onActivated}:{onActivated?:()=>void}){
   const key=import.meta.env.VITE_VAPID_PUBLIC_KEY;if(!key)throw Error('L’administrateur doit configurer la clé publique des notifications dans Cloudflare.');
   const raw=atob(key.replace(/-/g,'+').replace(/_/g,'/'));const bytes=Uint8Array.from(raw,c=>c.charCodeAt(0));
   if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:bytes});
-  await rpc('workshop_push_register',{p_subscription:sub.toJSON()});trackDesktopPush(sub.endpoint);setActive(true);setMessage('Cet appareil recevra les annonces et les notifications de tes tâches.');onActivated?.();
+  await rpc('workshop_push_register',{p_subscription:sub.toJSON()});trackDesktopPush(sub.endpoint);setActive(true);window.dispatchEvent(new Event('workshop-notifications-change128'));setMessage('Cet appareil recevra les annonces et les notifications de tes tâches.');onActivated?.();
  }catch(e:any){setMessage(e.message||'Activation impossible. Réessaie.')}finally{setBusy(false)}}
  return <section className="notification-settings"><h3>Notifications sur cet appareil</h3><p className="muted">Reçois les annonces de l’atelier et les mises à jour de tes tâches, même lorsque l’application est fermée.</p><button className="secondary" disabled={busy||active} onClick={toggle}>{busy?'Veuillez patienter…':active?'Notifications activées':'Activer les notifications'}</button><p role="status">{message|| (active?'Cet appareil est inscrit. La réception dépend des réglages du téléphone.':'Autorise les notifications sur chacun de tes appareils. Sur iPhone, ouvre l’application depuis l’écran d’accueil.')}</p></section>
 }
@@ -24,13 +24,4 @@ export function NotificationDirectory(){
  useEffect(()=>{void load()},[]);
  useAutoRefresh(()=>load());
  return <section className="panel"><div className="panel-head"><h2>Notifications de l’équipe</h2><></></div><p className="muted">Appareils inscrits : ce suivi ne confirme pas la réception ni la lecture d’une notification.</p>{error&&<p role="alert">{error}</p>}<div className="team-grid">{rows.map((r,i)=><div className={"team-card"+(!r.devices?" notifications-missing":"")} key={i}><strong>{r.name}</strong><p>{r.devices?`${r.devices} appareil(s) inscrit(s)`:'Aucun appareil inscrit'}</p></div>)}</div></section>
-}
-export function NotificationInvite({onOpen}:{onOpen:()=>void}){
- const [show,setShow]=useState(false);
- useEffect(()=>{let live=true;if(!supported()){setShow(true);return}void navigator.serviceWorker.ready.then(async reg=>{const sub=await reg.pushManager.getSubscription();const d=await rpc('workshop_push_status');if(live)setShow(!sub||!d.endpoints.includes(sub.endpoint)||Notification.permission!=='granted')}).catch(()=>{});return()=>{live=false}},[]);
- return show?<div className="info-line"><span>Active les notifications pour recevoir les annonces et tes tâches sur ce téléphone.</span><button className="secondary" onClick={onOpen}>Configurer</button></div>:null
-}
-
-export function NotificationCheck({onMissing}:{onMissing:()=>void}){
- useEffect(()=>{let live=true;async function check(){if(!supported()||Notification.permission!=='granted'){if(live)onMissing();return}try{const reg=await navigator.serviceWorker.ready;const sub=await reg.pushManager.getSubscription();const status=await rpc('workshop_push_status');if(live&&(!sub||Notification.permission!=='granted'||!status.endpoints.includes(sub.endpoint)))onMissing()}catch{/* Une erreur réseau ne doit pas déclencher une fausse redirection. */}}void check();window.addEventListener('focus',check);return()=>{live=false;window.removeEventListener('focus',check)}},[onMissing]);return null;
 }

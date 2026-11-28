@@ -14,7 +14,8 @@ type Report={client_notified?:boolean|null,author_job?:string|null,author_signat
 const normalizeRegistration=(value:string)=>value.normalize('NFKC').toUpperCase().replace(/[\u200B-\u200D\u2060\uFEFF]/g,'').replace(/[‐‑‒–—−]/g,'-').replace(/\s+/g,' ').trim();
 const when=(value:string)=>!value||!Number.isFinite(Date.parse(value))?'Date non renseignée':new Intl.DateTimeFormat('fr-FR',{timeZone:'Europe/Paris',dateStyle:'short',timeStyle:'medium'}).format(new Date(value));
 async function rpc(name:string,args:Record<string,unknown>){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),60000);try{const {data,error}=await supabase.rpc(name,args).abortSignal(controller.signal);if(error){if(controller.signal.aborted||/fetch|network|abort/i.test(error.message||''))throw Error('Connexion interrompue ou délai dépassé. L’envoi n’est pas confirmé : tes photos et ton brouillon sont conservés. Vérifie l’historique avant de réessayer.');throw Error(error.code==='PGRST202'?'Une fonction Signalement manque dans Supabase. Vérifie les mises à jour SQL installées.':error.message)}return data;}finally{clearTimeout(timer)}}
-export default function Reports({all,openRequest=0,readonly=false,admin=false}:{admin?:boolean,all:boolean,openRequest?:number,readonly?:boolean}){
+export default function Reports({all,openRequest=0,readonly=false,admin=false,teamRequest=0}:{teamRequest?:number,admin?:boolean,all:boolean,openRequest?:number,readonly?:boolean}){
+ useEffect(()=>{if(teamRequest&&all&&!readonly)setOnlyMine(false)},[teamRequest,all,readonly]);
  const adding=useRef(false);const [photoProgress,setPhotoProgress]=useState('');
  const [annotate,setAnnotate]=useState<number|null>(null);
  const [purge,setPurge]=useState<{before:string,reports:number,photos:number}|null>(null);
